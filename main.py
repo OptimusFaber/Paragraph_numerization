@@ -89,7 +89,6 @@ while t and f_elem:
 
         t = t[idx+2:]
         counter+=(idx+1)
-        # print('--------------------------------------')
         if not (len(paragraph.split('.')) == 2 and paragraph.split('.')[1].isdigit()):
             lst.append((paragraph, f_elem, counter))
 
