@@ -1,98 +1,19 @@
-import re
 from bigtree import Node, find, findall
 
-root = Node("txt")
-start = True
-tree = []
+# root = Node("a", age=90)
+# b = Node("b", pos=65, parent=root)
+# c = Node("c", pos=60, parent=root)
+# d = Node("d", pos=40, parent=b)
 
-def printRoman(number):
-    num = [1, 4, 5, 9, 10, 40, 50, 90,
-           100, 400, 500, 900, 1000]
-    sym = ["I", "IV", "V", "IX", "X", "XL",
-           "L", "XC", "C", "CD", "D", "CM", "M"]
-    i = 12
+# root.show(attr_list=["pos"])
 
-    while number:
-        div = number // num[i]
-        number %= num[i]
+# e = Node("e", pos=89, parent=d)
 
-        while div:
-            print(sym[i], end="")
-            div -= 1
-        i -= 1
+# root.show(attr_list=["pos"])
 
-def is_float(string):
-    try:
-        float(string)
-        return True
-    except ValueError:
-        return False
+# e.parent = c
 
-
-t = open('/home/titan/Documents/example.txt').readlines()
-t = ''.join(t)
-t = ' ' + t
-lst = []
-
-f_elem = True
-counter = 0
-
-while t and f_elem:
-    dot = re.search(r"(((\W[a-zA-Z])|(\d)+)[.])|((\d)+[.])+", t)
-    bracket = re.search(r"((\W[a-zA-Z])|(\d)+)[)]", t)
-
-    if dot and bracket:
-        f_elem = ')' if bracket.span()[0] < dot.span()[0] else '.'
-        pos = idx = min(bracket.span()[1]-2, dot.span()[1]-2)
-    elif dot:
-        f_elem = '.'
-        pos = idx = dot.span()[1]-2
-    elif bracket:
-        f_elem = ')'
-        pos = idx = bracket.span()[1]-2
-    else:
-        f_elem = None
-
-    # f_elem это главная нумерация типа
-    if f_elem:
-        if not t[pos].isdigit():
-            idx = pos
-            paragraph = t[pos]
-        else:
-            idx = pos
-            paragraph = t[pos]
-            while t[pos - 1].isdigit():
-                paragraph = t[pos - 1] + paragraph
-                if pos == 0:
-                    break
-                pos -= 1
-            pos = idx + 1
-            if t[pos] == '.':
-                paragraph += '.'
-                pos_dot = pos
-                pos_digit = pos
-                while t[pos + 1].isdigit() or t[pos + 1] == '.':
-                    paragraph += t[pos + 1]
-                    if t[pos + 1].isdigit():
-                        pos_digit = pos + 1
-                        pos = pos_digit
-                    else:
-                        pos_dot = pos + 1
-                        pos = pos_dot
-                    
-                    idx = pos
-            if t[pos+1] == ')':       # Ситуация по типу: 2)Не забудь купить соли килограмма 3.3)... - ready
-                t = t[pos_dot+1:]
-                continue                        # или по типу: 2)Не помню какое напряжение было 1.2 или 2.1. 3)
-                                            # Короче каждый раз нужна проверка. Ченить придумаем
-            
-
-        t = t[idx+2:]
-        counter+=(idx+1)
-        # print('--------------------------------------')
-        if not (len(paragraph.split('.')) == 2 and paragraph.split('.')[1].isdigit()):
-            lst.append((paragraph, f_elem, counter))
-
+# root.show(attr_list=["pos"])
 
 def check_types(elem1, elem2):
     if elem1.isdigit() and elem2.isdigit():
@@ -100,13 +21,14 @@ def check_types(elem1, elem2):
     elif elem1.isalpha() and elem2.isalpha():
         return True
     buf1, buf2 = elem1.split('.'), elem2.split('.')
-    if len(buf1) == len(buf2):
+    if len(buf1) == len(buf2):  # and ((buf1[0].isdigit() and buf2[0].isdigit()) or (buf1[0].isalpha() and buf2[0].isalpha()))
         return True
     else:
         return False
 
 root = Node("txt")
 tree = []
+lst = [('1.', '.', 2), ('2.', '.', 23), ('a', ')', 20), ('b', ')', 13), ('d', ')', 13), ('1', ')', 14), ('3', ')', 18), ('4.', '.', 16), ('2.', '.', 25), ('1.', '.', 67), ('2.', '.', 13), ('3.', '.', 31), ('a', '.', 37), ('b', '.', 15), ('c', '.', 13), ('3.', '.', 19), ('4.', '.', 13), ('1.', '.', 58), ('3.', '.', 37), ('4.', '.', 36), ('5.', '.', 16), ('1', ')', 80), ('2', ')', 17), ('3', ')', 16)]
 start = True
 for elem in lst:
     if start:
@@ -143,6 +65,7 @@ for elem in lst:
                         if tree[i].node_name >= elem[0]:
                             st = False
                         elif tree[i].node_name < elem[0] and st:
+                            print(tree[i].node_name, elem[0], tree[i].parent)
                             tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[i].parent))
                             res=True
                             break
