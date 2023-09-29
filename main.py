@@ -1,33 +1,11 @@
 import re
-from bigtree import Node, find, findall
+from bigtree import Node, find, findall, tree_to_dict
 
 root = Node("txt")
 start = True
 tree = []
 
-def printRoman(number):
-    num = [1, 4, 5, 9, 10, 40, 50, 90,
-           100, 400, 500, 900, 1000]
-    sym = ["I", "IV", "V", "IX", "X", "XL",
-           "L", "XC", "C", "CD", "D", "CM", "M"]
-    i = 12
-
-    while number:
-        div = number // num[i]
-        number %= num[i]
-
-        while div:
-            print(sym[i], end="")
-            div -= 1
-        i -= 1
-
-def is_float(string):
-    try:
-        float(string)
-        return True
-    except ValueError:
-        return False
-
+# Parse part
 
 t = open('/home/titan/Documents/example.txt').readlines()
 t = ''.join(t)
@@ -81,17 +59,24 @@ while t and f_elem:
                         pos = pos_dot
                     
                     idx = pos
-            if t[pos+1] == ')':       # Ситуация по типу: 2)Не забудь купить соли килограмма 3.3)... - ready
+            if t[pos+1] == ')':       
                 t = t[pos_dot+1:]
-                continue                        # или по типу: 2)Не помню какое напряжение было 1.2 или 2.1. 3)
-                                            # Короче каждый раз нужна проверка. Ченить придумаем
-            
+                continue                        
+            if '.' in paragraph:
+                if paragraph[-1] != '.':
+                    t = t[pos_digit+1:]
+                    continue
+                for i in paragraph.split('.'):
+                    if len(i) >= 4:
+                        t = t[pos_digit+1:]
+                        continue
 
         t = t[idx+2:]
         counter+=(idx+1)
         if not (len(paragraph.split('.')) == 2 and paragraph.split('.')[1].isdigit()):
             lst.append((paragraph, f_elem, counter))
 
+# Partition part
 
 def check_types(elem1, elem2):
     if elem1.isdigit() and elem2.isdigit():
@@ -164,3 +149,5 @@ for elem in lst:
                 tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[-1]))
 
 root.show(attr_list=["pos"])
+
+print(tree_to_dict(root, all_attrs=True))

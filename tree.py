@@ -1,90 +1,88 @@
-from bigtree import Node, find, findall
+from bigtree import Node, tree_to_dict
 
-# root = Node("a", age=90)
-# b = Node("b", pos=65, parent=root)
-# c = Node("c", pos=60, parent=root)
-# d = Node("d", pos=40, parent=b)
+class Make_tree:
 
-# root.show(attr_list=["pos"])
+    def __init__(self):
+        self.root = Node("txt")
+        self.start = True
 
-# e = Node("e", pos=89, parent=d)
+    def check_types(self, elem1, elem2):
+        if elem1.data_type == elem2[3]:
+            if '.' not in elem2:
+                return True
+            buf1, buf2 = elem1.node_name.split('.'), elem2[0].split('.')
+            if len(buf1) == len(buf2):  
+                return True
+        else:
+            return False
 
-# root.show(attr_list=["pos"])
+    def walk(self, lst):
+        tree = []
+        for elem in lst:
+            if self.start:
+                tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=self.root, data_type=elem[3]))
+                self.start = False
+            else:
+                if elem[1] == tree[-1].sign:
+                    if self.check_types(tree[-1], elem):
+                        if tree[-1].node_name < elem[0]:
+                            tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[-1].parent, data_type=elem[3]))
+                        else:
+                            res=None
+                            parent=None
+                            st=True
+                            for i in range(-2, -len(tree)-1, -1):
+                                if self.check_types(tree[i], elem) and tree[i].sign == elem:
+                                    if tree[i+1].parent != tree[i].parent and tree[i].parent != parent:
+                                        st = True
 
-# e.parent = c
+                                    if tree[i].node_name >= elem[0]:
+                                        parent=tree[i].parent
+                                        st = False
+                                    elif tree[i].node_name < elem[0] and st:
+                                        tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[i].parent, data_type=elem[3]))
+                                        res=True
+                                        break
+                            if not res:
+                                tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[-1], data_type=elem[3]))
+                    else:
+                        res=None
+                        st = True
+                        parent=None
+                        for i in range(-2, -len(tree)-1, -1):
+                            if self.check_types(tree[i], elem) and tree[i].sign == elem[1]:
+                                if tree[i+1].parent != tree[i].parent and tree[i].parent != parent:
+                                    st = True
 
-# root.show(attr_list=["pos"])
-
-def check_types(elem1, elem2):
-    if elem1.isdigit() and elem2.isdigit():
-        return True
-    elif elem1.isalpha() and elem2.isalpha():
-        return True
-    buf1, buf2 = elem1.split('.'), elem2.split('.')
-    if len(buf1) == len(buf2):  # and ((buf1[0].isdigit() and buf2[0].isdigit()) or (buf1[0].isalpha() and buf2[0].isalpha()))
-        return True
-    else:
-        return False
-
-root = Node("txt")
-tree = []
-lst = [('1.', '.', 2), ('2.', '.', 23), ('a', ')', 20), ('b', ')', 13), ('d', ')', 13), ('1', ')', 14), ('3', ')', 18), ('4.', '.', 16), ('2.', '.', 25), ('1.', '.', 67), ('2.', '.', 13), ('3.', '.', 31), ('a', '.', 37), ('b', '.', 15), ('c', '.', 13), ('3.', '.', 19), ('4.', '.', 13), ('1.', '.', 58), ('3.', '.', 37), ('4.', '.', 36), ('5.', '.', 16), ('1', ')', 80), ('2', ')', 17), ('3', ')', 16)]
-start = True
-for elem in lst:
-    if start:
-        tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=root))
-        start = False
-    else:
-        if elem[1] == tree[-1].sign:
-            if check_types(tree[-1].node_name, elem[0]):
-                if tree[-1].node_name < elem[0]:
-                    tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[-1].parent))
+                                if tree[i].node_name >= elem[0]:
+                                    parent = tree[i].parent
+                                    st = False
+                                elif tree[i].node_name < elem[0] and st:
+                                    tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[i].parent, data_type=elem[3]))
+                                    res=True
+                                    break
+                        if not res:
+                            tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[-1], data_type=elem[3]))
                 else:
                     res=None
+                    st=True
+                    parent=None
                     for i in range(-2, -len(tree)-1, -1):
-                        if check_types(tree[i].node_name, elem[0]) and tree[i].sign == elem:
-                            if tree[i+1].parent != tree[i].parent:
+                        if self.check_types(tree[i], elem) and tree[i].sign == elem[1]:
+                            if tree[i+1].parent != tree[i].parent and tree[i].parent != parent:
                                 st = True
 
                             if tree[i].node_name >= elem[0]:
+                                parent = tree[i].parent
                                 st = False
                             elif tree[i].node_name < elem[0] and st:
-                                tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[i].parent))
-                                res=True
-                                break
+                                    tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[i].parent, data_type=elem[3]))
+                                    res=True
+                                    break
                     if not res:
-                        tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[-1]))
-            else:
-                res=None
-                st = True
-                for i in range(-2, -len(tree)-1, -1):
-                    if check_types(tree[i].node_name, elem[0]) and tree[i].sign == elem[1]:
-                        if tree[i+1].parent != tree[i].parent:
-                            st = True
+                        tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[-1], data_type=elem[3]))
 
-                        if tree[i].node_name >= elem[0]:
-                            st = False
-                        elif tree[i].node_name < elem[0] and st:
-                            print(tree[i].node_name, elem[0], tree[i].parent)
-                            tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[i].parent))
-                            res=True
-                            break
-                if not res:
-                    tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[-1]))
-        else:
-            res=None
-            for i in range(-2, -len(tree)-1, -1):
-                if check_types(tree[i].node_name, elem[0]) and tree[i].sign == elem[1]:
-                    if tree[i+1].parent != tree[i].parent:
-                        st = True
+        return tree_to_dict(self.root, all_attrs=True)
 
-                    if tree[i].node_name >= elem[0]:
-                        st = False
-                    elif tree[i].node_name < elem[0] and st:
-                            tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[i].parent))
-                            res=True
-                            break
-            if not res:
-                tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[-1]))
-
-root.show(attr_list=["pos"])
+    def show(self):
+        self.root.show(attr_list=["pos"])
