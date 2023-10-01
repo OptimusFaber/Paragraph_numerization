@@ -1,0 +1,37 @@
+1. Wery important thing
+2. Second important thing
+	a) blablabla
+	b) blablabla
+	d) blablabla
+		1)also blablabla
+		
+MISSING 1 PARAGRAPHS
+3)and blabla bla
+
+MISSING 1 PARAGRAPHS
+4. Third important thing
+
+Ещё одна моя личная проверка
+
+I) I always think about Roman Empire
+
+MISSING 9 PARAGRAPHS
+XI) My favourite thing
+
+5. Даннные списка идут последовательно. Но могут встречаться и другие цифровые значения 12.05.2033 это не является значением, также №23. тоже не значение списка.  Наши значения  это последовательности: 1. такие вот. 2. просто 
+тесстом с переносами. 3. и в нем могут быть другие буквы: 
+	a. c текстом. 
+	b. с текстом  c. тоже с текстом. 
+
+MISSING 2 PARAGRAPHS
+3. А вот и 3й
+	(I) Also lets check this
+	(II) Blablabla
+4. То есть любое не очень корректное оформление документа: 1. с любыми отступами или без них. 
+		
+MISSING 1 PARAGRAPHS
+3. или табуляцией
+             4. или пробелами
+5. вообще список как в криво отформатированном документе может быть почти любым: 1) со скобочками, 2) со скобочками 3) со скобочками  
+
+

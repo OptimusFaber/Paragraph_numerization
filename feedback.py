@@ -28,7 +28,7 @@ def fb(dct):
                     else:       # for paragraphs 1.2.3.
                         pass
                     if dif != 0:
-                            feedback_list[dct[keys[j]]['pos']-len(alpha)+1] = 'MISSING {} PARAGRAPHS'.format(dif)
+                            feedback_list[dct[keys[j]]['pos']-len(buf[-1])-2] = 'MISSING {} PARAGRAPHS'.format(dif)
                 else:
                     if buf[-1].isdigit():
                         dif = abs(int(buf[-2])-int(buf[-1])) - 1
@@ -43,7 +43,7 @@ def fb(dct):
                     else:       # for paragraphs 1.2.3.
                         pass
                     if dif != 0:
-                            feedback_list[dct[keys[j]]['pos']-len(alpha)+1] = 'MISSING {} PARAGRAPHS'.format(dif)
+                            feedback_list[dct[keys[j]]['pos']-len(buf[-1])-2] = 'MISSING {} PARAGRAPHS'.format(dif)
     
     return feedback_list
 

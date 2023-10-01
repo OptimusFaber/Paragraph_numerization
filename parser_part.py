@@ -59,19 +59,19 @@ def parse(file_path):
                   paragraph = t[pos-1] + paragraph
                   pos -= 1
          else:
-            idx = pos
+            idx = pos + 1
             paragraph = t[pos]
             while t[pos - 1].isdigit():
                   paragraph = t[pos - 1] + paragraph
                   if pos == 0:
                      break
                   pos -= 1
-            pos = idx + 1
+            pos = idx
             if t[pos] == '.':
                   paragraph += '.'
                   pos_dot = pos
                   pos_digit = pos
-                  idx = pos+1
+                  idx = pos
                   while t[pos + 1].isdigit() or t[pos + 1] == '.':
                      paragraph += t[pos + 1]
                      if t[pos + 1].isdigit():
@@ -81,29 +81,26 @@ def parse(file_path):
                         pos_dot = pos + 1
                         pos = pos_dot
                      
-                     idx = pos
-
-            else:
-               idx+=1
+                  idx = pos
             
             # Обработчик исключений
-            if t[pos+1] == ')':       
+            if t[pos+1] == ')':    
                t = t[pos_dot+1:]
-               counter+=(idx+2)
+               counter+=(pos_dot+1)
                continue  
             if '.' in paragraph:
                if paragraph[-1] != '.':
                   t = t[pos_digit+1:]
-                  counter+=(idx+2)
+                  counter+=(pos_digit+1)
                   continue
                for i in paragraph.split('.'):
                   if len(i) >= 4:
                      t = t[pos_digit+1:]
-                     counter+=(idx+2)
+                     counter+=(pos_digit+1)
                      continue  
             if paragraph.count('.') == 1 and '.' not in t[pos_digit-5:pos_digit] and '\n' not in t[pos_digit-5:pos_digit] and '\t' not in t[pos_digit-4:pos_digit] and not first_elem and ':' not in t[pos_digit-4:pos_digit] and '   ' not in t[pos_digit-5:pos_digit]:
                t = t[pos_dot+1:]
-               counter+=(idx+2)
+               counter+=(pos_dot+1)
                continue               
          
          if paragraph in roman_numbers or all(i in roman_numbers for i in list(paragraph)):
