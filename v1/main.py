@@ -16,7 +16,6 @@ res = dict(sorted(list(res.items()), key=lambda x: x[0]))
 print(res)
 t = open('example.txt').readlines()
 t = ' ' + ''.join(t)
-print(t[27], t[188], t[552], t[643])
 
 buf = 0
 for k in list(res.keys()):

@@ -1,4 +1,13 @@
 from bigtree import Node, tree_to_dict
+from roman_numeral import *
+
+def compare_paragraphs(p1, p2, par_type):
+    if par_type != 'roman':
+        return p1 > p2
+    else:
+        p1, p2 = Roman2Num(p1), Roman2Num(p2)
+        return p1 > p2
+
 
 class Make_tree:
 
@@ -39,7 +48,7 @@ class Make_tree:
                                     if tree[i].node_name >= elem[0]:
                                         parent=tree[i].parent
                                         st = False
-                                    elif tree[i].node_name < elem[0] and st:
+                                    elif compare_paragraphs(elem[0], tree[i].node_name, tree[i].data_type) and st:
                                         tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[i].parent, data_type=elem[3]))
                                         res=True
                                         break
@@ -57,7 +66,7 @@ class Make_tree:
                                 if tree[i].node_name >= elem[0]:
                                     parent = tree[i].parent
                                     st = False
-                                elif tree[i].node_name < elem[0] and st:
+                                elif compare_paragraphs(elem[0], tree[i].node_name, tree[i].data_type) and st:
                                     tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[i].parent, data_type=elem[3]))
                                     res=True
                                     break
@@ -75,7 +84,7 @@ class Make_tree:
                             if tree[i].node_name >= elem[0]:
                                 parent = tree[i].parent
                                 st = False
-                            elif tree[i].node_name < elem[0] and st:
+                            elif compare_paragraphs(elem[0], tree[i].node_name, tree[i].data_type) and st:
                                     tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=tree[i].parent, data_type=elem[3]))
                                     res=True
                                     break
