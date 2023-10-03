@@ -51,39 +51,27 @@ XI) My favourite thing
 
 1. Wery important thing
 2. Second important thing
-	a) blablabla
+	a) blablablablabla
 	b) blablabla
-	
-c) Missing
-d) blablabla
+	c) Missing
+	d) blablabla
 		1)also blablabla
-		
-2) Missing
-3)and blabla bla
+		2) Missing
+		3)and blabla bla
 3. Missing
-
 4. Third important thing
 
 Ещё одна моя личная проверка
 
-
 I) Missing
-
 II) Missing
 III) I always think about Roman Empire
-
 IV) Missing
-
 V) Missing
-
 VI) Missing
-
 VII) Missing
-
 VIII) Missing
-
 IX) Missing
-
 X) Missing
 XI) My favourite thing
 
@@ -92,16 +80,13 @@ XI) My favourite thing
 	a. c текстом. 
 	b. с текстом  c. тоже с текстом. 
 1. Missing
-
 2. Missing
-
 3. А вот и 3й
 	(I) Also lets check this
 	(II) Blablabla
 4. То есть любое не очень корректное оформление документа: 1. с любыми отступами или без них. 
-	
-2. Missing
-	3. или табуляцией
+	2. Missing
+			3. или табуляцией
              4. или пробелами
 5. вообще список как в криво отформатированном документе может быть почти любым: 1) со скобочками, 2) со скобочками 3) со скобочками  
 

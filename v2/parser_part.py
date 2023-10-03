@@ -109,7 +109,7 @@ def parse(file_path):
             data_type = 'letter'
          else:
             data_type = 'number'
-         cut = t[:pos_dot+1][::-1]
+         cut = t[:idx+1][::-1]
          cut_pos_1 = re.search('[^\n\t\r ' + paragraph + sign + ']', cut)
          if cut_pos_1:
             cut_pos_1 = cut_pos_1.span()[1]
@@ -117,8 +117,15 @@ def parse(file_path):
          if cut_pos_2:
             cut_pos_2 = cut_pos_2.span()[0]
 
-         if cut_pos_2 and cut_pos_1:
-            delimetr = t[cut_pos_1:cut_pos_2]
+         if cut_pos_2 is not None and cut_pos_1 is not None:
+            delimetr = cut[cut_pos_2:cut_pos_1-1]
+            if '.' in delimetr:
+               delimetr = delimetr.replace('.', '')
+            if delimetr.count(' ') == 1 and delimetr[-1] == ' ' and len(delimetr) > 1:
+               delimetr = delimetr.replace(' ', '')
+            delimetr = delimetr[::-1]
+            if delimetr.count('\n') > 1:
+               delimetr = delimetr.replace('\n', '', delimetr.count('\n')-1)
          elif cut_pos_1:
             delimetr = ''
          elif cut_pos_2:

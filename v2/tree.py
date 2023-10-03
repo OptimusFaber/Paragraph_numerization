@@ -35,19 +35,22 @@ class Make_tree:
             buf=''
             parent = self.root
             pos = 0
+            loc = 0
             for e in paragraph[:-1]:
+    
                 buf+=e+'.'
-                self.tree.append(Node(buf, sign='.', pos=pos, parent=parent, data_type='number', status='MISSING'))
+                self.tree.append(Node(buf, sign='.', pos=pos, parent=parent, data_type='number', status='MISSING', delimetre = '\n'+elem[4], where = 0))
                 parent = self.tree[-1]
                 pos+=1
-            self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING'))
+                loc = 1
+            self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetre = elem[4], where = loc))
             return
 
         for i in range(-1, -len(self.tree)-1, -1):
             if self.tree[i].sign == '.' and self.tree[i].data_type == 'number': 
                 node = self.tree[i].node_name.split('.')[:-1]
                 if node[:-1] == paragraph[:-1]:
-                    self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=self.tree[i].parent, data_type=elem[3], status='EXISTING'))
+                    self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=self.tree[i].parent, data_type=elem[3], status='EXISTING', delimetre = elem[4], where = 0))
                     return
         # If algorithm reached this part, it means that we haven't found the brothers of these paragraph => we have to look for his father
         # if paragraph's name is 1.2.1. => his father is 1.2. 
@@ -55,7 +58,9 @@ class Make_tree:
         research = True
         reletives = [elem]
         papa = paragraph
+        delimetre = elem[4]
         while research:
+            loc=0
             for i in range(-1, -len(self.tree)-1, -1):
                 if self.tree[i].sign == '.' and self.tree[i].data_type == 'number': 
                     node = self.tree[i].node_name.split('.')[:-1]
@@ -64,16 +69,21 @@ class Make_tree:
                             parent = self.tree[i]
                         else:
                             parent = self.root
+                        loc = 0
                         for j in range(-1, -len(reletives)-1, -1):
-                            idx = elem[2] - len(elem[0])
+                            idx = elem[2] - len(elem[0]) - len(elem[4])
                             if j != -len(reletives):
-                                self.tree.append(Node('.'.join(reletives[j])+'.', sign='.', pos=idx, parent=parent, data_type='number', status='MISSING'))
+                                self.tree.append(Node('.'.join(reletives[j])+'.', sign='.', pos=idx, parent=parent, data_type='number', status='MISSING', delimetre = delimetre, where = loc))
                                 parent = self.tree[-1]
                             else:
-                                self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING'))
+                                self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetre = elem[4], where = loc))
+                            loc = 1
+                            if len(delimetre) < len(elem[4])-1:
+                                delimetre += elem[4][len(delimetre)]
                         research = False
                         break
             if research:
+                delimetre = delimetre[:-1]
                 papa = paragraph[:-1]
                 reletives.append(papa)
 
@@ -83,7 +93,7 @@ class Make_tree:
                 if elem[0].count('.') > 1:
                     self.numeral_paragraphs(elem)
                 else:
-                    self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=self.root, data_type=elem[3], status='EXISTING'))
+                    self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=self.root, data_type=elem[3], status='EXISTING', delimetre = elem[4], where = 0))
                 self.start = False
             else:
                 if elem[0].count('.') > 1:
@@ -92,7 +102,10 @@ class Make_tree:
                     res=None
                     st=True
                     parent=None
+                    loc = 0
                     for i in range(-1, -len(self.tree)-1, -1):
+                        if i < -1:
+                            loc = 1
                         if self.check_types(self.tree[i], elem) and self.tree[i].sign == elem[1]:
                             if self.tree[i+1].parent != self.tree[i].parent and self.tree[i].parent != parent:
                                 st = True
@@ -116,13 +129,13 @@ class Make_tree:
                                         else:
                                             n2 = self.tree[i].node_name
                                         for o in range(ord(n2)+1, ord(n1)):
-                                            self.tree.append(Node(chr(o), sign=elem[1], pos=idx, parent=parent, data_type=elem[3], status='MISSING'))
+                                            self.tree.append(Node(chr(o), sign=elem[1], pos=idx, parent=parent, data_type=elem[3], status='MISSING', delimetre = elem[4], where = loc))
                                             # idx+=1
                                     else:
                                         for o in range(Roman2Num(self.tree[i].node_name)+1, Roman2Num(elem[0])):
-                                            self.tree.append(Node(Num2Roman(o), sign=elem[1], pos=idx, parent=parent, data_type=elem[3], status='MISSING'))
+                                            self.tree.append(Node(Num2Roman(o), sign=elem[1], pos=idx, parent=parent, data_type=elem[3], status='MISSING', delimetre = elem[4], where = loc))
                                             # idx+=1
-                                    self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING'))
+                                    self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetre = elem[4], where = loc))
                                     res=True
                                     break
                     if not res:
@@ -140,16 +153,19 @@ class Make_tree:
                                 else:
                                     n='a'
                             dif = ord(elem[0].replace('.', '')) - ord(n)
+                            loc = 0
                             for i in range(ord(n), ord(n)+dif):
-                                self.tree.append(Node(chr(i), sign=elem[1], pos=idx, parent=parent, data_type=elem[3], status='MISSING'))
+                                if i > ord(n):
+                                    loc = 1
+                                self.tree.append(Node(chr(i), sign=elem[1], pos=idx, parent=parent, data_type=elem[3], status='MISSING', delimetre = elem[4], where = 1))
                                 # idx+=1
                         else:
                             n = Roman2Num(elem[0])
                             dif = n - 1
                             for i in range(1, 1+dif):
-                                self.tree.append(Node(Num2Roman(i), sign=elem[1], pos=idx, parent=parent, data_type=elem[3], status='MISSING'))
+                                self.tree.append(Node(Num2Roman(i), sign=elem[1], pos=idx, parent=parent, data_type=elem[3], status='MISSING', delimetre = elem[4], where = 0))
                                 # idx+=1
-                        self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING'))
+                        self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetre = elem[4]))
 
         return tree_to_dict(self.root, all_attrs=True)
 

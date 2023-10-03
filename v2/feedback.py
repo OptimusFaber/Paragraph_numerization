@@ -4,7 +4,7 @@ def fb(dct, file_path):
     keys = list(dct.keys())
     for i in range(1, len(keys)):
         if dct[keys[i]]['status'] == 'MISSING':
-            feedback_list.append((dct[keys[i]]['name'], dct[keys[i]]['sign'], dct[keys[i]]['pos']))
+            feedback_list.append((dct[keys[i]]['name'], dct[keys[i]]['sign'], dct[keys[i]]['pos'], dct[keys[i]]['delimetre'], dct[keys[i]]['where']))
 
     t = open(file_path).readlines()
     t = ' ' + ''.join(t)
@@ -18,8 +18,11 @@ def fb(dct, file_path):
                 text = k[0] + k[1] + ' ' + 'Missing'
             else:
                 text = '(' + k[0] + ')' + ' ' + 'Missing'
-        t = t[:k[2]+buf+1] + '\n' + text + '\n' + t[k[2]+1+buf:]
-        buf+=len(text)+2
+        if not k[4]:
+            t = t[:k[2]+buf+1] + text + k[3] + t[k[2]+1+buf:]
+        else:
+            t = t[:k[2]+buf+1] + k[3] + text + t[k[2]+1+buf:]
+        buf+=len(text)+len(k[3])
     t=t[1:]
     new_path = file_path.split('/')
     new_path[-1] = "new_" + new_path[-1]
