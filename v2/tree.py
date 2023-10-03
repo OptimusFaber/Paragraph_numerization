@@ -34,10 +34,12 @@ class Make_tree:
         if not self.tree:
             buf=''
             parent = self.root
+            pos = 0
             for e in paragraph[:-1]:
                 buf+=e+'.'
-                self.tree.append(Node(buf, sign='.', pos=None, parent=parent, data_type='number', status='MISSNG'))
+                self.tree.append(Node(buf, sign='.', pos=pos, parent=parent, data_type='number', status='MISSING'))
                 parent = self.tree[-1]
+                pos+=1
             self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING'))
             return
 
@@ -65,7 +67,7 @@ class Make_tree:
                         for j in range(-1, -len(reletives)-1, -1):
                             idx = elem[2] - len(elem[0])
                             if j != -len(reletives):
-                                self.tree.append(Node('.'.join(reletives[j])+'.', sign='.', pos=idx, parent=parent, data_type='number', status='MISSNG'))
+                                self.tree.append(Node('.'.join(reletives[j])+'.', sign='.', pos=idx, parent=parent, data_type='number', status='MISSING'))
                                 parent = self.tree[-1]
                             else:
                                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING'))

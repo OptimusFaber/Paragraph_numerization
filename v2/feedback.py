@@ -1,5 +1,4 @@
 def fb(dct, file_path):
-    # print(dct)
     feedback_list = []
 
     keys = list(dct.keys())

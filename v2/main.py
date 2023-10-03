@@ -4,9 +4,11 @@ from feedback import *
 
 txt = parse('example.txt')
 
-tree = Make_tree()
-dct = tree.walk(txt)
-tree.show()
+print(txt)
 
-fb(dct, 'C:/Users/Rodion/repos/Paragraph_numerization/example.txt')
+# tree = Make_tree()
+# dct = tree.walk(txt)
+# tree.show()
+
+# fb(dct, 'example.txt')
 

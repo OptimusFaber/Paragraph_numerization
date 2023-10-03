@@ -30,13 +30,13 @@ def parse(file_path):
          pos = min(bracket.span()[1]-2, dot.span()[1]-2, double_bracket.span()[1]-2)
       elif dot and bracket:
          sign = ')' if bracket.span()[0] < dot.span()[0] else '.'
-         pos = idx = min(bracket.span()[1]-2, dot.span()[1]-2)
+         pos = min(bracket.span()[1]-2, dot.span()[1]-2)
       elif dot and double_bracket:
          sign = '()' if double_bracket.span()[0] < dot.span()[0] else '.'
-         pos = idx = min(double_bracket.span()[1]-2, dot.span()[1]-2)
+         pos = min(double_bracket.span()[1]-2, dot.span()[1]-2)
       elif bracket and double_bracket:
          sign = '()' if double_bracket.span()[0] < bracket.span()[0] else '.'
-         pos = idx = min(double_bracket.span()[1]-2, bracket.span()[1]-2)
+         pos = min(double_bracket.span()[1]-2, bracket.span()[1]-2)
       elif dot:
          sign = '.'
          pos = dot.span()[1]-2
@@ -45,7 +45,7 @@ def parse(file_path):
          pos = bracket.span()[1]-2
       elif double_bracket:
          sign = '()'
-         pos  = double_bracket.span()[1]-2
+         pos = double_bracket.span()[1]-2
       else:
          sign = None
 
@@ -109,10 +109,24 @@ def parse(file_path):
             data_type = 'letter'
          else:
             data_type = 'number'
+         cut = t[:pos_dot+1][::-1]
+         cut_pos_1 = re.search('[^\n\t\r ' + paragraph + sign + ']', cut)
+         if cut_pos_1:
+            cut_pos_1 = cut_pos_1.span()[1]
+         cut_pos_2 = re.search('[\n\t\r ]', cut)
+         if cut_pos_2:
+            cut_pos_2 = cut_pos_2.span()[0]
+
+         if cut_pos_2 and cut_pos_1:
+            delimetr = t[cut_pos_1:cut_pos_2]
+         elif cut_pos_1:
+            delimetr = ''
+         elif cut_pos_2:
+            delimetr = ''
          t = t[idx+1:]
          counter+=(idx+1)
          if not (len(paragraph.split('.')) == 2 and paragraph.split('.')[1].isdigit()):
-            lst.append((paragraph, sign, counter, data_type))
+            lst.append((paragraph, sign, counter, data_type, delimetr))
       first_elem = False
 
    return lst
