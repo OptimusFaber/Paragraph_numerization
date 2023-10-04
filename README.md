@@ -16,31 +16,31 @@
 
 **Данные, которые идут на вход:**
 
-> 1. Wery important thing
-> 2. Second important thing
-> 	a) blablabla
-> 	b) blablabla
-> 	d) blablabla
-> 		1)also blablabla
-> 		3)and blabla bla
-> 4. Third important thing
-> 
-> Ещё одна моя личная проверка
-> 
-> III) I always think about Roman Empire
-> XI) My favourite thing
-> 
-> 5. Даннные списка идут последовательно. Но могут встречаться и другие цифровые значения 12.05.2033 это не является значением, также №23. тоже не значение списка.  Наши значения  это последовательности: 1. такие вот. 2. просто 
-> тесстом с переносами. 3. и в нем могут быть другие буквы: 
-> 	a. c текстом. 
-> 	b. с текстом  c. тоже с текстом. 
-> 3. А вот и 3й
-> 	(I) Also lets check this
-> 	(II) Blablabla
-> 4. То есть любое не очень корректное оформление документа: 1. с любыми отступами или без них. 
-> 		3. или табуляцией
->              4. или пробелами
-> 5. вообще список как в криво отформатированном документе может быть почти любым: 1) со скобочками, 2) со скобочками 3) со скобочками
+> 1. Wery important thing  
+> 2. Second important thing  
+> 	a) blablabla  
+> 	b) blablabla  
+> 	d) blablabla  
+> 		1)also blablabla  
+> 		3)and blabla bla  
+> 4. Third important thing  
+>   
+> Ещё одна моя личная проверка  
+>   
+> III) I always think about Roman Empire  
+> XI) My favourite thing  
+>   
+> 5. Даннные списка идут последовательно. Но могут встречаться и другие цифровые значения 12.05.2033 это не является значением, также №23. тоже не значение списка.  Наши значения  это последовательности: 1. такие вот. 2. просто   
+> тесстом с переносами. 3. и в нем могут быть другие буквы:   
+> 	a. c текстом.   
+> 	b. с текстом  c. тоже с текстом.   
+> 3. А вот и 3й  
+> 	(I) Also lets check this  
+> 	(II) Blablabla  
+> 4. То есть любое не очень корректное оформление документа: 1. с любыми отступами или без них.   
+> 		3. или табуляцией  
+>              4. или пробелами  
+> 5. вообще список как в криво отформатированном документе может быть почти любым: 1) со скобочками, 2) со скобочками 3) со скобочками  
 
 **Результирующее дерево параграфов:**
 
@@ -54,46 +54,46 @@
 
 **Затем я перезаписываю файл и вот что получается на выходе:**
 
-> 1. Wery important thing
-> 2. Second important thing
-> 	a) blablablablabla
-> 	b) blablabla
-> 	c) Missing
-> 	d) blablabla
-> 		1)also blablabla
-> 		2) Missing
-> 		3)and blabla bla
-> 3. Missing
-> 4. Third important thing
-> 
-> Ещё одна моя личная проверка
-> 
-> I) Missing
-> II) Missing
-> III) I always think about Roman Empire
-> IV) Missing
-> V) Missing
-> VI) Missing
-> VII) Missing
-> VIII) Missing
-> IX) Missing
-> X) Missing
-> XI) My favourite thing
-> 
-> 5. Даннные списка идут последовательно. Но могут встречаться и другие цифровые значения 12.05.2033 это не является значением, также №23. тоже не значение списка.  Наши значения  это последовательности: 1. такие вот. 2. просто 
-> тесстом с переносами. 3. и в нем могут быть другие буквы: 
-> 	a. c текстом. 
-> 	b. с текстом  c. тоже с текстом. 
-> 1. Missing
-> 2. Missing
-> 3. А вот и 3й
-> 	(I) Also lets check this
-> 	(II) Blablabla
-> 4. То есть любое не очень корректное оформление документа: 1. с любыми отступами или без них. 
-> 	2. Missing
-> 			3. или табуляцией
->              4. или пробелами
-> 5. вообще список как в криво отформатированном документе может быть почти любым: 1) со скобочками, 2) со скобочками 3) со скобочками  
+> 1. Wery important thing  
+> 2. Second important thing  
+> 	a) blablablablabla  
+> 	b) blablabla  
+> 	c) Missing  
+> 	d) blablabla  
+> 		1)also blablabla  
+> 		2) Missing  
+> 		3)and blabla bla  
+> 3. Missing  
+> 4. Third important thing  
+>   
+> Ещё одна моя личная проверка  
+>   
+> I) Missing  
+> II) Missing  
+> III) I always think about Roman Empire  
+> IV) Missing  
+> V) Missing  
+> VI) Missing  
+> VII) Missing  
+> VIII) Missing  
+> IX) Missing  
+> X) Missing  
+> XI) My favourite thing  
+>   
+> 5. Даннные списка идут последовательно. Но могут встречаться и другие цифровые значения 12.05.2033 это не является значением, также №23. тоже не значение списка.  Наши значения  это последовательности: 1. такие вот. 2. просто   
+> тесстом с переносами. 3. и в нем могут быть другие буквы:   
+> 	a. c текстом.   
+> 	b. с текстом  c. тоже с текстом.   
+> 1. Missing  
+> 2. Missing  
+> 3. А вот и 3й  
+> 	(I) Also lets check this  
+> 	(II) Blablabla  
+> 4. То есть любое не очень корректное оформление документа: 1. с любыми отступами или без них.   
+> 	2. Missing  
+> 			3. или табуляцией  
+>              4. или пробелами  
+> 5. вообще список как в криво отформатированном документе может быть почти любым: 1) со скобочками, 2) со скобочками 3) со скобочками    
 
 ### Часть два
 
@@ -108,36 +108,36 @@
 
 **Данные, которые идут на вход:**
 
->         1.2.1. Third paragraph
+>         1.2.1. Third paragraph  
+>   
+>         1.3.1. Fourth pparagraph  
 > 
->         1.3.1. Fourth pparagraph
-> 
-> 2. Extra paragraph
->        2.2.2. Pamparam
->     2.3. Aga
-> 
-> 5. Text
+> 2. Extra paragraph  
+>        2.2.2. Pamparam  
+>     2.3. Aga  
+>   
+> 5. Text  
 
 **Затем я перезаписываю файл и вот что получается на выходе:**
 
-> 1. Missng
->       1.1. Missng
->       1.2. Missng
->         1.2.1. Third paragraph
-> 
->       1.3. Missng
->         1.3.1. Fourth pparagraph
-> 
-> 2. Extra paragraph
->     2.1. Missng
->     2.2. Missng
->         2.2.1. Missng
->         2.2.2. Pamparam
->     2.3. Aga
-> 
-> 3. Missing
-> 4. Missing
-> 5. Text
+> 1. Missng  
+>       1.1. Missng  
+>       1.2. Missng  
+>         1.2.1. Third paragraph  
+>   
+>       1.3. Missng  
+>         1.3.1. Fourth pparagraph  
+>   
+> 2. Extra paragraph  
+>     2.1. Missng  
+>     2.2. Missng  
+>         2.2.1. Missng  
+>         2.2.2. Pamparam  
+>     2.3. Aga  
+>   
+> 3. Missing  
+> 4. Missing  
+> 5. Text  
 
 Причем алгоритм сохраняет отступы, что очень удобно для анализа текста
 
