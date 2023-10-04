@@ -36,14 +36,15 @@ class Make_tree:
         delimetre = elem[4]
         parent = None
         f, st = False, False
+        idx = elem[2] - len(elem[0]) - len(elem[4])
         while True:
             if len(paragraph) == 1:
-                delimetre = '\n'
+                delimetre = ''
                 parent = self.root
                 break
 
             for i in range(-1, -len(self.tree)-1, -1):
-                if self.tree[i].sign == '.' and self.tree[i].data_type == 'number': 
+                if self.tree[i].sign == '.' and (self.tree[i].data_type == 'number' or self.tree[i].data_type == 'numbers'): 
                     node = self.tree[i].node_name.split('.')[:-1]
                     if node[:-1] == paragraph[:-1]:
                         parent = self.tree[i].parent
@@ -53,7 +54,7 @@ class Make_tree:
                     elif node == paragraph[:-1]:
                         delimetre = self.tree[i].delimetre[:-1]
                         parent = self.tree[i]
-                        f, st = True, True
+                        f = True
             if f:
                 break
 
@@ -61,16 +62,42 @@ class Make_tree:
             paragraph = paragraph[:-1]
             reletives.append(paragraph)
             delimetres.append('\n' + delimetre)
-
         for i in range(-1, -len(reletives), -1):
-            idx = elem[2] - len(elem[0]) - len(elem[4])
-            if i > -len(reletives)+1:
-                self.tree.append(Node('.'.join(reletives[i])+'.', sign='.', pos=idx, parent=parent, data_type='number', status='MISSING', delimetre = delimetre))
+            if parent != self.root:
+                end = int(reletives[i][-1])
+                start = 0
+                for j in range(len(self.tree)):
+                    if self.tree[j].node_name.split('.')[:-2] == reletives[i][:-1]:
+                        start = int(self.tree[j].node_name.split('.')[-2])
+                for k in range(start+1, end):
+                    self.tree.append(Node('.'.join(reletives[i][:-1]+[str(k)])+'.', sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetre = delimetre))
+                self.tree.append(Node('.'.join(reletives[i])+'.', sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetre = delimetre))
+
             else:
-                self.tree.append(Node(delimetre[1:]+'.'.join(reletives[i])+'.', sign='.', pos=idx, parent=parent, data_type='number', status='MISSING', delimetre = '\n'))
-            
+                end = int(reletives[i][-1])
+                start = 0
+                for j in range(len(self.tree)):
+                    if self.tree[j].node_name.split('.')[:-2] == reletives[i][:-1]:
+                        start = int(self.tree[j].node_name.split('.')[-2])
+                for k in range(start+1, end):
+                    self.tree.append(Node('.'.join(reletives[i][:-1]+[str(k)])+'.', sign='.', pos=idx, parent=parent, data_type='number', status='MISSING', delimetre = '\n'))
+                self.tree.append(Node('.'.join(reletives[i])+'.', sign='.', pos=idx, parent=parent, data_type='number', status='MISSING', delimetre = '\n'))
+                idx -= 1
             parent = self.tree[-1]
             delimetre = delimetres[i]
+        for i in range(-1, -len(self.tree)-1, -1):
+            if self.tree[i].node_name.split('.')[:-2] == elem[0].split('.')[:-2]:
+                if self.tree[i].status == 'MISSING':
+                    self.tree[i].delimetre = elem[4]
+        
+        end = int(elem[0].split('.')[-2])
+        start = 0
+        for j in range(len(self.tree)):
+            if self.tree[j].node_name.split('.')[:-2] == elem[0].split('.')[:-2]:
+                start = int(self.tree[j].node_name.split('.')[-2])
+        for k in range(start+1, end):
+            self.tree.append(Node('.'.join(elem[0].split('.')[:-2]+[str(k)])+'.', sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetre = elem[4]))
+
         self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetre = elem[4]))
 
     def walk(self, lst):
