@@ -121,17 +121,27 @@ def parse(file_path):
             delimetr = cut[cut_pos_2:cut_pos_1-1]
             if '.' in delimetr:
                delimetr = delimetr.replace('.', '')
-            if delimetr.count(' ') == 1 and delimetr[-1] == ' ' and len(delimetr) > 1:
-               delimetr = delimetr.replace(' ', '')
+            # if delimetr.count(' ') == 1 and delimetr[-1] == ' ' and len(delimetr) > 1:
+            #    delimetr = delimetr.replace(' ', '')
             delimetr = delimetr[::-1]
-            if delimetr.count('\n') > 1:
-               delimetr = delimetr.replace('\n', '', delimetr.count('\n')-1)
+            # if delimetr.count('\n') > 1:
+            #    delimetr = delimetr.replace('\n', '', delimetr.count('\n')-1)
+            if '\n' in delimetr:
+               delimetr = '\n' + ''.join(delimetr.split('\n')[-1])
+
          elif cut_pos_1:
             delimetr = ''
          elif cut_pos_2:
-            delimetr = ''
-         t = t[idx+1:]
-         counter+=(idx+1)
+            delimetr = cut[cut_pos_2:-1]
+            if '.' in delimetr:
+               delimetr = delimetr.replace('.', '')
+            
+            delimetr = delimetr[::-1]
+
+            if '\n' in delimetr:
+               delimetr = '\n' + delimetr.split('\n')[-1]
+         t = t[idx:]
+         counter+=(idx)
          if not (len(paragraph.split('.')) == 2 and paragraph.split('.')[1].isdigit()):
             lst.append((paragraph, sign, counter, data_type, delimetr))
       first_elem = False
