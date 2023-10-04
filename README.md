@@ -108,32 +108,32 @@
 
 **Данные, которые идут на вход:**
 
->         1.2.1. Third paragraph  
+> \t\t1.2.1. Third paragraph  
 >   
->         1.3.1. Fourth pparagraph  
+> \t\t1.3.1. Fourth pparagraph  
 > 
 > 2. Extra paragraph  
->        2.2.2. Pamparam  
->     2.3. Aga  
+> \t\t2.2.2. Pamparam  
+> \t2.3. Aga  
 >   
 > 5. Text  
 
 **Затем я перезаписываю файл и вот что получается на выходе:**
 
 > 1. Missng  
->       1.1. Missng  
->       1.2. Missng  
->         1.2.1. Third paragraph  
+> \t1.1. Missng  
+> \t1.2. Missng  
+> \t\t1.2.1. Third paragraph  
 >   
->       1.3. Missng  
->         1.3.1. Fourth pparagraph  
+> \t1.3. Missng  
+> \t\t1.3.1. Fourth pparagraph  
 >   
 > 2. Extra paragraph  
->     2.1. Missng  
->     2.2. Missng  
->         2.2.1. Missng  
->         2.2.2. Pamparam  
->     2.3. Aga  
+> \t2.1. Missng  
+> \t2.2. Missng  
+> \t\t2.2.1. Missng  
+> \t\t2.2.2. Pamparam  
+> \t2.3. Aga  
 >   
 > 3. Missing  
 > 4. Missing  
