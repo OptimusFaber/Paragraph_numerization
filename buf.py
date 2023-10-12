@@ -32,16 +32,16 @@ class Make_tree:
         else:
             f_elem = elem1.node_name
 
-        if elem2[3] == 'number':
+        if elem1.data_type == 'number':
             node = int(f_elem) 
             elem = int(l_elem)
-        elif elem2[3] == 'letter':
+        elif elem.data_type == 'letter':
             node = ord(f_elem) 
             elem = ord(l_elem)
         else:
             node = Roman2Num(f_elem)
             elem = Roman2Num(l_elem)
-        if node >= elem:
+        if node > elem:
             return False
         if elem - node > 6:
             return False
@@ -155,10 +155,7 @@ class Make_tree:
                             res=True
                             break
                 if not res:
-                    if self.tree:
-                        parent = self.tree[-1]
-                    else:
-                        parent = self.root
+                    parent = self.tree[-1]
                     idx = elem[2] - len(elem[0]) - len(elem[1])
                     func, revfunc = None, None
                     if elem[3] == 'number':

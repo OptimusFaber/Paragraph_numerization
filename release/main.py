@@ -2,12 +2,15 @@ from parser_part import *
 from tree import *
 from feedback import *
 
-txt = parse('example2.txt')
+txt = parse('Output.txt')
+
+for i in txt:
+    print(i)
 
 
 tree = Make_tree()
 dct = tree.walk(txt)
-tree.show()
+# tree.show()
 
-fb(dct, 'example2.txt')
+# fb(dct, 'Output.txt')
 

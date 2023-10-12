@@ -1,4 +1,5 @@
 import re
+import codecs
 
 roman_numbers = 'IVXLCDM'
 
@@ -10,14 +11,14 @@ def parse(file_path):
    data_type = None 
    first_elem = True
 
-   t = open(file_path).readlines()
+   t = codecs.open(file_path, "r", "utf_8_sig")
    t = ''.join(t)
    t = ' ' + t
 
    while t and sign:
-      dot = re.search(r"(((\W[a-zA-Z])|(\d)+|([IVXLCDM(IV)(IX)(XL)(XC)(CD)(CM)])+)[.])|((\d)+[.])+", t)
-      bracket = re.search(r"((\W[a-zA-Z])|(\d)+|([IVXLCDM(IV)(IX)(XL)(XC)(CD)(CM)])+)[)]", t)
-      double_bracket = re.search(r"[(](([a-zA-Z])|(/d)+|([IVXLCDM(IV)(IX)(XL)(XC)(CD)(CM)]+))[)]", t)
+      dot = re.search(r"(((\W[a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[.])|((\d)+[.])+", t)
+      bracket = re.search(r"((\W[a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]", t)
+      double_bracket = re.search(r"[(]((\W[a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]", t)
 
 
       if dot and bracket and double_bracket:
@@ -35,7 +36,7 @@ def parse(file_path):
          sign = '()' if double_bracket.span()[0] < dot.span()[0] else '.'
          pos = min(double_bracket.span()[1]-2, dot.span()[1]-2)
       elif bracket and double_bracket:
-         sign = '()' if double_bracket.span()[0] < bracket.span()[0] else '.'
+         sign = '()' if double_bracket.span()[0] <= bracket.span()[0] else '.'
          pos = min(double_bracket.span()[1]-2, bracket.span()[1]-2)
       elif dot:
          sign = '.'
@@ -49,9 +50,8 @@ def parse(file_path):
       else:
          sign = None
 
-      # sign это знак параграфа
       if sign:
-         if not t[pos].isdigit():   # В случае если имя параграфа это буква
+         if not t[pos].isdigit():
             idx = pos+1
             paragraph = t[pos]
             if pos>0 and paragraph in roman_numbers:
@@ -89,19 +89,40 @@ def parse(file_path):
                counter+=(pos_dot+1)
                continue  
             if '.' in paragraph:
-               if paragraph[-1] != '.':
-                  t = t[pos_digit+1:]
-                  counter+=(pos_digit+1)
-                  continue
+               date = False
                for i in paragraph.split('.'):
-                  if len(i) >= 4:
+                  if len(i) >= 3:
                      t = t[pos_digit+1:]
                      counter+=(pos_digit+1)
-                     continue  
-            if paragraph.count('.') == 1 and '.' not in t[pos_digit-5:pos_digit] and '\n' not in t[pos_digit-5:pos_digit] and '\t' not in t[pos_digit-4:pos_digit] and not first_elem and ':' not in t[pos_digit-4:pos_digit] and '   ' not in t[pos_digit-5:pos_digit]:
-               t = t[pos_dot+1:]
-               counter+=(pos_dot+1)
-               continue               
+                     date = True
+                     break
+                  if i:
+                     if i[0] == '0':
+                        t = t[pos_digit+1:]
+                        counter+=(pos_digit+1)
+                        date = True
+                        break
+
+               if date:
+                  continue
+         pos1 = re.search(paragraph, t).span()[0]
+         pos2 = re.search(paragraph, t).span()[1]
+         pos0 = max(0, pos1-8)
+         if not re.search('[\n\t\r]|(  )|([.]\W+)|([:]\W+)', t[pos0:pos1]) or re.search('[.][ ]*[,]', t[pos0:pos1]):
+            t = t[idx+1:]
+            counter+=(idx+1)
+            continue  
+         if sign == '()':
+            if len(paragraph) >= 3:
+               t = t[idx+1:]
+               counter+=(idx+1)
+               continue  
+         # if re.search('\n', t[pos2:pos2+5]):
+         # # if '\n' in t[idx+1:idx+5] or '    ' in t[idx+1:idx+5] or '\t\t' in t[idx+1:idx+5] or '\r\r'in t[idx+1:idx+5]:
+         #    t = t[idx+1:]
+         #    counter+=(idx+1)
+         #    continue
+            
          
          if paragraph in roman_numbers or all(i in roman_numbers for i in list(paragraph)):
             data_type = 'roman'
@@ -110,6 +131,11 @@ def parse(file_path):
          else:
             data_type = 'number'
          cut = t[:idx+1][::-1]
+         if sign == ')' and cut.count('(') == cut.count(')'):
+            t = t[idx+1:]
+            counter+=(idx+1)
+            continue
+
          cut_pos_1 = re.search('[^\n\t\r ' + paragraph + sign + ']', cut)
          if cut_pos_1:
             cut_pos_1 = cut_pos_1.span()[1]
@@ -121,11 +147,7 @@ def parse(file_path):
             delimetr = cut[cut_pos_2:cut_pos_1-1]
             if '.' in delimetr:
                delimetr = delimetr.replace('.', '')
-            # if delimetr.count(' ') == 1 and delimetr[-1] == ' ' and len(delimetr) > 1:
-            #    delimetr = delimetr.replace(' ', '')
             delimetr = delimetr[::-1]
-            # if delimetr.count('\n') > 1:
-            #    delimetr = delimetr.replace('\n', '', delimetr.count('\n')-1)
             if '\n' in delimetr:
                delimetr = '\n' + ''.join(delimetr.split('\n')[-1])
 
@@ -142,8 +164,9 @@ def parse(file_path):
                delimetr = '\n' + delimetr.split('\n')[-1]
          t = t[idx:]
          counter+=(idx)
-         if not (len(paragraph.split('.')) == 2 and paragraph.split('.')[1].isdigit()):
-            lst.append((paragraph, sign, counter, data_type, delimetr))
+         paragraph = paragraph[:-1] if paragraph[-1] == '.' else paragraph
+         # if not (len(paragraph.split('.')) == 2 and paragraph.split('.')[1].isdigit()):
+         lst.append((paragraph, sign, counter, data_type, delimetr))
       first_elem = False
 
    return lst
