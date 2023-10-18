@@ -58,6 +58,13 @@ def parse(file_path):
                while t[pos-1] in roman_numbers:
                   paragraph = t[pos-1] + paragraph
                   pos -= 1
+                  if pos < 0:
+                     break
+               if pos > 0:
+                  if t[pos-1].isalpha() and t[pos-1] not in roman_numbers:
+                     t = t[idx+1:]
+                     counter+=(idx+1)
+                     continue
          else:
             idx = pos + 1
             paragraph = t[pos]
@@ -97,7 +104,7 @@ def parse(file_path):
                      date = True
                      break
                   if i:
-                     if i[0] == '0':
+                     if i[0] == '0' and len(i) > 1:
                         t = t[pos_digit+1:]
                         counter+=(pos_digit+1)
                         date = True
@@ -105,31 +112,45 @@ def parse(file_path):
 
                if date:
                   continue
-         pos1 = re.search(paragraph, t).span()[0]
-         pos2 = re.search(paragraph, t).span()[1]
+         p=None
+         if sign == ')':
+            p = paragraph + '[)]'
+         elif sign == '()':
+            p = '[(]' + paragraph + '[)]'
+         else:
+            p = paragraph.replace('.', '[.]')
+         pos1 = re.search(p, t).span()[0]
+         pos2 = re.search(p, t).span()[1]
          pos0 = max(0, pos1-8)
-         if not re.search('[\n\t\r]|(  )|([.]\W+)|([:]\W+)', t[pos0:pos1]) or re.search('[.][ ]*[,]', t[pos0:pos1]):
+         if not re.search('[\n\t\r]|([.]\W+)|([:]\W+)', t[pos0:pos1]):
             t = t[idx+1:]
             counter+=(idx+1)
             continue  
-         if sign == '()':
+         if sign == '()' and paragraph.isdigit():
             if len(paragraph) >= 3:
                t = t[idx+1:]
                counter+=(idx+1)
-               continue  
-         # if re.search('\n', t[pos2:pos2+5]):
-         # # if '\n' in t[idx+1:idx+5] or '    ' in t[idx+1:idx+5] or '\t\t' in t[idx+1:idx+5] or '\r\r'in t[idx+1:idx+5]:
-         #    t = t[idx+1:]
-         #    counter+=(idx+1)
-         #    continue
-            
+               continue      
          
          if paragraph in roman_numbers or all(i in roman_numbers for i in list(paragraph)):
             data_type = 'roman'
          elif paragraph.isalpha():
-            data_type = 'letter'
+            if 1040 <= ord(paragraph) <= 1103:
+               if paragraph.isupper():
+                  data_type = 'ru_up_letter'
+               else:
+                  data_type = 'ru_low_letter'
+            else:
+               if paragraph.isupper():
+                  data_type = 'en_up_letter'
+               else:
+                  data_type = 'en_low_letter'
          else:
-            data_type = 'number'
+            if paragraph.split('.')[-1].isdigit() and len( paragraph.split('.')) > 1:
+               data_type = 'numbers'
+            else:
+               data_type = 'number'
+         
          cut = t[:idx+1][::-1]
          if sign == ')' and cut.count('(') == cut.count(')'):
             t = t[idx+1:]
@@ -162,10 +183,9 @@ def parse(file_path):
 
             if '\n' in delimetr:
                delimetr = '\n' + delimetr.split('\n')[-1]
-         t = t[idx:]
-         counter+=(idx)
+         t = t[idx+1:]
+         counter+=(idx+1)
          paragraph = paragraph[:-1] if paragraph[-1] == '.' else paragraph
-         # if not (len(paragraph.split('.')) == 2 and paragraph.split('.')[1].isdigit()):
          lst.append((paragraph, sign, counter, data_type, delimetr))
       first_elem = False
 
