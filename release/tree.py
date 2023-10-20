@@ -78,7 +78,84 @@ class Make_tree:
         elif elem2[0] - elem1[0] > 1:
             return False
         
-            
+    def letters_romans(self, elem, k):
+        parent = None
+        if self.func(elem[0]) - self.func(self.n) < 2 and self.tree[-1].data_type != elem[3]:
+            parent=self.tree[-1]
+            if self.func(elem[0]) - self.func(self.n):
+                self.tree.append(Node(self.n, sign=elem[1], pos=self.idx, parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+            self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
+        else:
+            for i in range(-1, max(-len(self.tree)-1, -15), -1):  
+                if self.similarity_check(self.tree[i], elem):
+                    if ((self.tree[i+1].parent == self.tree[i].parent) or (self.tree[i].parent == parent)) and i < -1:
+                        parent = self.tree[i].parent
+                        continue
+
+                    if self.logic_check(self.tree[i], elem):
+                        parent = self.tree[i].parent
+                        n1, n2 = self.func(elem[0]), self.func(self.tree[i].node_name)
+                        if (n1-n2-1) > 2:
+                            return
+                        for i in range(n2+1, n1):
+                            self.tree.append(Node(self.revfunc(i), sign=elem[1], pos=self.idx, parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+                        self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
+                        return 
+        
+    def numbers(self, elem, k):
+        parent = None
+        if self.func(elem[0]) - self.func(self.n) < 2 and self.p:
+            st = False
+            if self.param and self.tree:
+                path = self.param.path_name.split('/')[2:]
+                for i in range(k+1, min(len(self.lst), k+71)):
+                    if 'number' not in self.lst[i][3]:
+                        continue
+                    if self.similarity_check(elem, self.lst[i]):
+                        if self.logic_check(elem[0], self.lst[i]):
+                            st = True
+                    for el in path:
+                        if self.numeral_check(el, self.lst[i][0]):
+                            if st:
+                                parent=self.tree[-1]
+                            break
+                    else:
+                        continue
+                    break
+                else:
+                    self.trees.append(tree_to_dict(self.root, all_attrs=True))
+                    self.roots.append(self.root)
+                    # del self.tree
+                    # del self.root
+                    self.root, self.tree = Node("txt"), []
+                    parent, st = self.root, True  
+            else:
+                parent, st = self.root, True
+
+            if st:
+                if self.func(elem[0]) - self.func(self.n) and not find(self.root, lambda node: node.path_name == parent.path_name + '/1'):
+                    self.tree.append(Node(self.n, sign=elem[1], pos=self.idx, parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+                self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
+                self.param = self.tree[-1]
+                self.p = self.func(elem[0]) - self.func(self.n)
+        else:
+            for i in range(-1, max(-len(self.tree)-1, -70), -1):  
+                if self.similarity_check(self.tree[i], elem):
+                    if i < -1:
+                        if ((self.tree[i+1].parent == self.tree[i].parent) or (self.tree[i].parent == parent)) and self.tree[i+1].data_type == self.tree[i].data_type:
+                            parent = self.tree[i].parent
+                            continue
+                    if self.logic_check(self.tree[i], elem):
+                        parent = self.tree[i].parent
+                        n1, n2 = self.func(elem[0]), self.func(self.tree[i].node_name)
+                        if (n1-n2-1) > 2:
+                            return
+                        for i in range(n2+1, n1):
+                            self.tree.append(Node(self.revfunc(i), sign=elem[1], pos=self.idx, parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+                        self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
+                        self.param = self.tree[-1]
+                        self.p = True
+                        return 
 
     def numeral_paragraphs(self, elem):
         paragraph = elem[0].split('.')
@@ -146,10 +223,8 @@ class Make_tree:
                     parent, st = self.root, True
 
                 if st:
-                    if sp[0] == 2 and not find(self.root, lambda node: node.path_name == parent.path_name + '/1.1'):
-                        self.tree.append(Node('1.1', sign=elem[1], pos=elem[2], parent=parent, data_type='number', status='MISSING', delimetr = elem[4]))
-                    for j in range(1, sp[1]):
-                        self.tree.append(Node('{}.{}'.format(sp[0], j), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+                    if (sp[0] == 2 or sp[0] == 1) and (not find(self.root, lambda node: node.path_name == parent.path_name + '/1.1') and elem[0] != '1.1'):
+                        self.tree.append(Node('{}.{}'.format(sp[0], 1), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
                     self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
                     self.param = self.tree[-1]
             return
@@ -193,93 +268,18 @@ class Make_tree:
             if elem[3] == 'numbers':
                 self.numeral_paragraphs(elem)  
             else:
-                parent=None
-                idx = elem[2] - len(elem[0]) - len(elem[1])
-                func, revfunc = functions[elem[3]]
-                n = first_elements[elem[3]]
+                self.idx = elem[2] - len(elem[0]) - len(elem[1])
+                self.func, self.revfunc = functions[elem[3]]
+                self.n = first_elements[elem[3]]
+
                 if 'letter' in elem[3] or 'roman' in elem[3]:
-                    if func(elem[0]) - func(n) < 2 and self.tree[-1].data_type != elem[3]:
-                        parent=self.tree[-1]
-                        if func(elem[0]) - func(n):
-                            self.tree.append(Node(n, sign=elem[1], pos=idx, parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
-                        self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
-                    else:
-                        for i in range(-1, max(-len(self.tree)-1, -15), -1):  
-                            if self.similarity_check(self.tree[i], elem):
-                                if ((self.tree[i+1].parent == self.tree[i].parent) or (self.tree[i].parent == parent)) and i < -1:
-                                    parent = self.tree[i].parent
-                                    continue
-
-                                if self.logic_check(self.tree[i], elem):
-                                    parent = self.tree[i].parent
-                                    n1, n2 = func(elem[0]), func(self.tree[i].node_name)
-                                    if (n1-n2-1) > 2:
-                                        break
-                                    for i in range(n2+1, n1):
-                                        self.tree.append(Node(revfunc(i), sign=elem[1], pos=idx, parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
-                                    self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
-                                    break 
-
+                    self.letters_romans(elem, k)
                 elif elem[3] == 'number':
-                    if func(elem[0]) - func(n) < 2 and self.p:
-                        # if find(self.root, lambda node: node.path_name == "/txt/1"):
-                        st = False
-                        for i in range(k+1, min(len(self.lst), k+71)):
-                            if self.param and self.tree:
-                                if 'number' not in self.lst[i][3]:
-                                    continue
-                                if self.similarity_check(elem, self.lst[i]):
-                                    if self.logic_check(elem[0], self.lst[i]):
-                                        st = True
-                                if self.numeral_check(self.param.node_name, self.lst[i][0]):
-                                    if st:
-                                        parent=self.tree[-1]
-                                    break
-                            else:
-                                st = True
-                                parent = self.root
-                                break
-
-                        else:
-                            self.trees.append(tree_to_dict(self.root, all_attrs=True))
-                            self.roots.append(self.root)
-                            del self.tree
-                            del self.root
-                            self.root = Node("txt")
-                            self.tree = []
-                            parent=self.root
-                            st = True
-                        if st:
-                            if func(elem[0]) - func(n) and not find(self.root, lambda node: node.path_name == parent.path_name + '/1'):
-                                self.tree.append(Node(n, sign=elem[1], pos=idx, parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
-                            self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
-                            self.param = self.tree[-1]
-                            self.p = func(elem[0]) - func(n)
-                    else:
-                        for i in range(-1, max(-len(self.tree)-1, -70), -1):  
-                            if self.similarity_check(self.tree[i], elem):
-                                if i < -1:
-                                    if ((self.tree[i+1].parent == self.tree[i].parent) or (self.tree[i].parent == parent)) and self.tree[i+1].data_type == self.tree[i].data_type:
-                                        parent = self.tree[i].parent
-                                        continue
-
-                                if self.logic_check(self.tree[i], elem):
-                                    parent = self.tree[i].parent
-                                    n1, n2 = func(elem[0]), func(self.tree[i].node_name)
-                                    if (n1-n2-1) > 2:
-                                        break
-                                    for i in range(n2+1, n1):
-                                        self.tree.append(Node(revfunc(i), sign=elem[1], pos=idx, parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
-                                    self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
-                                    self.param = self.tree[-1]
-                                    self.p = True
-                                    break 
-
+                    self.numbers(elem, k)
+                    
         self.trees.append(tree_to_dict(self.root, all_attrs=True))
         self.roots.append(self.root)
-
         return self.trees
-
 
     def show(self):
         for root in self.roots:
