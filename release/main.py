@@ -10,7 +10,7 @@ for i in txt:
 
 tree = Make_tree()
 dct = tree.walk(txt)
-tree.show()
+# tree.show()
 
 # fb(dct, 'Output.txt')
 
