@@ -3,6 +3,10 @@ import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from roman_numeral import *
 
+LETTER_SEARCH = -15     # Сколько шагов назад мы сделаем, чтобы найти подобный буквенный параграф
+NUMBER_SEARCH = 70      # Сколько шагов назад/вперед мы сделаем, чтобы найти числовой параграф
+NUM_PARAGRAPH_SEARCH = 90   # Сколько шагов назад/вперед мы сделаем, чтобы найти параграф с несколькими цифрами
+
 functions = {
     'number': [int, str], 
     'ru_up_letter': [ord, chr], 
@@ -26,21 +30,20 @@ class Make_tree:
     def __init__(self):
         self.root = Node("txt")
         self.param = None
-        self.tree = []
-        self.trees = []
-        self.roots = []
+        self.tree = []      # Тут локальное дерево
+        self.trees = []     # Список деревьев
+        self.roots = []     # Список верхушек деревьев
         # Special parametrs #
         self.p = True
-        self.p2 = True
         self.k = None
 
-    def similarity_check(self, elem1, elem2):
+    def similarity_check(self, elem1, elem2):       # Метод для проверки что параграф одного типа (элемент и знак)
         if isinstance(elem1, Node):
             return (elem1.data_type == elem2[3] and elem1.sign == elem2[1])
         else:
             return(elem1[3] == elem2[3] and elem1[1] == elem2[1])
     
-    def logic_check(self, elem1, elem2):
+    def logic_check(self, elem1, elem2):            # Метод для проверки что параграфы могут идти друг за другом
         l_elem = elem2[0]
         f_elem = elem1.node_name if isinstance(elem1, Node) else elem1
         if isinstance(elem1, Node):
@@ -55,7 +58,7 @@ class Make_tree:
         else:
             return True  
 
-    def numeral_check(self, elem1, elem2):
+    def numeral_check(self, elem1, elem2):          # Прототип logic_check, но для параграфов с несколькью числами
         elem1 = elem1.node_name if isinstance(elem1, Node) else elem1 
         elem2 = elem2.node_name if isinstance(elem2, Node) else elem2
         elem1, elem2 = list(map(int, elem1.split('.'))), list(map(int, elem2.split('.')))
@@ -78,7 +81,7 @@ class Make_tree:
         elif elem2[0] - elem1[0] > 1:
             return False
         
-    def letters_romans(self, elem, k):
+    def letters_romans(self, elem, k):      # Алгоритм работы с буквенными параграфами
         parent = None
         if self.func(elem[0]) - self.func(self.n) < 2 and self.tree[-1].data_type != elem[3]:
             parent=self.tree[-1]
@@ -86,7 +89,7 @@ class Make_tree:
                 self.tree.append(Node(self.n, sign=elem[1], pos=self.idx, parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
             self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
         else:
-            for i in range(-1, max(-len(self.tree)-1, -15), -1):  
+            for i in range(-1, max(-len(self.tree)-1, LETTER_SEARCH), -1):  
                 if self.similarity_check(self.tree[i], elem):
                     if ((self.tree[i+1].parent == self.tree[i].parent) or (self.tree[i].parent == parent)) and i < -1:
                         parent = self.tree[i].parent
@@ -102,13 +105,13 @@ class Make_tree:
                         self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
                         return 
         
-    def numbers(self, elem, k):
+    def numbers(self, elem, k):                 # Алгоритм работы с числовами параграфами
         parent = None
         if self.func(elem[0]) - self.func(self.n) < 2 and self.p:
             st = False
             if self.param and self.tree:
                 path = self.param.path_name.split('/')[2:]
-                for i in range(k+1, min(len(self.lst), k+71)):
+                for i in range(k+1, min(len(self.lst), k+NUMBER_SEARCH)):
                     if 'number' not in self.lst[i][3]:
                         continue
                     if self.similarity_check(elem, self.lst[i]):
@@ -139,7 +142,7 @@ class Make_tree:
                 self.param = self.tree[-1]
                 self.p = self.func(elem[0]) - self.func(self.n)
         else:
-            for i in range(-1, max(-len(self.tree)-1, -70), -1):  
+            for i in range(-1, max(-len(self.tree)-1, -NUMBER_SEARCH), -1):  
                 if self.similarity_check(self.tree[i], elem):
                     if i < -1:
                         if ((self.tree[i+1].parent == self.tree[i].parent) or (self.tree[i].parent == parent)) and self.tree[i+1].data_type == self.tree[i].data_type:
@@ -157,7 +160,7 @@ class Make_tree:
                         self.p = True
                         return 
 
-    def numeral_paragraphs(self, elem):
+    def numeral_paragraphs(self, elem):                 # Алгоритм работы с параграфами где несколько чисел
         paragraph = elem[0].split('.')
         reletives = [elem[0]]
         delimetrs = [elem[4]]
@@ -167,7 +170,7 @@ class Make_tree:
         # Поиск отсутствующих параграфов
         for i in range(2):
             p = None
-            for i in range(-1, max(-len(self.tree), -90), -1):
+            for i in range(-1, max(-len(self.tree), -NUM_PARAGRAPH_SEARCH), -1):
                 if self.tree[i].data_type == 'numbers': 
                     node = self.tree[i].node_name.split('.')
                     # Параграфы братья
@@ -194,7 +197,7 @@ class Make_tree:
                 if find(self.root, lambda node: node.path_name == "/txt/{}.{}".format(sp[0], sp[1])):
                     st = False
                     path = self.param.path_name.split('/')[2:]
-                    for i in range(self.k+1, min(len(self.lst), self.k+31)):
+                    for i in range(self.k+1, min(len(self.lst), self.k+NUM_PARAGRAPH_SEARCH)):
                         if self.param and self.tree:
                             if 'numbers' not in self.lst[i][3]:
                                 continue
