@@ -171,6 +171,8 @@ def parse(file_path):
             delimetr = delimetr[::-1]
             if '\n' in delimetr:
                delimetr = '\n' + ''.join(delimetr.split('\n')[-1])
+            if '\r' in delimetr:
+               delimetr = '\r' + ''.join(delimetr.split('\r')[-1])
 
          elif cut_pos_1:
             delimetr = ''
@@ -183,6 +185,8 @@ def parse(file_path):
 
             if '\n' in delimetr:
                delimetr = '\n' + delimetr.split('\n')[-1]
+            if '\r' in delimetr:
+               delimetr = '\r' + delimetr.split('\r')[-1]
          t = t[idx+1:]
          counter+=(idx+1)
          paragraph = paragraph[:-1] if paragraph[-1] == '.' else paragraph

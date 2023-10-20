@@ -9,8 +9,7 @@ for i in txt:
 
 
 tree = Make_tree()
-dct = tree.walk(txt)
-# tree.show()
+dcts = tree.walk(txt)
+tree.show()
 
-# fb(dct, 'Output.txt')
-
+fb(dcts, 'Output.txt')
