@@ -4,6 +4,7 @@ import codecs
 roman_numbers = 'IVXLCDM'
 
 def parse(file_path):
+   counter = None
    lst = []
 
    sign = True
@@ -49,7 +50,8 @@ def parse(file_path):
          pos = double_bracket.span()[1]-2
       else:
          sign = None
-
+      if counter == 175641:
+         print('yes')
       if sign:
          if not t[pos].isdigit():
             idx = pos+1
@@ -68,7 +70,7 @@ def parse(file_path):
          else:
             idx = pos + 1
             paragraph = t[pos]
-            while t[pos - 1].isdigit():
+            while t[pos - 1].isdigit() and pos>0:
                   paragraph = t[pos - 1] + paragraph
                   if pos == 0:
                      break

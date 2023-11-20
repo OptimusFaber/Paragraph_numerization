@@ -32,7 +32,7 @@ def fb(dcts, file_path):
     new_path[-1] = "new_" + new_path[-1]
     new_path = '/'.join(new_path)
     print('New file {} was saved'.format(new_path))
-    f = open(new_path, "w")
+    f = open(new_path, "w", encoding="utf-8")
     f.write(t)
     f.close()
     

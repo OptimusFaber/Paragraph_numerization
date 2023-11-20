@@ -120,7 +120,6 @@ def parse(file_path):
          else:
             p = paragraph.replace('.', '[.]')
          pos1 = re.search(p, t).span()[0]
-         pos2 = re.search(p, t).span()[1]
          pos0 = max(0, pos1-8)
          if not re.search('[\n\t\r]|([.]\W+)|([:]\W+)', t[pos0:pos1]):
             t = t[idx+1:]
