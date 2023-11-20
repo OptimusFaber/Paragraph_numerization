@@ -22,16 +22,16 @@
 
 **Parser_part.py вытаскивает все что похоже на параграфы:**
 
-![alt text](https://github.com/rodion02/Paragraph_numerization/blob/main/demo.jpg?raw=true)
+![alt text](https://github.com/rodion02/Paragraph_numerization/blob/main/images/demo.jpg?raw=true)
 
 **Tree.py уже работает с полученной последовательностью - связывает нужное и выкидывает ненужное**
 
-![alt text](https://github.com/rodion02/Paragraph_numerization/blob/main/demo2.jpg?raw=true)
+![alt text](https://github.com/rodion02/Paragraph_numerization/blob/main/images/demo2.jpg?raw=true)
 
 **Вот в этом месте программа сделала новое дерево тк дальше нет 7.13.2 или 7.14**
 
-![alt text](https://github.com/rodion02/Paragraph_numerization/blob/main/demo3.jpg?raw=true)
+![alt text](https://github.com/rodion02/Paragraph_numerization/blob/main/images/demo3.jpg?raw=true)
 
 **Feedback.py отрабатывает полученные словари и возвращает пропущенные параграфы с пометкой** ```Missing```
 
-![alt text](https://github.com/rodion02/Paragraph_numerization/blob/main/demo4.jpg?raw=true)
+![alt text](https://github.com/rodion02/Paragraph_numerization/blob/main/images/demo4.jpg?raw=true)

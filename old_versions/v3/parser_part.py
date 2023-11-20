@@ -92,8 +92,8 @@ def parse(file_path):
             
             # Обработчик исключений
             if t[pos+1] == ')':    
-               t = t[pos+2:]
-               counter+=(pos+2)
+               t = t[pos_dot+1:]
+               counter+=(pos_dot+1)
                continue  
             if '.' in paragraph:
                date = False
@@ -120,17 +120,12 @@ def parse(file_path):
          else:
             p = paragraph.replace('.', '[.]')
          pos1 = re.search(p, t).span()[0]
-         if pos1 >= 1:
-            pos0 = re.findall('[\w,!?()-]', t[:pos1])
-            pos0 = len(t[:pos1])-t[:pos1][::-1].index(pos0[-1]) if pos0 else 0 
-            if not re.search('[\n\t\r]|([.]\W+)|([:]\W+)', t[pos0:pos1]):
-               t = t[idx+1:]
-               counter+=(idx+1)
-               continue  
-         elif pos1 < 1 and lst:
+         pos2 = re.search(p, t).span()[1]
+         pos0 = max(0, pos1-8)
+         if not re.search('[\n\t\r]|([.]\W+)|([:]\W+)', t[pos0:pos1]):
             t = t[idx+1:]
             counter+=(idx+1)
-            continue 
+            continue  
          if sign == '()' and paragraph.isdigit():
             if len(paragraph) >= 3:
                t = t[idx+1:]
@@ -151,15 +146,10 @@ def parse(file_path):
                else:
                   data_type = 'en_low_letter'
          else:
-            if (paragraph.split('.')[-1].isdigit() and len(paragraph.split('.')) > 1):
+            if paragraph.split('.')[-1].isdigit() and len( paragraph.split('.')) > 1:
                data_type = 'numbers'
             else:
                data_type = 'number'
-         
-         if paragraph[-1] == '.' and paragraph.count('.') > 1:
-            t = t[idx+1:]
-            counter+=(idx+1)
-            continue
          
          cut = t[:idx+1][::-1]
          if sign == ')' and cut.count('(') == cut.count(')'):
