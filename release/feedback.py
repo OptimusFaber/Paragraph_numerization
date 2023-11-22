@@ -1,6 +1,6 @@
 import codecs
 
-def fb(dcts, file_path):
+def fb(dcts, file_path, new_file_path):
     feedback_list = []
 
     for dct in dcts:
@@ -28,11 +28,8 @@ def fb(dcts, file_path):
             t = t[:k[2]+buf] + text + k[3] + t[k[2]+buf:]
         buf+=len(text)+len(k[3])
 
-    new_path = file_path.split('/')
-    new_path[-1] = "new_" + new_path[-1]
-    new_path = '/'.join(new_path)
-    print('New file {} was saved'.format(new_path))
-    f = open(new_path, "w", encoding="utf-8")
+    print('New file {} was saved'.format(new_file_path))
+    f = open(new_file_path, "w", encoding="utf-8")
     f.write(t)
     f.close()
     
