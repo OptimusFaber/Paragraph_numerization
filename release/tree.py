@@ -135,14 +135,12 @@ class Make_tree:
         if (self.func(elem[0]) == self.func(self.n)) or (self.func(elem[0]) - self.func(self.n) < 2 and elem[1] not in self.p):
             st = False
             if self.ancestor and self.tree:    # если это не новое дерево 
-                last = 1000
                 for i in range(k+1, min(len(self.lst), k+NUMBER_SEARCH)):   # иду по нераспределенным элементам, смотрю что впереди
                     if 'number' not in self.lst[i][3]:
                         continue
-                    if self.similarity_check(elem, self.lst[i]):
-                        if self.logic_check(elem[0], self.lst[i]) and last :
+                    if self.similarity_check(elem, self.lst[i]) and self.lst[i][1] == elem[1]:
+                        if self.logic_check(elem[0], self.lst[i]):
                             st = True
-                        last = int(self.lst[i][0])
                     for n in list(self.ancestor.ancestors)[:-1]:
                         if 'number' in n.data_type:
                             if self.numeral_check(n.name, self.lst[i][0]) and self.lst[i][1] == n.sign:

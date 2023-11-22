@@ -121,9 +121,9 @@ def parse(file_path):
             p = paragraph.replace('.', '[.]')
          pos1 = re.search(p, t).span()[0]
          if pos1 >= 1 and lst:
-            pos0 = re.findall('[\w,!?()-]', t[:pos1])
+            pos0 = re.findall('[\w!?()-]', t[:pos1])
             pos0 = len(t[:pos1])-t[:pos1][::-1].index(pos0[-1]) if pos0 else 0 
-            if not re.search('[\n\t\r]|([.]\W+)|([:]\W+)', t[pos0:pos1]):
+            if not re.search('[\n\t\r]|([.]\W+)|([:]\W+)|([,]\W+)', t[pos0:pos1]):
                t = t[idx+1:]
                counter+=(idx+1)
                continue  
