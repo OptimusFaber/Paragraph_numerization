@@ -16,7 +16,7 @@ def check_file(path, test=False, visualize=False):
     else:
         new_path = path.replace(name, "fixed_{}".format(name))
         feedback = fb(dcts, path, new_path)
-        feedback = list(map(lambda x: 'MISSING: ' + ', '.join(map(str, x[:3])), feedback))
+        feedback = list(map(lambda x: "{}: {} || {} || {} || {} || {}".format(*x), feedback))
         feedback = '\n'.join(feedback)
         f = open("feedback.txt", "w", encoding="utf-8")
         f.write(feedback)
