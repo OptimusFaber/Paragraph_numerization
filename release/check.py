@@ -3,6 +3,7 @@ from tree import *
 from feedback import *
 import os
 import json
+import codecs
 
 def check_file(path, test=False, visualize=False): 
     name = os.path.basename(path)
@@ -28,8 +29,9 @@ def check_file(path, test=False, visualize=False):
                        "NextLine": feedback[i][5]})
         feedback = list(map(lambda x: "{}: {} || {} || {} || {} || {}".format(*x), feedback))
 
-        json_object = json.dumps(dictionary, indent=4)
-        with open("feedback.json", "w") as outfile:
+        json_object = json.dumps(dictionary, indent=4, ensure_ascii=False)
+        with codecs.open("feedback.json", "w") as outfile:
+            # json.dump(json_object, outfile, ensure_ascii=False)
             outfile.write(json_object)
         feedback = '\n'.join(feedback)
         f = open("feedback.txt", "w", encoding="utf-8")
