@@ -1,4 +1,0 @@
-TextErrorNumber:             (3) balalal || 5 || (2) ||             (1) blalala ||         2. blblbaal
-TextErrorNumber: 3) balalalala  || 8 || 2) ||     b)blblablabal ||     II. blblbaal
-TextErrorNumber:     II. blblbaal || 9 || I. || 3) balalalala  ||     III. blblbaal
-TextErrorNumber: 5) blalaal || 11 || 4) ||     III. blblbaal || None
