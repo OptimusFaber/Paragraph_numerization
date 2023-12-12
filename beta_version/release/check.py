@@ -23,21 +23,30 @@ def check_file(path, test=False, visualize=False):
         feedback = fb(dcts, path, new_path)
         feedback2 = abb_finder(path)
         # dictionary = dict(zip([i for i in range(len(feedback))], feedback))
-        dictionary = []
+        dictionary = {"MAIN":[], "TABLES":[]}
         for i in range(len(feedback)):
-            dictionary.append({"TypeError": feedback[i][0],
-                       "ErrorLine": feedback[i][1],
-                       "LineNumber": feedback[i][2],
-                       "Description": feedback[i][3],
-                       "PrevLine": feedback[i][4],
-                       "NextLine": feedback[i][5]})
+            dictionary["MAIN"].append({"TypeError": feedback[i][0],
+                                       "ErrorLine": feedback[i][1],
+                                       "LineNumber": feedback[i][2],
+                                       "Description": feedback[i][3],
+                                       "PrevLine": feedback[i][4],
+                                       "NextLine": feedback[i][5]})
         for i in range(len(feedback2)):
-            dictionary.append({"TypeError": feedback2[i][0],
-                       "ErrorLine": feedback2[i][1],
-                       "LineNumber": feedback2[i][2],
-                       "Description": feedback2[i][3],
-                       "PrevLine": feedback2[i][4],
-                       "NextLine": feedback2[i][5]})
+            if feedback2[i][0] == "TextErrorNumber":
+                dictionary["MAIN"].append({"TypeError": feedback2[i][0],
+                                           "ErrorLine": feedback2[i][1],
+                                           "LineNumber": feedback2[i][2],
+                                           "Description": feedback2[i][3],
+                                           "PrevLine": feedback2[i][4],
+                                           "NextLine": feedback2[i][5]})
+            else:
+                dictionary["TABLES"].append({"TypeError": feedback2[i][0],
+                                             "ErrorLine": feedback2[i][1],
+                                             "LineNumber": feedback2[i][2],
+                                             "Description": feedback2[i][3],
+                                             "PrevLine": feedback2[i][4],
+                                             "NextLine": feedback2[i][5]})
+
         feedback = list(map(lambda x: "{}: {} || {} || {} || {} || {}".format(*x), feedback))
         feedback2 = list(map(lambda x: "{}: {} || {} || {} || {} || {}".format(*x), feedback2))
         feedback.extend(feedback2)
