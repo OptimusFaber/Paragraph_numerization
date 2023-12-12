@@ -50,17 +50,20 @@ def fb(dcts, file_path, new_file_path, correct_spelling=False):
             feedback_list[i][3] = "(" + feedback_list[i][0]  + ")"
         elif feedback_list[i][1] == ")":
             feedback_list[i][3] = feedback_list[i][0]  + ")"
-        elif feedback_list[i][1] == "." and feedback_list[i][1] != "numbers":
+        elif feedback_list[i][1] == "." and feedback_list[i][4] != "numbers":
             feedback_list[i][3] = feedback_list[i][0]  + "."
         else:
             feedback_list[i][3] = feedback_list[i][0]
         
-        if feedback_list[i][4] == "таблица" or feedback_list[i][4] == "схема":
+        if feedback_list[i][1] == "таблица" or feedback_list[i][1] == "схема":
             feedback_list[i][0] = "TableErrorNumber"
-        elif feedback_list[i][4] == "рисунок" or feedback_list[i][4] == "рис":
+            feedback_list[i][3] = "Отсутствует " + feedback_list[i][3]
+        elif feedback_list[i][1] == "рисунок" or feedback_list[i][1] == "рис":
             feedback_list[i][0] = "PictureErrorNumber"
+            feedback_list[i][3] = "Отсутствует " + feedback_list[i][3]
         else:
             feedback_list[i][0] = "TextErrorNumber"
+            feedback_list[i][3] = "Отсутствует параграф " + feedback_list[i][3]
         feedback_list[i][1] = splited_t[n-1].replace("\r", "")
         feedback_list[i][2] = n
         feedback_list[i][4] = n_prev
