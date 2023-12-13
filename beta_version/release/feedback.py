@@ -1,7 +1,7 @@
 import codecs
 import re
 
-def fb(dcts, file_path, new_file_path, correct_spelling=False):
+def fb(dcts, t, new_file_path, correct_spelling=False):
     feedback_list = []
     for dct in dcts:
         keys = list(dct.keys())
@@ -9,10 +9,9 @@ def fb(dcts, file_path, new_file_path, correct_spelling=False):
             if dct[keys[i]]['status'] == 'MISSING':
                 feedback_list.append([dct[keys[i]]['name'], dct[keys[i]]['sign'], dct[keys[i]]['pos'], dct[keys[i]]['delimetr'], dct[keys[i]]['data_type']])
 
-    t = codecs.open(file_path, "r", "utf_8_sig")
-    t = ' ' + ''.join(t)
-    t_copy = t
-    splited_t = t.split("\n")
+    txt = t
+    t_copy = txt
+    splited_t = txt.split("\n")
     buf = 0
     for k, i in zip(list(feedback_list), range(len(feedback_list))):
         if '.' in k[0]:
@@ -26,9 +25,9 @@ def fb(dcts, file_path, new_file_path, correct_spelling=False):
             else:
                 text = '(' + k[0] + ')' + ' ' + 'Missing'
         if k[4] == 'numbers':
-            t = t[:k[2]+buf] + k[3] + text + t[k[2]+buf:]
+            txt = txt[:k[2]+buf] + k[3] + text + txt[k[2]+buf:]
         else:
-            t = t[:k[2]+buf] + text + k[3] + t[k[2]+buf:]
+            txt = txt[:k[2]+buf] + text + k[3] + txt[k[2]+buf:]
         buf+=len(text)+len(k[3])
 
         ## Строка, в которой проблема
@@ -71,7 +70,7 @@ def fb(dcts, file_path, new_file_path, correct_spelling=False):
         
     if correct_spelling:
         f = open(new_file_path, "w", encoding="utf-8")
-        f.write(t)
+        f.write(txt)
         f.close()
         print('New file {} was saved'.format(new_file_path))
     
