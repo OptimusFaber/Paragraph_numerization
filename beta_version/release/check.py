@@ -32,7 +32,7 @@ def check_file(path, test=False, visualize=False):
     else:
         new_path = path.replace(name, "fixed_{}".format(name))
         feedback = fb(dcts, path, new_path)
-        feedback2 = abb_finder(path)
+        feedback2 = abb_finder(t)
         # dictionary = dict(zip([i for i in range(len(feedback))], feedback))
         dictionary = {"MAIN":[], "TABLES":[]}
         for i in range(len(feedback)):
