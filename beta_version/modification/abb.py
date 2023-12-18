@@ -165,11 +165,13 @@ def abb_finder(t):
                                 left_side.reverse()
                                 line = ""
                                 st = False
-                                eleml = elem.upper()
+                                elem = elem.upper()
                                 for lef in left_side:
                                     line += lef.upper()
-                                    if levenstein(line[::-1], eleml) <= 1:
+                                    if levenstein(line[::-1], elem) <= 1:
                                         st = True
+                                        break
+                                    if len(line) - len(elem) > 4:
                                         break
                                 if st:
                                     abb_set[elem] = i+1

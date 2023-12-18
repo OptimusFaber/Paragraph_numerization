@@ -21,7 +21,7 @@ def check_file(path, test=False, visualize=False):
 
 
 
-    # print(txt)
+    print(txt)
 
     tree = Make_tree()
     dcts = tree.walk(txt)
@@ -33,25 +33,16 @@ def check_file(path, test=False, visualize=False):
         new_path = path.replace(name, "fixed_{}".format(name))
         feedback = fb(dcts, t, new_path)
         feedback2 = abb_finder(t)
-        # dictionary = dict(zip([i for i in range(len(feedback))], feedback))
-        dictionary = {"MAIN":[], "TABLES":[]}
+        dictionary = []
         for i in range(len(feedback)):
-            if feedback[i][0] == "TextErrorNumber":
-                dictionary["MAIN"].append({"TypeError": feedback[i][0],
-                                           "ErrorLine": feedback[i][1],
-                                           "LineNumber": feedback[i][2],
-                                           "Description": feedback[i][3],
-                                           "PrevLine": feedback[i][4],
-                                           "NextLine": feedback[i][5]})
-            else:
-                dictionary["TABLES"].append({"TypeError": feedback2[i][0],
-                                             "ErrorLine": feedback2[i][1],
-                                             "LineNumber": feedback2[i][2],
-                                             "Description": feedback2[i][3],
-                                             "PrevLine": feedback2[i][4],
-                                             "NextLine": feedback2[i][5]})
+            dictionary.append({"TypeError": feedback[i][0],
+                                        "ErrorLine": feedback[i][1],
+                                        "LineNumber": feedback[i][2],
+                                        "Description": feedback[i][3],
+                                        "PrevLine": feedback[i][4],
+                                        "NextLine": feedback[i][5]})
         for i in range(len(feedback2)):
-            dictionary["MAIN"].append({"TypeError": feedback2[i][0],
+            dictionary.append({"TypeError": feedback2[i][0],
                                         "ErrorLine": feedback2[i][1],
                                         "LineNumber": feedback2[i][2],
                                         "Description": feedback2[i][3],
