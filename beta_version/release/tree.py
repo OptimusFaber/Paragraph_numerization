@@ -135,7 +135,7 @@ class Make_tree:
                         return
                     for i in range(n2+1, n1):
                         try:
-                            self.tree.append(Node(elem[1] + " " + self.revfunc(i), sign=elem[1], pos=self.idx, parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+                            self.tree.append(Node(elem[1] + " " + self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
                         except:
                             continue
                     try:
@@ -147,7 +147,7 @@ class Make_tree:
             if self.func(elem[0]) - self.func(self.n) <= 2:
                 for i in range(self.func(self.n), self.func(elem[0])):
                     try:
-                        self.tree.append(Node(elem[1] + " " + self.revfunc(i), sign=elem[1], pos=self.idx, parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+                        self.tree.append(Node(elem[1] + " " + self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
                     except:
                         continue
             try:
@@ -173,13 +173,13 @@ class Make_tree:
                         if (n1-n2-1) > 2:
                             return
                         for i in range(n2+1, n1):
-                            self.tree.append(Node(self.revfunc(i), sign=elem[1], pos=self.idx, parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+                            self.tree.append(Node(self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
                         self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
                         return 
             else:                                                   ## Первого элемента нет, но есть второй
                 if self.func(elem[0]) - self.func(self.n) == 1:
                     parent=self.tree[-1]
-                    self.tree.append(Node(self.n, sign=elem[1], pos=self.idx, parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+                    self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
                     self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
         
     def single_numbers(self, elem, k):                 ## Алгоритм работы с числовами параграфами
@@ -194,7 +194,7 @@ class Make_tree:
                         if self.logic_check(elem[0], self.lst[i]): 
                             param = True
                             st += 1
-                    if self.lst[i][2]-self.ancestor.pos > 20000: continue
+                    if self.lst[i][2]-self.ancestor.pos > 100: continue
                     ancestors = [self.ancestor] + list(self.ancestor.ancestors)
                     for n in ancestors[:-1]:
                         if 'number' in n.data_type and n.sign not in ["таблица", "рисунок", "рис", "схема"]:
@@ -220,7 +220,7 @@ class Make_tree:
 
             if st:
                 if self.func(elem[0]) == 2:
-                    self.tree.append(Node(self.n, sign=elem[1], pos=self.idx, parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+                    self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
                     if elem[1] in self.p:
                         self.p.remove(elem[1])
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
@@ -239,7 +239,7 @@ class Make_tree:
                         if (n1-n2-1) > 2:
                             continue
                         for i in range(n2+1, n1):
-                            self.tree.append(Node(self.revfunc(i), sign=elem[1], pos=self.idx, parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+                            self.tree.append(Node(self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
                         self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
                         self.ancestor = self.tree[-1]
                         return 
@@ -256,23 +256,22 @@ class Make_tree:
                     self.roots.append(self.root)
                 self.root, self.tree = Node("txt"), []
                 parent = self.root  
-
+                param = True
                 if self.func(elem[0]) == 2:
-                    self.tree.append(Node(self.n, sign=elem[1], pos=self.idx, parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+                    self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
                 self.ancestor = self.tree[0]
 
     def numeral_paragraphs(self, elem):                 # Алгоритм работы с параграфами где несколько чисел
         delimetr = elem[4]
         parent = None
-        idx = elem[2] - len(elem[0]) - len(elem[4])
         sp = []
         black_list = set()
         for i in range(-1, max(-len(self.tree)-1, -NUM_PARAGRAPH_SEARCH), -1):
             if 'number' in self.tree[i].data_type and elem[1] == self.tree[i].sign: 
                 if self.numeral_check(self.tree[i], elem) and (self.tree[i].parent not in black_list):
                     node = self.tree[i]
-                    if elem[2] - node.pos > 20000: continue
+                    if elem[2] - node.pos > 40: continue
                     ## добавить определение parent-a тк он думает что отец 1.3.1 это 1.2.1
                     parent, delimetr = node, node.delimetr
                     rel = list(map(int, node.node_name.split('.')))
@@ -296,20 +295,20 @@ class Make_tree:
                             k1 = k2 = False
                             if e==0:
                                 for j in range(rel[e]+1, sp[e]):
-                                    self.tree.append(Node('{}.1'.format(j), sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))  
+                                    self.tree.append(Node('{}.1'.format(j), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))  
                                     param = True
                             else:
                                 for j in range(rel[e]+1, sp[e]):  
-                                    self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))
+                                    self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))
                                     param = True
                                 if len(sp) > e+1:
-                                    self.tree.append(Node('.'.join(list(map(str, adress+[sp[e]]))), sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))
+                                    self.tree.append(Node('.'.join(list(map(str, adress+[sp[e]]))), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))
                                     param = True
                             adress.append(sp[e])
                         else:
                             parent = self.tree[-1]
                             for j in range(1, sp[e]):  
-                                self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))
+                                self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))
                                 param = True
                             adress.append(sp[e])
                     
@@ -340,7 +339,7 @@ class Make_tree:
                         if self.numeral_check(elem[0], self.lst[i][0]):
                             param = True
                             st += 1
-                        if self.lst[i][2]-self.ancestor.pos > 20000: break
+                        if self.lst[i][2]-self.ancestor.pos > 40: break
                         ancestors = [self.ancestor] + list(self.ancestor.ancestors) 
                         for n in ancestors[:-1]:
                             if 'number' in n.data_type and n.sign == self.lst[i][1]:
@@ -370,15 +369,15 @@ class Make_tree:
                 if st:
                     for i in range(1, sp[0]):
                         try:
-                            self.tree.append(Node("{}.1".format(i), sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetr = elem[4]))
+                            self.tree.append(Node("{}.1".format(i), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = elem[4]))
                         except:
                             pass
                     for i in range(1, sp[1]):
                         try:
-                            self.tree.append(Node("{}.{}".format(sp[0], i), sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetr = elem[4]))
+                            self.tree.append(Node("{}.{}".format(sp[0], i), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = elem[4]))
                         except:
                             pass
-                    self.tree.append(Node(elem[0], sign='.', pos=idx, parent=parent, data_type='numbers', status='EXISTING', delimetr = elem[4]))
+                    self.tree.append(Node(elem[0], sign='.', pos=elem[2], parent=parent, data_type='numbers', status='EXISTING', delimetr = elem[4]))
                     self.ancestor = self.tree[-1]
                 
 
@@ -394,7 +393,6 @@ class Make_tree:
             if elem[3] == 'numbers':
                 self.numeral_paragraphs(elem)  
             else:
-                self.idx = elem[2] - len(elem[0]) - len(elem[1])
                 self.func, self.revfunc = functions[elem[3]]
                 self.n = first_elements[elem[3]]
 

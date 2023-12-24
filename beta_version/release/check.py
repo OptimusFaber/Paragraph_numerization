@@ -6,7 +6,7 @@ import os
 import json
 import codecs
 
-def check_file(path, test=False, visualize=False): 
+def check_file(path, text=False, test=False, visualize=False): 
     name = os.path.basename(path)        
     if path.endswith("json"):
         F = open(path)
@@ -18,11 +18,8 @@ def check_file(path, test=False, visualize=False):
         return 
     
     txt = parse(t)
-
-
-
-    print(txt)
-
+    if text:
+        print(txt)
     tree = Make_tree()
     dcts = tree.walk(txt)
     if visualize:
@@ -48,16 +45,8 @@ def check_file(path, test=False, visualize=False):
                                         "Description": feedback2[i][3],
                                         "PrevLine": feedback2[i][4],
                                         "NextLine": feedback2[i][5]})
-
-        feedback = list(map(lambda x: "{}: {} || {} || {} || {} || {}".format(*x), feedback))
-        feedback2 = list(map(lambda x: "{}: {} || {} || {} || {} || {}".format(*x), feedback2))
-        feedback.extend(feedback2)
-
+        dictionary = sorted(dictionary, key=lambda x: x["LineNumber"])
         json_object = json.dumps(dictionary, indent=4, ensure_ascii=False)
         with codecs.open("feedback.json", "w") as outfile:
-            # json.dump(json_object, outfile, ensure_ascii=False)
             outfile.write(json_object)
-        feedback = '\n'.join(feedback)
-        f = open("feedback.txt", "w", encoding="utf-8")
-        f.write(feedback)
-        f.close()
+        outfile.close()

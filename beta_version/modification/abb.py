@@ -201,16 +201,44 @@ def abb_finder(t):
             #^------------------------------------------------------------------------------------
 
             #? Поиск элементов из наших 3 словарей
-            corr_fac = list(filter(lambda x: x[0] , zip([word in devided_text[i].lower() for word in corruption_factor_set], corruption_factor_set)))
-            no_conn  = list(filter(lambda x: x[0],  zip([word in devided_text[i].lower() for word in no_connection_with_npa_set], no_connection_with_npa_set)))
-            inc_frm  = list(filter(lambda x: x[0],  zip([word in devided_text[i].lower() for word in incorrect_formulation_set], incorrect_formulation_set)))
+            # re.search("\W"+word+"\W", devided_text[i].lower())
+            corr_fac = list(filter(lambda x: x[0] , zip([re.search("\W"+word+"\W", devided_text[i].lower()) for word in corruption_factor_set], corruption_factor_set)))
+            no_conn  = list(filter(lambda x: x[0],  zip([re.search("\W"+word+"\W", devided_text[i].lower()) for word in no_connection_with_npa_set], no_connection_with_npa_set)))
+            inc_frm  = list(filter(lambda x: x[0],  zip([re.search("\W"+word+"\W", devided_text[i].lower()) for word in incorrect_formulation_set], incorrect_formulation_set)))
 
             for cor in corr_fac:
-                feedback_list.append(["CorruptionFactorError", devided_text[i], i+1, cor[1], devided_text[i-1], devided_text[i+1]])
+                prev_line, next_line = '', ''
+                for k in range(i-1, -1, -1):
+                    if devided_text[k] != '':
+                        prev_line = devided_text[k]
+                        break
+                for k in range(i+1, len(devided_text)):
+                    if devided_text[k] != '':
+                        next_line = devided_text[k]
+                        break
+                feedback_list.append(["CorruptionFactorError", devided_text[i], i+1, cor[1], prev_line, next_line])
             for no in no_conn:
-                feedback_list.append(["NoConnectionWithNPAError", devided_text[i], i+1, no[1], devided_text[i-1], devided_text[i+1]])
+                prev_line, next_line = '', ''
+                for k in range(i-1, -1, -1):
+                    if devided_text[k] != '':
+                        prev_line = devided_text[k]
+                        break
+                for k in range(i+1, len(devided_text)):
+                    if devided_text[k] != '':
+                        next_line = devided_text[k]
+                        break
+                feedback_list.append(["NoConnectionWithNPAError", devided_text[i], i+1, no[1], prev_line, next_line])
             for inc in inc_frm:
-                feedback_list.append(["IncorrectFormulationError", devided_text[i], i+1, inc[1], devided_text[i-1], devided_text[i+1]])  
+                prev_line, next_line = '', ''
+                for k in range(i-1, -1, -1):
+                    if devided_text[k] != '':
+                        prev_line = devided_text[k]
+                        break
+                for k in range(i+1, len(devided_text)):
+                    if devided_text[k] != '':
+                        next_line = devided_text[k]
+                        break
+                feedback_list.append(["IncorrectFormulationError", devided_text[i], i+1, inc[1], prev_line, next_line])  
             #?------------------------------------------------------------------------------------
 
             if buf:
@@ -224,7 +252,16 @@ def abb_finder(t):
                 # print("{} {} ---> ".format(i+1, devided_text[i]), end="")
                 #! ErrorType, LineText, LineNumber, ОШИБКА, PrevLineText, NextLine
                 for r in res:
-                    result += "АbbreviationError: {} || {} || {} || {} || {}\n".format(devided_text[i], i+1, r, devided_text[i-1], devided_text[i+1])
-                    feedback_list.append(["АbbreviationError", devided_text[i], i+1, r, devided_text[i-1], devided_text[i+1]])
+                    r = "Неизвестная абревиатура "
+                    prev_line, next_line = '', ''
+                    for k in range(i-1, -1, -1):
+                        if devided_text[k] != '':
+                            prev_line = devided_text[k]
+                            break
+                    for k in range(i+1, len(devided_text)):
+                        if devided_text[k] != '':
+                            next_line = devided_text[k]
+                            break
+                    feedback_list.append(["АbbreviationError", devided_text[i], i+1, r, prev_line, next_line])
     #^--------------------------------------------------------------------------------------------------------------------           
     return feedback_list

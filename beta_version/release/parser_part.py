@@ -15,10 +15,10 @@ def parse(text):
       'en_low_letter': 'a', 
       'roman': 'I'
    }
-   c = 0
+   string_num = 0
    for txt in text:
       f_elem = True
-      c += 1
+      string_num += 1
       while txt and sign:
          list_findings = [[re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|((([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[.]))", re.ASCII), txt), ".", None, None],
                         [re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt), ")", None, None],
@@ -160,6 +160,6 @@ def parse(text):
          txt = txt[pos:]
          counter+=(pos)
          paragraph = paragraph[:-1] if paragraph[-1] == '.' else paragraph
-         lst.append((paragraph, sign, counter, data_type, delimetr, c))
+         lst.append((paragraph, sign, string_num, data_type, delimetr))
 
    return lst

@@ -1,4 +1,3 @@
-import codecs
 import re
 
 def fb(dcts, t, new_file_path, correct_spelling=False):
@@ -12,26 +11,9 @@ def fb(dcts, t, new_file_path, correct_spelling=False):
     txt = t
     t_copy = txt
     splited_t = txt.split("\n")
-    buf = 0
-    for k, i in zip(list(feedback_list), range(len(feedback_list))):
-        if '.' in k[0]:
-            text = k[0] + ' ' + 'Missing'
-        else:
-            if k[1]:
-                if len(k[1]) == 1:
-                    text = k[0] + k[1] + ' ' + 'Missing'
-                else:
-                    text = '(' + k[0] + ')' + ' ' + 'Missing'
-            else:
-                text = '(' + k[0] + ')' + ' ' + 'Missing'
-        if k[4] == 'numbers':
-            txt = txt[:k[2]+buf] + k[3] + text + txt[k[2]+buf:]
-        else:
-            txt = txt[:k[2]+buf] + text + k[3] + txt[k[2]+buf:]
-        buf+=len(text)+len(k[3])
-
+    for i in range(len(feedback_list)):
         ## Строка, в которой проблема
-        n = t_copy[:k[2]].count("\n")+1
+        n = feedback_list[i][2]
         ## Строки, которые стоят рядом
         n_prev, n_next = None, None
         for j in range(n-2, -1, -1):
@@ -67,11 +49,5 @@ def fb(dcts, t, new_file_path, correct_spelling=False):
         feedback_list[i][2] = n
         feedback_list[i][4] = n_prev
         feedback_list[i].append(n_next)
-        
-    if correct_spelling:
-        f = open(new_file_path, "w", encoding="utf-8")
-        f.write(txt)
-        f.close()
-        print('New file {} was saved'.format(new_file_path))
     
     return feedback_list   
