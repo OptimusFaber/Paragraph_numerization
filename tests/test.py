@@ -27,7 +27,7 @@ def test3():
         for key in list(dct.keys())[1:]:
             if dct[key]["status"] == "MISSING":
                 lost.append(dct[key]["name"])
-    assert lost == ['1.2', '1.3', '2.2.1', '3']
+    assert lost == ['1.2', '1.3', '2.1', '2.2.1', '3', '4.1']
 
 def test4():
     lost = []
