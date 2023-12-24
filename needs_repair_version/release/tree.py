@@ -228,11 +228,13 @@ class Make_tree:
                 if self.func(elem[0]) == 1:
                     self.p.append(elem[1])
         else:
-            black_list = set()
             for i in range(-1, max(-len(self.tree)-1, -NUMBER_SEARCH), -1):  
                 if self.similarity_check(self.tree[i], elem):
-                    if self.tree[i].parent in black_list:
-                        continue
+                    if i < -1:
+                        # накопившийся путь
+                        if ((self.tree[i+1].parent == self.tree[i].parent) or (self.tree[i].parent == parent)) and self.tree[i+1].data_type == self.tree[i].data_type:
+                            parent = self.tree[i].parent
+                            continue
                     if self.logic_check(self.tree[i], elem):
                         parent = self.tree[i].parent
                         n1, n2 = self.func(elem[0]), self.func(self.tree[i].node_name)
@@ -244,7 +246,7 @@ class Make_tree:
                         self.ancestor = self.tree[-1]
                         return 
                     else:
-                        black_list.add(self.tree[i].parent)
+                        parent = self.tree[i].parent
             else:
                 if self.func(elem[0]) > 2: return
                 c = 0
@@ -263,123 +265,129 @@ class Make_tree:
                 self.ancestor = self.tree[0]
 
     def numeral_paragraphs(self, elem):                 # Алгоритм работы с параграфами где несколько чисел
+        paragraph = elem[0].split('.')
+        reletives = [elem[0]]
+        delimetrs = [elem[4]]
         delimetr = elem[4]
         parent = None
         idx = elem[2] - len(elem[0]) - len(elem[4])
-        sp = []
         black_list = set()
-        for i in range(-1, max(-len(self.tree)-1, -NUM_PARAGRAPH_SEARCH), -1):
-            if 'number' in self.tree[i].data_type and elem[1] == self.tree[i].sign: 
-                if self.numeral_check(self.tree[i], elem) and (self.tree[i].parent not in black_list):
-                    node = self.tree[i]
-                    if elem[2] - node.pos > 20000: continue
-                    ## добавить определение parent-a тк он думает что отец 1.3.1 это 1.2.1
-                    parent, delimetr = node, node.delimetr
-                    rel = list(map(int, node.node_name.split('.')))
-                    sp = list(map(int, elem[0].split('.')))
-                    if len(rel) == len(sp):
-                        parent = node.parent
-                    adress = []
-                    k1 = k2 = True
-                    dif = len(sp) - len(rel)
-                    param = False
-                    if len(sp) > len(rel):
-                        for _ in range(dif):rel.append(0)
-                    for e in range(min(len(rel), len(sp))):
-                        if rel[e] == sp[e] and k1:
-                            adress.append(sp[e])
-                            continue
-                        elif k2:
-                            for i in range(1, len(rel) - e):
-                                if parent != self.root:
-                                    parent = parent.parent
-                            k1 = k2 = False
-                            if e==0:
-                                for j in range(rel[e]+1, sp[e]):
-                                    self.tree.append(Node('{}.1'.format(j), sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))  
-                                    param = True
-                            else:
-                                for j in range(rel[e]+1, sp[e]):  
-                                    self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))
-                                    param = True
-                                if len(sp) > e+1:
-                                    self.tree.append(Node('.'.join(list(map(str, adress+[sp[e]]))), sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))
-                                    param = True
-                            adress.append(sp[e])
-                        else:
-                            parent = self.tree[-1]
-                            for j in range(1, sp[e]):  
-                                self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))
-                                param = True
-                            adress.append(sp[e])
-                    
-                    if 'number' in self.tree[-1].data_type and elem[1] == self.tree[-1].sign: 
-                        if self.numeral_check(self.tree[-1], elem):
-                            rel = self.tree[-1].node_name.split(".")
-                            parent = self.tree[-1] if len(sp) != len(rel) else self.tree[-1].parent
-                            if len(rel) > len(sp):
-                                for i in range(len(rel) - len(sp)+1):
-                                    parent = parent.parent
-                    if len(node.node_name) == 1:
-                        parent = parent.parent
-                    self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
-                    self.ancestor = self.tree[-1]  
-                    return
-                else:
-                    black_list.add(self.tree[i].parent)
+        # Поиск отсутствующих параграфов
+        for i in range(2):
+            p = None
+            for i in range(-1, max(-len(self.tree)-1, -NUM_PARAGRAPH_SEARCH), -1):
+                if 'number' in self.tree[i].data_type and elem[1] == self.tree[i].sign: 
+                    if self.numeral_check(self.tree[i], elem) and (self.tree[i].parent not in black_list):
+                        if elem[2] - self.tree[i].pos > 20000: continue
+                        node = self.tree[i].node_name.split('.')
+                        # Параграфы братья
+                        if node[:-1] == paragraph[:-1]:
+                            if int(node[-1]) >= int(paragraph[-1]):
+                                black_list.add(self.tree[i].parent)
+                                continue
+                            if self.tree[i].parent not in black_list:
+                                parent, delimetr = self.tree[i].parent, self.tree[i].delimetr
+                                break
+                        # node это отец текущего параграфа
+                        elif node == paragraph[:-1]:
+                            parent, delimetr = self.tree[i], self.tree[i].delimetr[:-1]
+                            break
+            if parent:
+                break
+            delimetr = delimetr[:-1]
+            paragraph = paragraph[:-1]
+            reletives.append(paragraph)
+            delimetrs.append('\n' + delimetr)
         else:
             if len(elem[0].split('.')) == 2:
                 sp = list(map(int, elem[0].split('.')))
-                if sp[0] > 2: return False
-                if sp[1] > 3: return False
-                st = 0
-                if find(self.root, lambda node: node.path_name == "/txt/{}.{}".format(*sp)):
+                if find(self.root, lambda node: node.path_name == "/txt/{}.{}".format(sp[0], sp[1])):
+                    st = False
+                    # path = self.ancestor.path_name.split('/')[2:]
                     for i in range(self.k+1, min(len(self.lst), self.k+NUM_PARAGRAPH_SEARCH)):
-                        param = ok = False
-                        if 'number' not in self.lst[i][3] and elem[1] != self.lst[i][1]: continue
-                        if self.numeral_check(elem[0], self.lst[i][0]):
-                            param = True
-                            st += 1
-                        if self.lst[i][2]-self.ancestor.pos > 20000: break
-                        ancestors = [self.ancestor] + list(self.ancestor.ancestors) 
-                        for n in ancestors[:-1]:
-                            if 'number' in n.data_type and n.sign == self.lst[i][1]:
-                                if self.numeral_check(n.name, self.lst[i][0]):
-                                    if (st and not param) or st > 1: parent=self.tree[-1]
-                                    elif param: return False
-                                    ok = True
+                        if self.ancestor and self.tree:
+                            if 'numbers' not in self.lst[i][3]:
+                                continue
+                            if self.numeral_check(elem[0], self.lst[i][0]):
+                                st = True
+                            for n in list(self.ancestor.ancestors)[:-1]:
+                                if 'number' in n.data_type:
+                                    if self.numeral_check(n.name, self.lst[i][0]) and self.lst[i][1] == n.sign:
+                                        if st:
+                                            parent=self.tree[-1]
+                                            if sp[0] > 2:
+                                                if not find(self.root, lambda node: node.path_name == parent.path_name + "/{}.1".format(sp[0])):
+                                                    return False
+                                        break
+                            else:
+                                if self.numeral_check(self.ancestor.name, self.lst[i][0]) and self.lst[i][1] == self.ancestor.sign:
+                                    if st:
+                                        parent=self.tree[-1]
+                                        if sp[0] > 2:
+                                            if not find(self.root, lambda node: node.path_name == parent.path_name + "/{}.1".format(sp[0])):
+                                                return False
                                     break
-                        if ok: break
+                                continue
+                            break
+                        else:
+                            parent, st = self.root, True
 
                     else:   # Делаем новое дерево
-                        c = 0
-                        for obj in self.tree: 
-                            if obj.status == "EXISTING":
-                                c += 1
-                        if c > 1:
-                            self.trees.append(tree_to_dict(self.root, all_attrs=True))
+                        self.trees.append(tree_to_dict(self.root, all_attrs=True))
                         self.roots.append(self.root)
+                        # del self.tree
+                        # del self.root
                         self.root, self.tree = Node("txt"), []
-                        parent= self.root
-                        st = True
+                        parent, st = self.root, True
 
                 else:
-                    if not self.tree:
-                        parent, st = self.root, True
-  
+                    if self.ancestor:
+                        if self.ancestor.data_type == 'numbers':
+                            if not self.numeral_check(self.ancestor.node_name, elem[0]):
+                                return
+                    parent, st = self.root, True
+
                 if st:
-                    for i in range(1, sp[0]):
-                        try:
-                            self.tree.append(Node("{}.1".format(i), sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetr = elem[4]))
-                        except:
-                            pass
-                    for i in range(1, sp[1]):
-                        try:
-                            self.tree.append(Node("{}.{}".format(sp[0], i), sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetr = elem[4]))
-                        except:
-                            pass
-                    self.tree.append(Node(elem[0], sign='.', pos=idx, parent=parent, data_type='numbers', status='EXISTING', delimetr = elem[4]))
+                    if (sp[0] == 2 or sp[0] == 1) and (not find(self.root, lambda node: node.path_name == parent.path_name + '/1.1') and elem[0] != '1.1'):
+                        self.tree.append(Node('{}.{}'.format(sp[0], 1), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+                    self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
                     self.ancestor = self.tree[-1]
+            return
+
+        # Восстановка отсутствующих параграфов
+        for i in range(-1, -len(reletives), -1):
+            start, end = 0, int(reletives[i][-1])
+            for j in range(len(self.tree)):
+                if self.tree[j].node_name.split('.')[:-1] == reletives[i][:-1]:
+                    start = int(self.tree[j].node_name.split('.')[-1])
+            if (end - start - 1) > 3:
+                return
+            for k in range(start+1, end):
+                self.tree.append(Node('.'.join(reletives[i][:-1]+[str(k)]), sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))
+            self.tree.append(Node('.'.join(reletives[i]), sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))               
+            parent = self.tree[-1]
+            delimetr = delimetrs[i]
+        # Выравниваем предупреждения по форме предыдущих параграфов
+        for i in range(-1, -len(self.tree)-1, -1):
+            if self.tree[i].node_name.split('.')[:-1] == elem[0].split('.')[:-1]:
+                if self.tree[i].status == 'MISSING':
+                    self.tree[i].delimetr = elem[4]
+        # Конец проверки
+        
+        # работаем над параграфом, который нашли и смотрим, каких частей до него не хватает
+        end = int(elem[0].split('.')[-1])
+        start = 0
+        for j in range(len(self.tree)):
+            if self.tree[j].node_name.split('.')[:-1] == elem[0].split('.')[:-1]:
+                start = int(self.tree[j].node_name.split('.')[-1])
+        for k in range(start+1, end):
+            self.tree.append(Node('.'.join(elem[0].split('.')[:-1]+[str(k)]), sign='.', pos=idx, parent=parent, data_type='numbers', status='MISSING', delimetr = elem[4]))
+
+        try:
+            self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
+            self.ancestor = self.tree[-1]
+        except:
+            pass
                 
 
     def walk(self, lst):

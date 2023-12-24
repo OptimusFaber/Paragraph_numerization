@@ -1,5 +1,7 @@
 import re
 import psycopg2
+import codecs
+import time
 
 #! Алгоритм Левинштейна
 def levenstein(str_1, str_2):
@@ -228,3 +230,9 @@ def abb_finder(t):
                     feedback_list.append(["АbbreviationError", devided_text[i], i+1, r, devided_text[i-1], devided_text[i+1]])
     #^--------------------------------------------------------------------------------------------------------------------           
     return feedback_list
+
+start = time.time()
+t = codecs.open("D:\\Work\\EasyData\\Paragraph_numerization\\text_docx.txt", "r", "utf_8_sig")
+t = ' ' + ''.join(t)
+abb_finder(t)
+print(time.time()-start)
