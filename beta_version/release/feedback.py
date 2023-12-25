@@ -1,16 +1,16 @@
 import re
 
-def fb(dcts, t, new_file_path, correct_spelling=False):
+def fb(text, dictonaries):
+    if not dictonaries:
+        return []
     feedback_list = []
-    for dct in dcts:
+    for dct in dictonaries:
         keys = list(dct.keys())
         for i in range(1, len(keys)):
             if dct[keys[i]]['status'] == 'MISSING':
                 feedback_list.append([dct[keys[i]]['name'], dct[keys[i]]['sign'], dct[keys[i]]['pos'], dct[keys[i]]['delimetr'], dct[keys[i]]['data_type']])
 
-    txt = t
-    t_copy = txt
-    splited_t = txt.split("\n")
+    splited_t = text.split("\n")
     for i in range(len(feedback_list)):
         ## Строка, в которой проблема
         n = feedback_list[i][2]

@@ -20,14 +20,15 @@ def levenstein(str_1, str_2):
     return current_row[n]
 #!--------------------------------------------------------------------------------------------------------------------
 
-def abb_finder(t):
+def abb_finder(text, abbs=True, dicts=True, add_info=None):
+    if not abbs and not dicts:
+        return []
     #& Маски для поиска нужных нам сокращений
     abb_mask1 = re.compile(r"(?<!-)((«?([А-Я]+и)»?\s?){2,}|(«?([А-Я]{2,})»?\s?)+|(«?[A-Z]{2,}»?\s?)+)([^А-Яа-я0-9-—–]|$)")
     abb_mask2 = re.compile(r"(?<!-)(((([А-Я]+[а-я]*){2,})\s?)+|((([A-Z]+[a-z]*){2,})\s?)+)([^А-Яа-я0-9-—–]|$)")
     #&--------------------------------------------------------------------------------------------------------------------
 
     #^ Ищем таблицу с сокращениями и их расшифровками 
-    text = t
     pos = []
     for match in re.finditer("[С|с]окр", text):
         idx = match.end()
@@ -103,35 +104,27 @@ def abb_finder(t):
                 abb_set[buf1] = st
                 buf1, buf2 = '', ''
     #^--------------------------------------------------------------------------------------------------------------------
-
-
-    #^ Подгрузка спец слов из словаря
-    try:
-        connection = psycopg2.connect(user="name",
-                                    password="password",
-                                    host="host",
-                                    port="port",
-                                    database="db")
-        cursor = connection.cursor()
-        postgreSQL_select_Query = "select * from mobile"
-
-        cursor.execute(postgreSQL_select_Query)
-
-        mobile_records = cursor.fetchall()
-
-        for row in mobile_records:
-            special_words.add(row[0].lower())
-            abb_set[row[1].lower()] = 0
-            corruption_factor_set.add(row[2].lower())
-            no_connection_with_npa_set.add(row[3].lower())
-            incorrect_formulation_set.add(row[4].lower())
-
-    except:
-        pass
-    #^--------------------------------------------------------------------------------------------------------------------
+                
+    #* Дополняем словари если нужно
+    if add_info:
+        if "Corruption" in add_info.keys():
+            for elem in add_info["Corruption"]:
+                corruption_factor_set.add(elem["Value"])
+        if "Abbreviation" in add_info.keys():
+            for elem in add_info["Abbreviation"]:
+                abb_set[elem["Value"]] = 0
+        if "???" in add_info.keys():
+            for elem in add_info["???"]:
+                no_connection_with_npa_set.add(elem["Value"])
+        if "???" in add_info.keys():
+            for elem in add_info["???"]:
+                special_words.add(elem["Value"])
+        if "???" in add_info.keys():
+            for elem in add_info["???"]:
+                incorrect_formulation_set.add(elem["Value"])
+    #*-----------------------------
 
     #^ Поиск сокращений в нашем тексте
-    result = ""
     feedback_list = []
     devided_text = text.split("\n")
     for i in range(len(devided_text)):
@@ -201,47 +194,46 @@ def abb_finder(t):
             #^------------------------------------------------------------------------------------
 
             #? Поиск элементов из наших 3 словарей
-            # re.search("\W"+word+"\W", devided_text[i].lower())
-            corr_fac = list(filter(lambda x: x[0] , zip([re.search("\W"+word+"\W", devided_text[i].lower()) for word in corruption_factor_set], corruption_factor_set)))
-            no_conn  = list(filter(lambda x: x[0],  zip([re.search("\W"+word+"\W", devided_text[i].lower()) for word in no_connection_with_npa_set], no_connection_with_npa_set)))
-            inc_frm  = list(filter(lambda x: x[0],  zip([re.search("\W"+word+"\W", devided_text[i].lower()) for word in incorrect_formulation_set], incorrect_formulation_set)))
+            if dicts:
+                corr_fac = list(filter(lambda x: x[0] , zip([re.search("\W"+word+"\W", devided_text[i].lower()) for word in corruption_factor_set], corruption_factor_set)))
+                no_conn  = list(filter(lambda x: x[0],  zip([re.search("\W"+word+"\W", devided_text[i].lower()) for word in no_connection_with_npa_set], no_connection_with_npa_set)))
+                inc_frm  = list(filter(lambda x: x[0],  zip([re.search("\W"+word+"\W", devided_text[i].lower()) for word in incorrect_formulation_set], incorrect_formulation_set)))
 
-            for cor in corr_fac:
-                prev_line, next_line = '', ''
-                for k in range(i-1, -1, -1):
-                    if devided_text[k] != '':
-                        prev_line = devided_text[k]
-                        break
-                for k in range(i+1, len(devided_text)):
-                    if devided_text[k] != '':
-                        next_line = devided_text[k]
-                        break
-                feedback_list.append(["CorruptionFactorError", devided_text[i], i+1, cor[1], prev_line, next_line])
-            for no in no_conn:
-                prev_line, next_line = '', ''
-                for k in range(i-1, -1, -1):
-                    if devided_text[k] != '':
-                        prev_line = devided_text[k]
-                        break
-                for k in range(i+1, len(devided_text)):
-                    if devided_text[k] != '':
-                        next_line = devided_text[k]
-                        break
-                feedback_list.append(["NoConnectionWithNPAError", devided_text[i], i+1, no[1], prev_line, next_line])
-            for inc in inc_frm:
-                prev_line, next_line = '', ''
-                for k in range(i-1, -1, -1):
-                    if devided_text[k] != '':
-                        prev_line = devided_text[k]
-                        break
-                for k in range(i+1, len(devided_text)):
-                    if devided_text[k] != '':
-                        next_line = devided_text[k]
-                        break
-                feedback_list.append(["IncorrectFormulationError", devided_text[i], i+1, inc[1], prev_line, next_line])  
+                for cor in corr_fac:
+                    prev_line, next_line = '', ''
+                    for k in range(i-1, -1, -1):
+                        if devided_text[k] != '':
+                            prev_line = devided_text[k]
+                            break
+                    for k in range(i+1, len(devided_text)):
+                        if devided_text[k] != '':
+                            next_line = devided_text[k]
+                            break
+                    feedback_list.append(["CorruptionFactorError", devided_text[i], i+1, cor[1], prev_line, next_line])
+                for no in no_conn:
+                    prev_line, next_line = '', ''
+                    for k in range(i-1, -1, -1):
+                        if devided_text[k] != '':
+                            prev_line = devided_text[k]
+                            break
+                    for k in range(i+1, len(devided_text)):
+                        if devided_text[k] != '':
+                            next_line = devided_text[k]
+                            break
+                    feedback_list.append(["NoConnectionWithNPAError", devided_text[i], i+1, no[1], prev_line, next_line])
+                for inc in inc_frm:
+                    prev_line, next_line = '', ''
+                    for k in range(i-1, -1, -1):
+                        if devided_text[k] != '':
+                            prev_line = devided_text[k]
+                            break
+                    for k in range(i+1, len(devided_text)):
+                        if devided_text[k] != '':
+                            next_line = devided_text[k]
+                            break
+                    feedback_list.append(["IncorrectFormulationError", devided_text[i], i+1, inc[1], prev_line, next_line])  
             #?------------------------------------------------------------------------------------
-
-            if buf:
+            if abbs and buf:
                 res = set()
                 for b in buf:
                     buf_f = list(filter(lambda x: x[1][0]==b[1][0], buf))
@@ -249,7 +241,6 @@ def abb_finder(t):
                     buf_y = list(filter(lambda x: x[1][1]==b[1][1], buf))
                     buf_y = sorted(buf_y, key=lambda x: len(x[0]), reverse=True)
                     res.add(max(buf_y[0][0], buf_f[0][0], key=lambda x: len(x)))
-                # print("{} {} ---> ".format(i+1, devided_text[i]), end="")
                 #! ErrorType, LineText, LineNumber, ОШИБКА, PrevLineText, NextLine
                 for r in res:
                     r = "Неизвестная абревиатура "

@@ -6,30 +6,41 @@ import os
 import json
 import codecs
 
-def check_file(path, text=False, test=False, visualize=False): 
-    name = os.path.basename(path)        
-    if path.endswith("json"):
-        F = open(path)
-        t = ' ' + json.load(F)["MAIN"]
-    elif path.endswith("txt"):
-        t = codecs.open(path, "r", "utf_8_sig")
-        t = ' ' + ''.join(t)
+def check_file(txt_path=None, json_path=None, text=False, test=False, visualize=False):    
+    if json_path:
+        F = open(json_path)
+        j = json.load(F)
+        paragraph_check = j["Settings"]["CheckNumberList"]
+        abb_check = j["Settings"]["CheckAbbreviations"]
+        dict_check = j["Settings"]["DetectReference"]
+        try:
+            add_info = j["Dictionaries"]
+        except:
+            add_info = None
+    else:
+        paragraph_check = abb_check = dict_check = True
+    if txt_path:
+        # name = os.txt_path.basename(txt_path)
+        F = codecs.open(txt_path, "r", "utf_8_sig")
+        t = ' ' + ''.join(F)
     else:
         return 
     
-    txt = parse(t)
-    if text:
-        print(txt)
-    tree = Make_tree()
-    dcts = tree.walk(txt)
-    if visualize:
-        tree.show()
+    if paragraph_check:
+        txt = parse(t)
+        tree = Make_tree()
+        dcts = tree.walk(txt)
+        if text:
+            print(txt)
+        if visualize:
+            tree.show()
+    else:
+       dcts = {} 
     if test:
         return dcts
     else:
-        new_path = path.replace(name, "fixed_{}".format(name))
-        feedback = fb(dcts, t, new_path)
-        feedback2 = abb_finder(t)
+        feedback = fb(text=t, dictonaries=dcts)
+        feedback2 = abb_finder(text=t, abbs=abb_check, dicts=dict_check,  add_info=add_info)
         dictionary = []
         for i in range(len(feedback)):
             dictionary.append({"TypeError": feedback[i][0],
