@@ -38,18 +38,10 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
 
     #& Объявление наши справочников и словарей
     abb_set = dict()
-    special_words = {"далее", "условное обозначение", "условные обозначения", 
-                    "сокращенное наименование", "сокращенные наименования"}
-
-    corruption_factor_set = {"вправе", "может", "как правило", "возможно", "допускается", 
-                            "и т. д.", "и так далее", "и т. п.", "и тому подобное", 
-                            "и тому подобные", "и др.", "и другие" , "и пр.", "и прочие"}
-
-    no_connection_with_npa_set = {"в установленном порядке", "согласно действующему законодательству"}
-
-    incorrect_formulation_set = {"своевременно", "согласно установленным правилам", "в соответствии с действующим законодательством",
-                                "в случае необходимости", "по мере необходимости",  "при наличии достаточных оснований", 
-                                "в исключительных случаях", "в отдельных случаях", "целесообразно", "при достаточных основаниях"}
+    special_words = {}
+    corruption_factor_set = {}
+    no_connection_with_npa_set = {}
+    incorrect_formulation_set = {}
     #&--------------------------------------------------------------------------------------------------------------------
 
     #^ Если у нас идет слово Сокр
@@ -113,14 +105,14 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
         if "Abbreviation" in add_info.keys():
             for elem in add_info["Abbreviation"]:
                 abb_set[elem["Value"]] = 0
-        if "???" in add_info.keys():
-            for elem in add_info["???"]:
+        if "No_NPA" in add_info.keys():
+            for elem in add_info["No_NPA"]:
                 no_connection_with_npa_set.add(elem["Value"])
-        if "???" in add_info.keys():
-            for elem in add_info["???"]:
+        if "SpecWords" in add_info.keys():
+            for elem in add_info["SpecWords"]:
                 special_words.add(elem["Value"])
-        if "???" in add_info.keys():
-            for elem in add_info["???"]:
+        if "IncorrectForm" in add_info.keys():
+            for elem in add_info["IncorrectForm"]:
                 incorrect_formulation_set.add(elem["Value"])
     #*-----------------------------
 
