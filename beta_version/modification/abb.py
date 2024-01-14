@@ -38,10 +38,11 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
 
     #& Объявление наши справочников и словарей
     abb_set = dict()
-    special_words = {}
-    corruption_factor_set = {}
-    no_connection_with_npa_set = {}
-    incorrect_formulation_set = {}
+    special_words = {"далее", "условное обозначение", "условные обозначения", 
+                    "сокращенное наименование", "сокращенные наименования"}
+    corruption_factor_set = set()
+    no_connection_with_npa_set = set()
+    incorrect_formulation_set = set()
     #&--------------------------------------------------------------------------------------------------------------------
 
     #^ Если у нас идет слово Сокр
@@ -129,6 +130,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
                     if element:
                         st = False
                         elem = element.group()
+                        elem = re.sub("[\t\n\r]", "", elem)
                         ##----------------------------
                         for _ in range(2):
                             if not elem[-1].isalpha():
@@ -235,7 +237,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
                     res.add(max(buf_y[0][0], buf_f[0][0], key=lambda x: len(x)))
                 #! ErrorType, LineText, LineNumber, ОШИБКА, PrevLineText, NextLine
                 for r in res:
-                    r = "Неизвестная абревиатура "
+                    r = "Неизвестная аббревиатура "
                     prev_line, next_line = '', ''
                     for k in range(i-1, -1, -1):
                         if devided_text[k] != '':
@@ -245,6 +247,6 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
                         if devided_text[k] != '':
                             next_line = devided_text[k]
                             break
-                    feedback_list.append(["АbbreviationError", devided_text[i], i+1, r, prev_line, next_line])
+                    feedback_list.append(["AbbreviationError", devided_text[i], i+1, r, prev_line, next_line])
     #^--------------------------------------------------------------------------------------------------------------------           
     return feedback_list
