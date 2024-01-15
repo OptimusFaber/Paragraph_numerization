@@ -7,7 +7,7 @@ LETTER_SEARCH = -15         # Сколько шагов назад мы сдел
 NUMBER_SEARCH = 70          # Сколько шагов назад/вперед мы сделаем, чтобы найти числовой параграф
 NON_TEXT_SEARCH = -80
 NUM_PARAGRAPH_SEARCH = 90   # Сколько шагов назад/вперед мы сделаем, чтобы найти параграф с несколькими цифрами
-
+DUPLICATE = 0
 
 functions = {
     'number': [int, str], 
@@ -137,11 +137,11 @@ class Make_tree:
                         try:
                             self.tree.append(Node(elem[1] + " " + self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
                         except:
-                            continue
+                            self.trees.append({"DUPLICATE": {'name':elem[1] + " " + self.revfunc(i), 'sign':elem[1], 'pos':elem[2], 'parent':parent, 'data_type':elem[3], 'status':'DUPLICATE', 'delimetr':elem[4]}})
                     try:
                         self.tree.append(Node(elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
                     except:
-                        return
+                        self.trees.append({"DUPLICATE": {'name':elem[1] + " " + elem[0], 'sign':elem[1], 'pos':elem[2], 'parent':parent, 'data_type':elem[3], 'status':'DUPLICATE', 'delimetr':elem[4]}})
                     return
         else:
             if self.func(elem[0]) - self.func(self.n) <= 2:
@@ -149,11 +149,11 @@ class Make_tree:
                     try:
                         self.tree.append(Node(elem[1] + " " + self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
                     except:
-                        continue
+                        self.trees.append({"DUPLICATE": {'name':elem[1] + " " + self.revfunc(i), 'sign':elem[1], 'pos':elem[2], 'parent':parent, 'data_type':elem[3], 'status':'DUPLICATE', 'delimetr':elem[4]}})
             try:
                 self.tree.append(Node(elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
             except:
-                return
+                self.trees.append({"DUPLICATE": {'name':elem[1] + " " + elem[0], 'sign':elem[1], 'pos':elem[2], 'parent':parent, 'data_type':elem[3], 'status':'DUPLICATE', 'delimetr':elem[4]}})
         
     def letters_romans(self, elem, k):      ## Алгоритм работы с буквенными параграфами
         parent = None
@@ -206,15 +206,19 @@ class Make_tree:
                     if ok: break
 
                 else:
-                    c = 0
-                    for obj in self.tree: 
-                        if obj.status == "EXISTING":
-                            c += 1
-                    if c > 1:
-                        self.trees.append(tree_to_dict(self.root, all_attrs=True))
-                        self.roots.append(self.root)
-                    self.root, self.tree, self.ancestor = Node("txt"), [], None
-                    parent, st = self.root, True  
+                    if self.tree[-1].sign == 'таблица':
+                        parent = self.tree[-1]
+                        st = True
+                    else:
+                        c = 0
+                        for obj in self.tree: 
+                            if obj.status == "EXISTING":
+                                c += 1
+                        if c > 1:
+                            self.trees.append(tree_to_dict(self.root, all_attrs=True))
+                            self.roots.append(self.root)
+                        self.root, self.tree, self.ancestor = Node("txt"), [], None
+                        parent, st = self.root, True  
             else:
                 parent, st = self.root, True
 
@@ -247,15 +251,19 @@ class Make_tree:
                         black_list.add(self.tree[i].parent)
             else:
                 if self.func(elem[0]) > 2: return
-                c = 0
-                for obj in self.tree: 
-                    if obj.status == "EXISTING":
-                        c += 1
-                if c > 1:
-                    self.trees.append(tree_to_dict(self.root, all_attrs=True))
-                    self.roots.append(self.root)
-                self.root, self.tree = Node("txt"), []
-                parent = self.root  
+                if self.tree[-1].sign == 'таблица':
+                        parent = self.tree[-1]
+                        st = True
+                else:
+                    c = 0
+                    for obj in self.tree: 
+                        if obj.status == "EXISTING":
+                            c += 1
+                    if c > 1:
+                        self.trees.append(tree_to_dict(self.root, all_attrs=True))
+                        self.roots.append(self.root)
+                    self.root, self.tree = Node("txt"), []
+                    parent = self.root  
                 param = True
                 if self.func(elem[0]) == 2:
                     self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
@@ -268,7 +276,7 @@ class Make_tree:
         sp = []
         black_list = set()
         for i in range(-1, max(-len(self.tree)-1, -NUM_PARAGRAPH_SEARCH), -1):
-            if 'number' in self.tree[i].data_type and elem[1] == self.tree[i].sign: 
+            if 'number' in self.tree[i].data_type and (elem[1] == self.tree[i].sign or self.tree[i].sign == 'NaN'):
                 if self.numeral_check(self.tree[i], elem) and (self.tree[i].parent not in black_list):
                     node = self.tree[i]
                     if elem[2] - node.pos > 40: continue
@@ -312,7 +320,7 @@ class Make_tree:
                                 param = True
                             adress.append(sp[e])
                     
-                    if 'number' in self.tree[-1].data_type and elem[1] == self.tree[-1].sign: 
+                    if 'number' in self.tree[-1].data_type and (elem[1] == self.tree[-1].sign or self.tree[-1].sign=='NaN'): 
                         if self.numeral_check(self.tree[-1], elem):
                             rel = self.tree[-1].node_name.split(".")
                             parent = self.tree[-1] if len(sp) != len(rel) else self.tree[-1].parent
@@ -371,12 +379,12 @@ class Make_tree:
                         try:
                             self.tree.append(Node("{}.1".format(i), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = elem[4]))
                         except:
-                            pass
+                            self.trees.append({"DUPLICATE": {'name':"{}.1".format(i), 'sign':'.', 'pos':elem[2], 'parent':parent, 'data_type':'numbers', 'status':'DUPLICATE', 'delimetr':elem[4]}})
                     for i in range(1, sp[1]):
                         try:
                             self.tree.append(Node("{}.{}".format(sp[0], i), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = elem[4]))
                         except:
-                            pass
+                            self.trees.append({"DUPLICATE": {'name':"{}.{}".format(sp[0], i), 'sign':'.', 'pos':elem[2], 'parent':parent, 'data_type':'numbers', 'status':'DUPLICATE', 'delimetr':elem[4]}})
                     self.tree.append(Node(elem[0], sign='.', pos=elem[2], parent=parent, data_type='numbers', status='EXISTING', delimetr = elem[4]))
                     self.ancestor = self.tree[-1]
                 
