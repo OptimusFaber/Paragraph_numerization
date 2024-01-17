@@ -237,7 +237,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
                     res.add(max(buf_y[0][0], buf_f[0][0], key=lambda x: len(x)))
                 #! ErrorType, LineText, LineNumber, ОШИБКА, PrevLineText, NextLine
                 for r in res:
-                    r = "Неизвестная аббревиатура "
+                    r = "Неизвестная аббревиатура «{}»".format(r)
                     prev_line, next_line = '', ''
                     for k in range(i-1, -1, -1):
                         if devided_text[k] != '':
