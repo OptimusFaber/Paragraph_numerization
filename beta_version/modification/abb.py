@@ -35,6 +35,11 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
         string_num = text[:idx].count('\n')+1
         pos.append((idx, string_num))
     #^--------------------------------------------------------------------------------------------------------------------
+        
+    #? Поиск где начинается содержание документа
+    idx = re.search("[С|с]одержание", text).end()
+    content_pos = text[:idx].count('\n')+1       
+    #?--------------------------------------------------------------------------------------------------------------------
 
     #& Объявление наши справочников и словарей
     abb_set = dict()
@@ -63,14 +68,14 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
                 f1 = re.search(abb_mask1, i)
                 f2 = re.search(abb_mask2, i)
                 if f1 and f2:
-                    f = f1 if (len(f1.group()) > len(f2.group()) and f1.span()[0] == 0) and f1 else f2 if f2.span()[0] == 0 else None
+                    f = f1 if (len(f1.group()) > len(f2.group()) and f1.span()[0] < 5) else f2 if f2.span()[0] < 5 else None
                 elif f1 or f2:
                     f = f1 if f1 else f2
-                    f = f if f.span()[0] == 0 else None
+                    f = f if f.span()[0] < 5 else None
                 else:
                     f = None
                 if f:
-                    if f.span()[0] == 0:
+                    if f.span()[0] < 5:
                         #?-----------------------------------
                         if buf1 != "" and buf2 == "":
                             buf1 += f.group()
@@ -116,12 +121,32 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
             for elem in add_info["IncorrectForm"]:
                 incorrect_formulation_set.add(elem["Value"])
     #*-----------------------------
+    
+    devided_text = text.split("\n")
+    #?
+    c = 0
+    content_end = content_pos
+    for k in range(content_pos+1, len(devided_text)):
+        if c == 5:
+            content_end = k-3
+            break
+        txt = devided_text[k]
+        list_findings = [re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|((([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[.]))", re.ASCII), txt) != None,
+                        re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt) != None,
+                        re.search(re.compile(r"((?<=\s)|(?<=^))[(]((\d+[.]?)+|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt) != None]
+        if any(list_findings):
+            c = 0
+            continue
+        else:
+            c += 1
+    #?-----------------------------
+
+    forbidden_list = list(abb_set.values()) + list(range(content_pos, content_end+1))
 
     #^ Поиск сокращений в нашем тексте
     feedback_list = []
-    devided_text = text.split("\n")
     for i in range(len(devided_text)):
-        if i not in list(abb_set.values()):
+        if i not in forbidden_list:
             f = [re.finditer(abb_mask1, devided_text[i]), re.finditer(abb_mask2, devided_text[i])]
             buf = []
             #^------------------------------------------------------------------------------------

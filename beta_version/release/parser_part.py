@@ -6,14 +6,15 @@ roman_numbers = 'IVXLCDM'
 def parse(text):
    lst = []
    sign, counter, data_type = 1, 0, None
+   text = text.replace(u'\xa0', u' ')
    text = text.split("\n")
    first_elements = {
-      'number': '1', 
-      'ru_up_letter': 'А', 
-      'en_up_letter': 'A', 
-      'ru_low_letter': 'а', 
-      'en_low_letter': 'a', 
-      'roman': 'I'
+      'number': {'.': '1', ')': '1', '()': '1', 'таблица': '1', 'рисунок': '1', 'рис': '1', 'схема': '1', 'NaN': '1'}, 
+      'ru_up_letter': {'.': 'А', ')': 'А', '()': 'А', 'таблица': 'А', 'рисунок': 'А', 'рис': 'А', 'схема': 'А'}, 
+      'en_up_letter': {'.': 'A', ')': 'A', '()': 'A', 'таблица': 'A', 'рисунок': 'A', 'рис': 'A', 'схема': 'A'},
+      'ru_low_letter': {'.': 'а', ')': 'а', '()': 'а', 'таблица': 'а', 'рисунок': 'а', 'рис': 'а', 'схема': 'а'},
+      'en_low_letter': {'.': 'a', ')': 'a', '()': 'a', 'таблица': 'a', 'рисунок': 'a', 'рис': 'a', 'схема': 'a'},
+      'roman': {'.': 'I', ')': 'I', '()': 'I', 'таблица': 'I', 'рисунок': 'I', 'рис': 'I', 'схема': 'I'},
    }
    string_num = 0
    for txt in text:
@@ -32,7 +33,6 @@ def parse(text):
                         [re.search(re.compile(r"[Рр]ис[.]? [№]?\d+", re.ASCII), txt), "рис", None, None],
                         [re.search(re.compile(r"[Сс]хема [№]?\d+", re.ASCII), txt), "схема", None, None],
                         [re.search(re.compile(r"((?<=\s)|(?<=^))[(]((\d+[.]?)+|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt), "()", None, None]]
-                        # [re.search(re.compile(r"((^\s+)\d+)|(^\d+)", re.ASCII), txt), "NaN", None, None]]
          
          list_findings = [non_sign] if non_sign[0] else list(filter(lambda x: x[0] is not None, list_findings))
          if list_findings:
@@ -130,37 +130,37 @@ def parse(text):
             
          if all(i in roman_numbers for i in list(paragraph)):
             data_type = 'roman'
-            elem = first_elements[data_type]
+            elem = first_elements[data_type][sign]
 
             if Roman2Num(paragraph) - Roman2Num(elem) > 7:
                txt = txt[pos:]
                counter+=(pos)
                continue 
             else:
-               first_elements[data_type] = paragraph
+               first_elements[data_type][sign] = paragraph
          elif paragraph.isalpha():
             if 1040 <= ord(paragraph) <= 1103:
                data_type = 'ru_up_letter' if paragraph.isupper() else 'ru_low_letter'
             else:
                data_type = 'en_up_letter' if paragraph.isupper() else 'en_low_letter'
 
-            elem = first_elements[data_type]
+            elem = first_elements[data_type][sign]
             if ord(paragraph) - ord(elem) > 7:
                txt = txt[pos:]
                counter+=(pos)
                continue 
             else:
-               first_elements[data_type] = paragraph
+               first_elements[data_type][sign] = paragraph
          else:
             data_type = 'numbers' if (paragraph.split('.')[-1].isdigit() and len(paragraph.split('.')) > 1) or (len(paragraph.split('.')) > 2 and paragraph.split('.')[-1]=="") else 'number'
             if data_type == "number":
-               elem = first_elements[data_type]
+               elem = first_elements[data_type][sign]
                if int(paragraph) - int(elem) > 7:
                   txt = txt[pos:]
                   counter+=(pos)
                   continue 
                else:
-                  first_elements[data_type] = paragraph
+                  first_elements[data_type][sign] = paragraph
 
          txt = txt[pos:]
          counter+=(pos)

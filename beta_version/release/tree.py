@@ -40,6 +40,7 @@ class Make_tree:
         # Special parametrs
         self.p = []
         self.k = None
+        self.non_txt_dct = {'таблица':[], 'рисунок':[], 'рис':[], 'схема':[]}
 
     def similarity_check(self, elem1, elem2):       ## Метод для проверки что параграф одного типа (элемент и знак)
         if isinstance(elem1, Node): dt1, sgn1 = elem1.data_type, elem1.sign
@@ -76,10 +77,12 @@ class Make_tree:
         elem1, elem2 = list(map(int, elem1.split('.'))), list(map(int, elem2.split('.')))
 
         if len(elem1) == 1 or len(elem2) == 1:                  ## Случай если число одиночное
-            if len(elem1) == len(elem2):
+            if elem1 == elem2:
+                return False
+            elif len(elem1) == len(elem2):
                 if 0 < int(elem2[0]) - int(elem1[0]) <= 2:
                     return True
-            if elem1[0] == elem2[0]:
+            else:
                 elem = elem1 if len(elem1) > len(elem2) else elem2
                 dif = 0
                 for i in elem[1:]:
@@ -134,24 +137,32 @@ class Make_tree:
                     if (n1-n2-1) > 2:
                         return
                     for i in range(n2+1, n1):
+                        if self.revfunc(i) in self.non_txt_dct[elem[1]]:
+                            continue
                         try:
                             self.tree.append(Node(elem[1] + " " + self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+                            self.non_txt_dct[elem[1]].append(self.revfunc(i))
                         except:
                             self.trees.append({"DUPLICATE": {'name':elem[1] + " " + self.revfunc(i), 'sign':elem[1], 'pos':elem[2], 'parent':parent, 'data_type':elem[3], 'status':'DUPLICATE', 'delimetr':elem[4]}})
                     try:
                         self.tree.append(Node(elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
+                        self.non_txt_dct[elem[1]].append(elem[0])
                     except:
                         self.trees.append({"DUPLICATE": {'name':elem[1] + " " + elem[0], 'sign':elem[1], 'pos':elem[2], 'parent':parent, 'data_type':elem[3], 'status':'DUPLICATE', 'delimetr':elem[4]}})
                     return
         else:
             if self.func(elem[0]) - self.func(self.n) <= 2:
                 for i in range(self.func(self.n), self.func(elem[0])):
+                    if self.revfunc(i) in self.non_txt_dct[elem[1]]:
+                        continue
                     try:
                         self.tree.append(Node(elem[1] + " " + self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+                        self.non_txt_dct[elem[1]].append(self.revfunc(i))
                     except:
                         self.trees.append({"DUPLICATE": {'name':elem[1] + " " + self.revfunc(i), 'sign':elem[1], 'pos':elem[2], 'parent':parent, 'data_type':elem[3], 'status':'DUPLICATE', 'delimetr':elem[4]}})
             try:
                 self.tree.append(Node(elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
+                self.non_txt_dct[elem[1]].append(elem[0])
             except:
                 self.trees.append({"DUPLICATE": {'name':elem[1] + " " + elem[0], 'sign':elem[1], 'pos':elem[2], 'parent':parent, 'data_type':elem[3], 'status':'DUPLICATE', 'delimetr':elem[4]}})
         
