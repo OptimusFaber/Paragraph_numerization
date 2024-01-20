@@ -27,7 +27,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
     abb_mask1 = re.compile(r"(?<!-)((«?([А-Я]+и)»?\s?){2,}|(«?([А-Я]{2,})»?\s?)+|(«?[A-Z]{2,}»?\s?)+)([^А-Яа-я0-9-—–]|$)")
     abb_mask2 = re.compile(r"(?<!-)(((([А-Я]+[а-я]*){2,})\s?)+|((([A-Z]+[a-z]*){2,})\s?)+)([^А-Яа-я0-9-—–]|$)")
     #&--------------------------------------------------------------------------------------------------------------------
-    text = text.replace(u'\xa0', u' ')
+
     #^ Ищем таблицу с сокращениями и их расшифровками 
     pos = []
     for match in re.finditer("[С|с]окр", text):
@@ -35,11 +35,6 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
         string_num = text[:idx].count('\n')+1
         pos.append((idx, string_num))
     #^--------------------------------------------------------------------------------------------------------------------
-        
-    #? Поиск где начинается содержание документа
-    idx = re.search("[С|с]одержание", text).end()
-    content_pos = text[:idx].count('\n')+1       
-    #?--------------------------------------------------------------------------------------------------------------------
 
     #& Объявление наши справочников и словарей
     abb_set = dict()
@@ -68,14 +63,14 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
                 f1 = re.search(abb_mask1, i)
                 f2 = re.search(abb_mask2, i)
                 if f1 and f2:
-                    f = f1 if (len(f1.group()) > len(f2.group()) and f1.span()[0] < 5) else f2 if f2.span()[0] < 5 else None
+                    f = f1 if (len(f1.group()) > len(f2.group()) and f1.span()[0] == 0) and f1 else f2 if f2.span()[0] == 0 else None
                 elif f1 or f2:
                     f = f1 if f1 else f2
-                    f = f if f.span()[0] < 5 else None
+                    f = f if f.span()[0] == 0 else None
                 else:
                     f = None
                 if f:
-                    if f.span()[0] < 5:
+                    if f.span()[0] == 0:
                         #?-----------------------------------
                         if buf1 != "" and buf2 == "":
                             buf1 += f.group()
@@ -83,7 +78,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
                         else:
                             if buf1:
                                 buf1 = re.sub("[\t\n\r]", "", buf1)
-                                if not buf1[-1].isalpha() and buf1[-1] != "»": buf1=buf1[:-1]
+                                if not buf1[-1].isalpha(): buf1=buf1[:-1]
                                 abb_set[buf1] = st
                             c = 0
                             st = idx
@@ -97,7 +92,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
                     c += 1
                 idx+=1
             if buf1:
-                if not buf1[-1].isalpha() and buf1[-1] != "»": buf1=buf1[:-1]
+                if not buf1[-1].isalpha(): buf1=buf1[:-1]
                 buf1 = re.sub("[\t\n\r]", "", buf1)
                 abb_set[buf1] = st
                 buf1, buf2 = '', ''
@@ -114,53 +109,28 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
         if "No_NPA" in add_info.keys():
             for elem in add_info["No_NPA"]:
                 no_connection_with_npa_set.add(elem["Value"])
-        if "SpecWords" in add_info.keys():                      ## Дополнение к Abbreviation
+        if "SpecWords" in add_info.keys():
             for elem in add_info["SpecWords"]:
                 special_words.add(elem["Value"])
         if "IncorrectForm" in add_info.keys():
             for elem in add_info["IncorrectForm"]:
                 incorrect_formulation_set.add(elem["Value"])
     #*-----------------------------
-    
-    devided_text = text.split("\n")
-    #?
-    c = 0
-    content_end = content_pos
-    for k in range(content_pos+1, len(devided_text)):
-        if c == 5:
-            content_end = k-3
-            break
-        txt = devided_text[k]
-        list_findings = [re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|((([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[.]))", re.ASCII), txt) != None,
-                        re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt) != None,
-                        re.search(re.compile(r"((?<=\s)|(?<=^))[(]((\d+[.]?)+|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt) != None]
-        if any(list_findings):
-            c = 0
-            continue
-        else:
-            c += 1
-    #?-----------------------------
-
-    forbidden_list = list(abb_set.values()) + list(range(content_pos, content_end+1))
 
     #^ Поиск сокращений в нашем тексте
     feedback_list = []
+    devided_text = text.split("\n")
     for i in range(len(devided_text)):
-        if i not in forbidden_list:
-            if i == 1992:
-                print()
+        if i not in list(abb_set.values()):
             f = [re.finditer(abb_mask1, devided_text[i]), re.finditer(abb_mask2, devided_text[i])]
             buf = []
             #^------------------------------------------------------------------------------------
-            list_of_added_elems = []
             for itter in f:       
                 for element in itter:
                     if element:
+                        st = False
                         elem = element.group()
                         elem = re.sub("[\t\n\r]", "", elem)
-                        if bool(re.search(r"^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$", elem)):    #! Проверяем что это не римская цифра
-                            continue
-                        st = False 
                         ##----------------------------
                         for _ in range(2):
                             if not elem[-1].isalpha():
@@ -168,20 +138,17 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
                                     if elem[-1].isdigit():
                                         continue
                                     elem = elem[:-1]
-                        # elem = re.sub("[«»]", "", elem)
+                        elem = re.sub("[«»]", "", elem)
                         if elem in buf:
                             continue
                         ##----------------------------
                         if elem in list(abb_set.keys()):
                             if abb_set[elem] <= i+1:
-                                list_of_added_elems.extend(range(element.span()[0], element.span()[1]+1))
                                 continue
                             else:
                                 buf.append((elem, element.span()))
                                 st = True
                         elif all(list(map(lambda x: 1<len(x)<9, elem.split(" ")))) and ((not re.search("[\s.,:;!?]"+elem.lower()+"[\s.,:;!?]", text)) and (not re.search(("[\s.,:;!?]"+elem[0]+elem.lower()[1:])+"[\s.,:;!?]", text))):
-                            if element.span()[0] in list_of_added_elems or element.span()[1] in list_of_added_elems:
-                                continue
                             f1 = re.search("([А-Я]?[а-я]*)?[\t ]*[-—–]", devided_text[i][element.span()[1]:])
                             f2 = re.search("[\t ]*[-—–]", devided_text[i][:element.span()[0]][::-1])
                             if f1:
@@ -261,7 +228,6 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
                     feedback_list.append(["IncorrectFormulationError", devided_text[i], i+1, inc[1], prev_line, next_line])  
             #?------------------------------------------------------------------------------------
             if abbs and buf:
-                buf = list(filter(lambda x: (x[1][0] not in list_of_added_elems) and (x[1][1] not in list_of_added_elems), buf))
                 res = set()
                 for b in buf:
                     buf_f = list(filter(lambda x: x[1][0]==b[1][0], buf))
@@ -271,7 +237,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
                     res.add(max(buf_y[0][0], buf_f[0][0], key=lambda x: len(x)))
                 #! ErrorType, LineText, LineNumber, ОШИБКА, PrevLineText, NextLine
                 for r in res:
-                    r = "Неизвестная аббревиатура «{}»".format(r)
+                    r = "Неизвестная аббревиатура "
                     prev_line, next_line = '', ''
                     for k in range(i-1, -1, -1):
                         if devided_text[k] != '':

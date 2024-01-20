@@ -1,0 +1,75 @@
+{
+  "Document": {
+    "FileId": 867235,
+    "FileExtension": "docx",
+    "PreviewFolderId": 428976,
+    "ResultFolderId": 772633
+  },
+  "Settings": {
+    "CheckNumberList": true,
+    "CheckAbbreviations": true,
+    "DetectReference": false,
+    "DetectNpa": true
+  },
+  "Npa": {
+    "SanPin": [
+      2
+    ],
+    "RegionalLaw": [
+      1,
+      2
+    ],
+    "Gost": [
+      2
+    ],
+    "FederalLaw": [
+      1,
+      2
+    ],
+    "GovermentDecree": [
+      1
+    ]
+  },
+  "Dictionaries": {
+    "Corruption": [
+      {
+        "Value": "вправе",
+        "Description": null
+      },
+      {
+        "Value": "имеет право",
+        "Description": null
+      }
+    ],
+    "Abbreviation": [
+      {
+        "Value": "ООО",
+        "Description": "Общество с Ограниченной Ответственностью"
+      },
+      {
+        "Value": "ЗАО",
+        "Description": "Закрытое Акционерное Общество"
+      }
+    ]
+  },
+  "Hilights": {
+    "CatalogNotFound": -8355712,
+    "CatalogMismatch": -65536,
+    "CatalogUnknown": -8355712,
+    "CatalogIncorrect": -23296,
+    "FormattingIncorrect": -16181,
+    "NpaColors": {
+      "Gost": -5383962,
+      "RegionalLaw": -1644806,
+      "SanPin": -65281,
+      "FederalLaw": -24454,
+      "GovermentDecree": -5192482
+    },
+    "DictionaryColors": {
+      "Abbreviation": -23296,
+      "Corruption": -5383962,
+      "CommonStatements": -256,
+      "IncorrectStatements": -16744448
+    }
+  }
+}
