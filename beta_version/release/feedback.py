@@ -7,8 +7,8 @@ def fb(text, dictonaries):
     for dct in dictonaries:
         keys = list(dct.keys())
         for i in range(1, len(keys)):
-            if dct[keys[i]]['status'] == 'MISSING':
-                feedback_list.append([dct[keys[i]]['name'], dct[keys[i]]['sign'], dct[keys[i]]['pos'], dct[keys[i]]['delimetr'], dct[keys[i]]['data_type']])
+            if dct[keys[i]]['status'] == 'MISSING' or dct[keys[i]]['status'] == 'DUPLICATE':
+                feedback_list.append([dct[keys[i]]['name'], dct[keys[i]]['sign'], dct[keys[i]]['pos'], dct[keys[i]]['delimetr'], dct[keys[i]]['data_type'], dct[keys[i]]['status']])
 
     splited_t = text.split("\n")
     for i in range(len(feedback_list)):
@@ -27,6 +27,8 @@ def fb(text, dictonaries):
         ##-----------------------------
 
         #! ErrorType, LineText, LineNumber, ОШИБКА, PrevLineText, NextLine
+        text = "Отсутствует " if feedback_list[i][5] == "MISSING" else "Дублирующаяся " if feedback_list[i][1] == "таблица" or feedback_list[i][1] == "схема" else "Дублирующийся "
+
         if feedback_list[i][1] == "()":
             feedback_list[i][3] = "(" + feedback_list[i][0]  + ")"
         elif feedback_list[i][1] == ")":
@@ -38,16 +40,16 @@ def fb(text, dictonaries):
         
         if feedback_list[i][1] == "таблица" or feedback_list[i][1] == "схема":
             feedback_list[i][0] = "TableErrorNumber"
-            feedback_list[i][3] = "Отсутствует " + feedback_list[i][3]
+            feedback_list[i][3] = text + feedback_list[i][3]
         elif feedback_list[i][1] == "рисунок" or feedback_list[i][1] == "рис":
             feedback_list[i][0] = "PictureErrorNumber"
-            feedback_list[i][3] = "Отсутствует " + feedback_list[i][3]
+            feedback_list[i][3] = text + feedback_list[i][3]
         else:
             feedback_list[i][0] = "TextErrorNumber"
-            feedback_list[i][3] = "Отсутствует параграф " + feedback_list[i][3]
+            feedback_list[i][3] = text + "параграф " + feedback_list[i][3]
         feedback_list[i][1] = splited_t[n-1].replace("\r", "")
         feedback_list[i][2] = n
         feedback_list[i][4] = n_prev
-        feedback_list[i].append(n_next)
+        feedback_list[i][5] = n_next
     
     return feedback_list   

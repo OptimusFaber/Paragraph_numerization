@@ -143,12 +143,12 @@ class Make_tree:
                             self.tree.append(Node(elem[1] + " " + self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
                             self.non_txt_dct[elem[1]].append(self.revfunc(i))
                         except:
-                            self.trees.append({"DUPLICATE": {'name':elem[1] + " " + self.revfunc(i), 'sign':elem[1], 'pos':elem[2], 'parent':parent, 'data_type':elem[3], 'status':'DUPLICATE', 'delimetr':elem[4]}})
+                            self.tree.append(Node(" " + elem[1] + " " + self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type='None', status='DUPLICATE', delimetr = None))
                     try:
                         self.tree.append(Node(elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
                         self.non_txt_dct[elem[1]].append(elem[0])
                     except:
-                        self.trees.append({"DUPLICATE": {'name':elem[1] + " " + elem[0], 'sign':elem[1], 'pos':elem[2], 'parent':parent, 'data_type':elem[3], 'status':'DUPLICATE', 'delimetr':elem[4]}})
+                        self.tree.append(Node(" " + elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', status='DUPLICATE', delimetr = None))
                     return
         else:
             if self.func(elem[0]) - self.func(self.n) <= 2:
@@ -159,17 +159,23 @@ class Make_tree:
                         self.tree.append(Node(elem[1] + " " + self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
                         self.non_txt_dct[elem[1]].append(self.revfunc(i))
                     except:
-                        self.trees.append({"DUPLICATE": {'name':elem[1] + " " + self.revfunc(i), 'sign':elem[1], 'pos':elem[2], 'parent':parent, 'data_type':elem[3], 'status':'DUPLICATE', 'delimetr':elem[4]}})
+                        self.tree.append(Node(" " + elem[1] + " " + self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type='None', status='DUPLICATE', delimetr = None))                        
             try:
                 self.tree.append(Node(elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
                 self.non_txt_dct[elem[1]].append(elem[0])
             except:
-                self.trees.append({"DUPLICATE": {'name':elem[1] + " " + elem[0], 'sign':elem[1], 'pos':elem[2], 'parent':parent, 'data_type':elem[3], 'status':'DUPLICATE', 'delimetr':elem[4]}})
+                self.tree.append(Node(" " + elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', status='DUPLICATE', delimetr = None))
         
     def letters_romans(self, elem, k):      ## Алгоритм работы с буквенными параграфами
         parent = None
         if self.func(elem[0]) == self.func(self.n) and self.tree[-1].data_type != elem[3]:   ## Вдруг это первый элемент последовательности
-            parent=self.tree[-1]
+            for i in range(-1, max(-len(self.tree)-1, -NUM_PARAGRAPH_SEARCH), -1):
+                parent=self.tree[-1]
+                if self.similarity_check(self.tree[i], elem):
+                    if self.tree[i].node_name == elem[0]:
+                        self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', status='DUPLICATE', delimetr = None))
+                        return False
+                    break
             self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
         else:
             for i in range(-1, max(-len(self.tree)-1, LETTER_SEARCH), -1):  
@@ -188,6 +194,12 @@ class Make_tree:
                         self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
                         return 
             else:                                                   ## Первого элемента нет, но есть второй
+                for i in range(-1, max(-len(self.tree)-1, -NUM_PARAGRAPH_SEARCH), -1):
+                    if self.similarity_check(self.tree[i], elem):
+                        if self.tree[i].node_name == elem[0]:
+                            self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[i].parent, data_type='None', status='DUPLICATE', delimetr = None))
+                            return False
+                        break
                 if self.func(elem[0]) - self.func(self.n) == 1:
                     parent=self.tree[-1]
                     self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
@@ -197,8 +209,8 @@ class Make_tree:
         parent = None
         if (self.func(elem[0]) == self.func(self.n)) or (self.func(elem[0]) - self.func(self.n) < 2 and elem[1] not in self.p):
             st = 0
-            if self.ancestor and self.tree:    # если это не новое дерево 
-                for i in range(k+1, min(len(self.lst), k+NUMBER_SEARCH)):   # иду по нераспределенным элементам, смотрю что впереди
+            if self.ancestor and self.tree:    ## если это не новое дерево 
+                for i in range(k+1, min(len(self.lst), k+NUMBER_SEARCH)):   ## иду по нераспределенным элементам, смотрю что впереди
                     param = ok = False
                     if 'number' not in self.lst[i][3]: continue
                     if self.similarity_check(elem, self.lst[i]):
@@ -261,11 +273,27 @@ class Make_tree:
                     else:
                         black_list.add(self.tree[i].parent)
             else:
-                if self.func(elem[0]) > 2: return
+                for i in range(-1, max(-len(self.tree)-1, -NUM_PARAGRAPH_SEARCH), -1):
+                    if self.similarity_check(self.tree[i], elem):
+                        if self.tree[i].node_name == elem[0]:
+                            try:
+                                self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[i].parent, data_type='None', status='DUPLICATE', delimetr = None))
+                            except:
+                                pass
+                            return False
+                        break
+                if self.func(elem[0]) > 2:
+                    return False
                 if self.tree[-1].sign == 'таблица':
                         parent = self.tree[-1]
                         st = True
                 else:
+                    for i in range(-1, max(-len(self.tree)-1, -NUM_PARAGRAPH_SEARCH), -1):
+                        if self.similarity_check(self.tree[i], elem):
+                            if self.tree[i].node_name == elem[0]:
+                                self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[i].parent, data_type='None', status='DUPLICATE', delimetr = None))
+                                return False
+                            break
                     c = 0
                     for obj in self.tree: 
                         if obj.status == "EXISTING":
@@ -352,7 +380,7 @@ class Make_tree:
                     for i in range(-1, max(-len(self.tree)-1, -NUM_PARAGRAPH_SEARCH), -1):
                         if self.similarity_check(self.tree[i], elem):
                             if self.tree[i].node_name == elem[0]:
-                                print("DUPLICATE")
+                                self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[i].parent, data_type='None', status='DUPLICATE', delimetr = None))
                             break
                     return False
                 
@@ -396,12 +424,12 @@ class Make_tree:
                         try:
                             self.tree.append(Node("{}.1".format(i), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = elem[4]))
                         except:
-                            self.trees.append({"DUPLICATE": {'name':"{}.1".format(i), 'sign':'.', 'pos':elem[2], 'parent':parent, 'data_type':'numbers', 'status':'DUPLICATE', 'delimetr':elem[4]}})
+                            self.tree.append(Node(" " + "{}.1".format(i), sign=elem[1], pos=elem[2], parent=parent, data_type='None', status='DUPLICATE', delimetr = None))
                     for i in range(1, sp[1]):
                         try:
                             self.tree.append(Node("{}.{}".format(sp[0], i), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = elem[4]))
                         except:
-                            self.trees.append({"DUPLICATE": {'name':"{}.{}".format(sp[0], i), 'sign':'.', 'pos':elem[2], 'parent':parent, 'data_type':'numbers', 'status':'DUPLICATE', 'delimetr':elem[4]}})
+                            self.tree.append(Node(" " + "{}.{}".format(sp[0], i), sign=elem[1], pos=elem[2], parent=parent, data_type='None', status='DUPLICATE', delimetr = None))
                     self.tree.append(Node(elem[0], sign='.', pos=elem[2], parent=parent, data_type='numbers', status='EXISTING', delimetr = elem[4]))
                     self.ancestor = self.tree[-1]
                 
@@ -410,8 +438,6 @@ class Make_tree:
         self.lst = lst
         for elem, k in zip(self.lst, range(len(self.lst))):
             self.k = k
-            if elem[0] == "3.2":
-                print()
             if elem[1] in ["таблица", "рисунок", "рис", "схема"]:
                 self.func, self.revfunc = functions[elem[3]]
                 self.n = first_elements[elem[3]]

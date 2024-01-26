@@ -161,7 +161,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
                 for element in itter:
                     if element:
                         elem = element.group()
-                        elem = re.sub("[\t\n\r]", "", elem)
+                        elem = re.sub("[(\t\n\r)]", "", elem)
                         if bool(re.search(r"^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$", elem)):    #! Проверяем что это не римская цифра
                             continue
                         st = False 
