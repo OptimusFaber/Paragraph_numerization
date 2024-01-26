@@ -6,7 +6,7 @@ import os
 import json
 import codecs
 
-def check_file(txt_path=None, json_path=None, text=False, test=False, visualize=False):    
+def check_file(txt_path=None, json_path=None, output_path=None, text=False, test=False, visualize=False):    
     if json_path:
         F = open(json_path)
         j = json.load(F)
@@ -58,6 +58,13 @@ def check_file(txt_path=None, json_path=None, text=False, test=False, visualize=
                                         "NextLine": feedback2[i][5]})
         dictionary = sorted(dictionary, key=lambda x: x["LineNumber"])
         json_object = json.dumps(dictionary, indent=4, ensure_ascii=False)
-        with codecs.open("feedback.json", "w") as outfile:
+
+        save_path = "feedback.json"
+        if output_path:
+            out = re.sub("[/\\]\w*[.]json", "", output_path)
+            if os.path.exists(out):
+                save_path = output_path
+
+        with codecs.open(save_path, "w") as outfile:
             outfile.write(json_object)
         outfile.close()

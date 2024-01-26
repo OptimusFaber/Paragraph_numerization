@@ -1,5 +1,5 @@
 from check import check_file
 
-file_txt = "text_docx_5.txt"
-config_json = "DitTaskConfig.json"
+file_txt = "text_docx.txt"
+config_json = "472.json"
 check_file(txt_path=file_txt, json_path=config_json, visualize=True)

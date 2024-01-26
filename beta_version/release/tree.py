@@ -290,7 +290,7 @@ class Make_tree:
             if 'number' in self.tree[i].data_type and (elem[1] == self.tree[i].sign or self.tree[i].sign == 'NaN'):
                 if self.numeral_check(self.tree[i], elem) and (self.tree[i].parent not in black_list):
                     node = self.tree[i]
-                    if elem[2] - node.pos > 40: continue
+                    if elem[2] - node.pos > 150: break
                     ## добавить определение parent-a тк он думает что отец 1.3.1 это 1.2.1
                     parent, delimetr = node, node.delimetr
                     rel = list(map(int, node.node_name.split('.')))
@@ -348,8 +348,14 @@ class Make_tree:
         else:
             if len(elem[0].split('.')) == 2:
                 sp = list(map(int, elem[0].split('.')))
-                if sp[0] > 2: return False
-                if sp[1] > 3: return False
+                if sp[0] > 2 or sp[1] > 3: 
+                    for i in range(-1, max(-len(self.tree)-1, -NUM_PARAGRAPH_SEARCH), -1):
+                        if self.similarity_check(self.tree[i], elem):
+                            if self.tree[i].node_name == elem[0]:
+                                print("DUPLICATE")
+                            break
+                    return False
+                
                 st = 0
                 if find(self.root, lambda node: node.path_name == "/txt/{}.{}".format(*sp)):
                     for i in range(self.k+1, min(len(self.lst), self.k+NUM_PARAGRAPH_SEARCH)):
@@ -404,6 +410,8 @@ class Make_tree:
         self.lst = lst
         for elem, k in zip(self.lst, range(len(self.lst))):
             self.k = k
+            if elem[0] == "3.2":
+                print()
             if elem[1] in ["таблица", "рисунок", "рис", "схема"]:
                 self.func, self.revfunc = functions[elem[3]]
                 self.n = first_elements[elem[3]]
