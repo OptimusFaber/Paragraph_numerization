@@ -318,7 +318,7 @@ class Make_tree:
             if 'number' in self.tree[i].data_type and (elem[1] == self.tree[i].sign or self.tree[i].sign == 'NaN'):
                 if self.numeral_check(self.tree[i], elem) and (self.tree[i].parent not in black_list):
                     node = self.tree[i]
-                    if elem[2] - node.pos > 150: break
+                    if elem[2] - node.pos > 326: break
                     ## добавить определение parent-a тк он думает что отец 1.3.1 это 1.2.1
                     parent, delimetr = node, node.delimetr
                     rel = list(map(int, node.node_name.split('.')))
