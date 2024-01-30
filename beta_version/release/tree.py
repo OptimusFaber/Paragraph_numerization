@@ -62,7 +62,7 @@ class Make_tree:
         node = functions[elem2[3]][0](f_elem) 
         elem = functions[elem2[3]][0](l_elem)
 
-        if node >= elem or (elem - node) > 2:
+        if node >= elem or (elem - node) > 4:
             return False
         else:
             return True  
@@ -75,6 +75,9 @@ class Make_tree:
         elif isinstance(elem2, list) or isinstance(elem2, tuple): elem2 = elem2[0]
         
         elem1, elem2 = list(map(int, elem1.split('.'))), list(map(int, elem2.split('.')))
+
+        if elem1[0] > elem2[0]:                                 ## Случай что если после 2.1 идет 1.9
+            return False
 
         if len(elem1) == 1 or len(elem2) == 1:                  ## Случай если число одиночное
             if elem1 == elem2:
@@ -93,9 +96,6 @@ class Make_tree:
             return False
         
         if elem1 == elem2:
-            return False
-        
-        if elem1[0] > elem2[0]:                                 ## Случай что если после 2.1 идет 1.9
             return False
         
         if elem1[0] == elem2[0]:                                ## Первое число совпадает 5.6 и 5.7
@@ -142,7 +142,7 @@ class Make_tree:
                 prev = self.tree[i].node_name.split(" ")[-1]
                 if self.logic_check(prev, elem):
                     n1, n2 = self.func(elem[0]), self.func(prev)
-                    if (n1-n2-1) > 2:
+                    if (n1-n2-1) > 4:
                         return
                     for i in range(n2+1, n1):
                         if self.revfunc(i) in self.non_txt_dct[elem[1]]:
@@ -206,7 +206,7 @@ class Make_tree:
                     if self.logic_check(self.tree[i], elem):
                         parent = self.tree[i].parent
                         n1, n2 = self.func(elem[0]), self.func(self.tree[i].node_name)
-                        if (n1-n2-1) > 2:
+                        if (n1-n2-1) > 4:
                             return
                         for i in range(n2+1, n1):
                             self.tree.append(Node(self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
@@ -240,7 +240,7 @@ class Make_tree:
                         if self.logic_check(elem[0], self.lst[i]): 
                             param = True
                             st += 1
-                    if self.lst[i][2]-self.ancestor.pos > 100: continue
+                    # if self.lst[i][2]-self.ancestor.pos > 100: continue
                     ancestors = [self.ancestor] + list(self.ancestor.ancestors)
                     for n in ancestors[:-1]:
                         if 'number' in n.data_type and n.sign not in ["таблица", "рисунок", "рис", "схема"]:
@@ -284,7 +284,7 @@ class Make_tree:
                     point = list(self.tree[i].ancestors)      #! СЛАБОЕ МЕСТО
                     break
             parent_flag = False
-            for i in range(-1, max(-len(self.tree)-1, -NUMBER_SEARCH), -1):  
+            for i in range(-1, -len(self.tree)-1, -1):  
                 if self.similarity_check(self.tree[i], elem):
                     if len(point) < len(list(self.tree[i].ancestors)): continue
                     if parent_flag and self.tree[i].parent.name != 'txt': continue
@@ -293,7 +293,7 @@ class Make_tree:
                     if self.logic_check(self.tree[i], elem):
                         parent = self.tree[i].parent
                         n1, n2 = self.func(elem[0]), self.func(self.tree[i].node_name)
-                        if (n1-n2-1) > 2:
+                        if (n1-n2-1) > 4:
                             continue
                         for i in range(n2+1, n1):
                             self.tree.append(Node(self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
@@ -303,7 +303,7 @@ class Make_tree:
                     else:
                         black_list.add(self.tree[i].parent)
             else:
-                for i in range(-1, max(-len(self.tree)-1, -NUM_PARAGRAPH_SEARCH), -1):
+                for i in range(-1, -len(self.tree)-1, -1):
                     if self.similarity_check(self.tree[i], elem):
                         if self.tree[i].node_name == elem[0]:
                             try:
@@ -318,7 +318,7 @@ class Make_tree:
                         parent = self.tree[-1]
                         st = True
                 else:
-                    for i in range(-1, max(-len(self.tree)-1, -NUM_PARAGRAPH_SEARCH), -1):
+                    for i in range(-1, -len(self.tree)-1, -1):
                         if self.similarity_check(self.tree[i], elem):
                             if self.tree[i].node_name == elem[0]:
                                 self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[i].parent, data_type='None', status='DUPLICATE', delimetr = None))
@@ -477,6 +477,8 @@ class Make_tree:
         self.lst = lst
         for elem, k in zip(self.lst, range(len(self.lst))):
             self.k = k
+            if elem[2] == 1317:
+                print()
             if elem[1] in ["таблица", "рисунок", "рис", "схема"]:
                 self.func, self.revfunc = functions[elem[3]]
                 self.n = first_elements[elem[3]]

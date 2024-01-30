@@ -279,7 +279,10 @@ class Make_tree:
                     self.p.append(elem[1])
         else:
             black_list = set()
-            point = list(self.tree[-1].ancestors)
+            for i in range(-1, max(-len(self.tree)-1, -NUMBER_SEARCH), -1):  
+                if self.tree[i].sign not in ["таблица", "рисунок", "рис", "схема"]:
+                    point = list(self.tree[i].ancestors)      #! СЛАБОЕ МЕСТО
+                    break
             parent_flag = False
             for i in range(-1, max(-len(self.tree)-1, -NUMBER_SEARCH), -1):  
                 if self.similarity_check(self.tree[i], elem):
@@ -474,8 +477,6 @@ class Make_tree:
         self.lst = lst
         for elem, k in zip(self.lst, range(len(self.lst))):
             self.k = k
-            if elem[0] == "4.1.1.1.1":
-                print()
             if elem[1] in ["таблица", "рисунок", "рис", "схема"]:
                 self.func, self.revfunc = functions[elem[3]]
                 self.n = first_elements[elem[3]]
