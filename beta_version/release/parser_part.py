@@ -25,15 +25,14 @@ def parse(text):
          non_sign = [None]
          if begin:
             non_sign = [re.search(re.compile(r"(^\d+((?=\s)|$))|((?<=^\s)\s*\d+((?=\s)|$))", re.ASCII), txt), "NaN", None, None] if begin else [None]
-         begin = False 
          list_findings = [[re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|((([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[.]))", re.ASCII), txt), ".", None, None],
                         [re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt), ")", None, None],
-                        [re.search(re.compile(r"[Тт]аблица [№]?\d+", re.ASCII), txt), "таблица", None, None],
-                        [re.search(re.compile(r"[Рр]исунок [№]?\d+", re.ASCII), txt), "рисунок", None, None],
-                        [re.search(re.compile(r"[Рр]ис[.]? [№]?\d+", re.ASCII), txt), "рис", None, None],
-                        [re.search(re.compile(r"[Сс]хема [№]?\d+", re.ASCII), txt), "схема", None, None],
+                        [re.search(re.compile(r"(^|(?<=^\s)\s*)[Тт]аблица [№]?\d+", re.ASCII), txt) if begin else None, "таблица", None, None],
+                        [re.search(re.compile(r"(^|(?<=^\s)\s*)[Рр]исунок [№]?\d+", re.ASCII), txt) if begin else None, "рисунок", None, None],
+                        [re.search(re.compile(r"(^|(?<=^\s)\s*)[Рр]ис[.]? [№]?\d+", re.ASCII), txt) if begin else None, "рис", None, None],
+                        [re.search(re.compile(r"(^|(?<=^\s)\s*)[Сс]хема [№]?\d+", re.ASCII), txt) if begin else None, "схема", None, None],
                         [re.search(re.compile(r"((?<=\s)|(?<=^))[(]((\d+[.]?)+|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt), "()", None, None]]
-         
+         begin = False 
          list_findings = [non_sign] if non_sign[0] else list(filter(lambda x: x[0] is not None, list_findings))
          if list_findings:
             list_findings = list(map(lambda x: [x[0], x[1], x[0].span()[0], x[0].span()[1]], list_findings))         
