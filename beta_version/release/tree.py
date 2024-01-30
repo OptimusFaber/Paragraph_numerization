@@ -104,13 +104,21 @@ class Make_tree:
             if dif > 0:
                 for _ in range(dif):
                     elem1.append(1)
-            elif dif < 0:
-                for _ in range(abs(dif)):
-                    elem2.append(1)
+            # elif dif < 0:
+            #     for _ in range(abs(dif)):
+            #         elem2.append(1)
+            flag = True
             for i in range(1, min(len(elem1), len(elem2))):     ## Вдруг после 5.4 идет 5.6 + ищем разницу между параграфами
-                cnt += abs(elem1[i] - elem2[i])
-                if elem1[i] > elem2[i]:
-                    return False
+                if flag:
+                    if elem1[i] > elem2[i]:
+                        return False
+                    elif elem1[i] < elem2[i]:
+                        cnt += abs(elem1[i] - elem2[i])
+                        flag = False
+                    else:
+                        continue
+                else:
+                    cnt += (elem2[i]-1)
             if cnt > 3:
                 return False
             return True
@@ -256,8 +264,13 @@ class Make_tree:
                     self.p.append(elem[1])
         else:
             black_list = set()
-            for i in range(-1, max(-len(self.tree)-1, -NUMBER_SEARCH), -1):  
+            point = list(self.tree[-1].ancestors)
+            parent_flag = False
+            for i in range(-1, -len(self.tree)-1, -1):
+                if self.tree[i].parent.name == 'txt': parent_flag = True
                 if self.similarity_check(self.tree[i], elem):
+                    if len(point) < len(list(self.tree[i].ancestors)): continue
+                    if parent_flag and self.tree[i].parent.name != 'txt': continue
                     if self.tree[i].parent in black_list:
                         continue
                     if self.logic_check(self.tree[i], elem):
@@ -318,7 +331,7 @@ class Make_tree:
             if 'number' in self.tree[i].data_type and (elem[1] == self.tree[i].sign or self.tree[i].sign == 'NaN'):
                 if self.numeral_check(self.tree[i], elem) and (self.tree[i].parent not in black_list):
                     node = self.tree[i]
-                    if elem[2] - node.pos > 326: break
+                    # if elem[2] - node.pos > 326: break
                     ## добавить определение parent-a тк он думает что отец 1.3.1 это 1.2.1
                     parent, delimetr = node, node.delimetr
                     rel = list(map(int, node.node_name.split('.')))
@@ -438,6 +451,8 @@ class Make_tree:
         self.lst = lst
         for elem, k in zip(self.lst, range(len(self.lst))):
             self.k = k
+            if elem[2] == 895:
+                print()
             if elem[1] in ["таблица", "рисунок", "рис", "схема"]:
                 self.func, self.revfunc = functions[elem[3]]
                 self.n = first_elements[elem[3]]
