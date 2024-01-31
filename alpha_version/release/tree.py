@@ -411,7 +411,7 @@ class Make_tree:
                             if len(rel) > len(sp):
                                 for i in range(len(rel) - len(sp)+1):
                                     parent = parent.parent
-                    if len(node.node_name) == 1:
+                    if len(node.node_name) == 1 and parent.node_name != 'txt':
                         parent = parent.parent
                     if len(parent.node_name.split('.')) == len(elem[0].split('.')) and parent.node_name != 'txt':
                         parent = parent.parent
