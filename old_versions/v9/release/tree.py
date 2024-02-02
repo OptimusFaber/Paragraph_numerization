@@ -333,7 +333,8 @@ class Make_tree:
                             break
                     n = self.main_line
                     table = False
-                    for i in range(k+1, min(len(self.lst), k+NUMBER_SEARCH)): 
+                    for i in range(k+1, min(len(self.lst), k+NUMBER_SEARCH)):
+                        if 'number' not in self.lst[i][3] or elem[1] != self.lst[i][1]: continue
                         if self.numeral_check(n.name, self.lst[i][0]):
                             parent = self.tree[-1]
                             if self.func(elem[0]) == 2:
@@ -443,11 +444,11 @@ class Make_tree:
                 if find(self.root, lambda node: node.path_name == "/txt/{}.{}".format(*sp)):
                     for i in range(self.k+1, min(len(self.lst), self.k+NUM_PARAGRAPH_SEARCH)):
                         param = ok = False
-                        if 'number' not in self.lst[i][3] and elem[1] != self.lst[i][1]: continue
+                        if 'number' not in self.lst[i][3] or elem[1] != self.lst[i][1]: continue
                         if self.numeral_check(elem[0], self.lst[i][0]):
                             param = True
                             st += 1
-                        if self.lst[i][2]-self.ancestor.pos > 40: break
+                        # if self.lst[i][2]-self.ancestor.pos > 40: break
                         ancestors = [self.ancestor] + list(self.ancestor.ancestors) 
                         for n in ancestors[:-1]:
                             if 'number' in n.data_type and n.sign == self.lst[i][1]:
@@ -496,7 +497,7 @@ class Make_tree:
         self.lst = lst
         for elem, k in zip(self.lst, range(len(self.lst))):
             self.k = k
-            if elem[2] == 2041:
+            if elem[2] == 93:
                 print()
             if elem[1] in ["таблица", "рисунок", "рис", "схема"]:
                 self.func, self.revfunc = functions[elem[3]]
