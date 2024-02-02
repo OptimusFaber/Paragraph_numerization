@@ -183,20 +183,19 @@ class Make_tree:
         
     def letters_romans(self, elem, k):      ## Алгоритм работы с буквенными параграфами
         parent = None
-        if elem[2] == 940:
-            print()
-        if self.func(elem[0]) == self.func(self.n) and self.tree[-1].data_type != elem[3]:   ## Вдруг это первый элемент последовательности
-            for i in range(-1, max(-len(self.tree)-1, -NUM_PARAGRAPH_SEARCH), -1):
+        if self.tree:
+            if self.func(elem[0]) == self.func(self.n) and self.tree[-1].data_type != elem[3]:   ## Вдруг это первый элемент последовательности
+                for i in range(-1, max(-len(self.tree)-1, -NUM_PARAGRAPH_SEARCH), -1):
+                    parent=self.tree[-1]
+                    if self.similarity_check(self.tree[i], elem):
+                        if self.tree[i].node_name == elem[0]:
+                            self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', status='DUPLICATE', delimetr = None))
+                            return False
+                        break
+                self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
+            elif self.func(elem[0]) == self.func(self.n):
                 parent=self.tree[-1]
-                if self.similarity_check(self.tree[i], elem):
-                    if self.tree[i].node_name == elem[0]:
-                        self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', status='DUPLICATE', delimetr = None))
-                        return False
-                    break
-            self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
-        elif self.func(elem[0]) == self.func(self.n):
-            parent=self.tree[-1]
-            self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
+                self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
         else:
             for i in range(-1, max(-len(self.tree)-1, LETTER_SEARCH), -1):  
                 if self.similarity_check(self.tree[i], elem):
@@ -394,9 +393,10 @@ class Make_tree:
                                 for j in range(rel[e]+1, sp[e]):
                                     try:
                                         self.tree.append(Node('{}.1'.format(j), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))  
+                                        param = True
                                     except:
                                         continue
-                                    param = True
+                                    
                             else:
                                 for j in range(rel[e]+1, sp[e]):  
                                     self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))
@@ -406,7 +406,8 @@ class Make_tree:
                                     param = True
                             adress.append(sp[e])
                         else:
-                            parent = self.tree[-1]
+                            if param:
+                                parent = self.tree[-1]
                             for j in range(1, sp[e]):  
                                 self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))
                                 param = True
@@ -418,8 +419,9 @@ class Make_tree:
                             parent = self.tree[-1] if len(sp) != len(rel) else self.tree[-1].parent
                             if len(rel) > len(sp):
                                 for i in range(len(rel) - len(sp)+1):
-                                    parent = parent.parent
-                    if len(node.node_name) == 1  and parent.node_name != 'txt':
+                                    if parent != self.root:
+                                        parent = parent.parent
+                    if len(node.node_name) == 1 and parent.node_name != 'txt':
                         parent = parent.parent
                     if len(parent.node_name.split('.')) == len(elem[0].split('.')) and parent.node_name != 'txt':
                         parent = parent.parent
@@ -497,7 +499,7 @@ class Make_tree:
         self.lst = lst
         for elem, k in zip(self.lst, range(len(self.lst))):
             self.k = k
-            if elem[2] == 93:
+            if elem[2] == 1385:
                 print()
             if elem[1] in ["таблица", "рисунок", "рис", "схема"]:
                 self.func, self.revfunc = functions[elem[3]]

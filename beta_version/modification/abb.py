@@ -224,7 +224,8 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
                                     continue
                             if f0 or f3:
                                 brackets = f0 if f0 else f3
-                                brackets = list(map(lambda x: x[0], brackets.group().split(" ")))
+                                brackets = list(filter(lambda x: x, brackets.group().split(" ")))
+                                brackets = list(map(lambda x: x[0], brackets))
                                 if levenstein(elem, brackets) <= 1:
                                     abb_set[elem] = i+1
                                     continue

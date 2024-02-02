@@ -22,24 +22,20 @@ def parse(text):
       string_num += 1
       begin = True
       while txt and sign:
-         non_sign = [None]
-         if begin:
-            non_sign = [re.search(re.compile(r"(^\d+((?=\s)|$))|((?<=^\s)\s*\d+((?=\s)|$))", re.ASCII), txt), "NaN", None, None] if begin else [None]
          list_findings = [[re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|((([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[.]))", re.ASCII), txt), ".", None, None],
                         [re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt), ")", None, None],
                         [re.search(re.compile(r"(^|(?<=^\s)\s*)[Тт]аблица [№]?\d+", re.ASCII), txt) if begin else None, "таблица", None, None],
                         [re.search(re.compile(r"(^|(?<=^\s)\s*)[Рр]исунок [№]?\d+", re.ASCII), txt) if begin else None, "рисунок", None, None],
                         [re.search(re.compile(r"(^|(?<=^\s)\s*)[Рр]ис[.]? [№]?\d+", re.ASCII), txt) if begin else None, "рис", None, None],
                         [re.search(re.compile(r"(^|(?<=^\s)\s*)[Сс]хема [№]?\d+", re.ASCII), txt) if begin else None, "схема", None, None],
-                        [re.search(re.compile(r"((?<=\s)|(?<=^))[(]((\d+[.]?)+|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt), "()", None, None]]
+                        [re.search(re.compile(r"((?<=\s)|(?<=^))[(]((\d+[.]?)+|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt), "()", None, None],
+                        [re.search(re.compile(r"(^\d+((?=\s)|$))|((?<=^\s)\s*\d+((?=\s)|$))", re.ASCII), txt) if begin else None, "NaN", None, None]]
          begin = False 
-         list_findings = [non_sign] if non_sign[0] else list(filter(lambda x: x[0] is not None, list_findings))
+         list_findings = list(filter(lambda x: x[0] is not None, list_findings))
          if list_findings:
-            list_findings = list(map(lambda x: [x[0], x[1], x[0].span()[0], x[0].span()[1]], list_findings))         
-            list_findings = sorted(list_findings, key = lambda x: x[2])
+            list_findings = sorted(list(map(lambda x: [x[0], x[1], x[0].span()[0], x[0].span()[1]], list_findings)), key = lambda x: x[2])         
             posx = list_findings[0][2]
-            list_findings = list(filter(lambda x: x[2] == posx, list_findings))
-            list_findings = sorted(list_findings, key = lambda x: x[3], reverse=True)
+            list_findings = sorted(list(filter(lambda x: x[2] == posx, list_findings)), key = lambda x: x[3], reverse=True)
             sign = list_findings[0][1]
             pos = list_findings[0][3]
             delimetr = txt[0:list_findings[0][2]] if not re.search("[^\s]", txt[0:list_findings[0][2]]) else ""
@@ -51,7 +47,6 @@ def parse(text):
          paragraph = re.sub(r"^\s\s*", "", paragraph)
          if sign == "()":
             paragraph = paragraph[1:len(paragraph)-1]
-            # pos -= 2 
          elif sign == ")":
             paragraph = paragraph[:-1]
          elif paragraph[-1] == "." and paragraph.count(".") == 1:
