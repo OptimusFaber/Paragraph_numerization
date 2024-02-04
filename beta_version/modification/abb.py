@@ -1,5 +1,5 @@
 import re
-import psycopg2
+import logging
 
 #! Алгоритм Левинштейна
 def levenstein(str_1, str_2):
@@ -21,6 +21,9 @@ def levenstein(str_1, str_2):
 #!--------------------------------------------------------------------------------------------------------------------
 
 def abb_finder(text, abbs=True, dicts=True, add_info=None):
+    logging.basicConfig(filename='myapp.log', level=logging.DEBUG, 
+                    format='%(asctime)s %(levelname)s %(name)s %(message)s')
+    logger=logging.getLogger(__name__)
     if not abbs and not dicts:
         return []
     #& Маски для поиска нужных нам сокращений
@@ -152,127 +155,128 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
     #^ Поиск сокращений в нашем тексте
     feedback_list = []
     for i in range(len(devided_text)):
-        if i not in forbidden_list:
-            f = [re.finditer(abb_mask1, devided_text[i]), re.finditer(abb_mask2, devided_text[i])]
+        try:
             buf = []
-            #^------------------------------------------------------------------------------------
-            list_of_added_elems = []
-            for itter in f:       
-                for element in itter:
-                    if element:
-                        elem = element.group()
-                        elem = re.sub("[(\t\n\r)]", "", elem)
-                        if bool(re.search(r"^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$", elem)):    #! Проверяем что это не римская цифра
-                            continue
-                        st = False 
-                        ##----------------------------
-                        for _ in range(2):
-                            if not elem[-1].isalpha():
-                                if elem[-1] != "»":
-                                    if elem[-1].isdigit():
-                                        continue
-                                    elem = elem[:-1]
-                        if elem in buf:
-                            continue
-                        ##----------------------------
-                        if elem in list(abb_set.keys()):
-                            if abb_set[elem] <= i+1:
-                                list_of_added_elems.extend(range(element.span()[0], element.span()[1]+1))
+            if i not in forbidden_list:
+                f = [re.finditer(abb_mask1, devided_text[i]), re.finditer(abb_mask2, devided_text[i])]
+                #^------------------------------------------------------------------------------------
+                list_of_added_elems = []
+                for itter in f:       
+                    for element in itter:
+                        if element:
+                            elem = element.group()
+                            elem = re.sub("[(\t\n\r)]", "", elem)
+                            if bool(re.search(r"^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$", elem)):    #! Проверяем что это не римская цифра
                                 continue
-                            else:
+                            st = False 
+                            ##----------------------------
+                            for _ in range(2):
+                                if not elem[-1].isalpha():
+                                    if elem[-1] != "»":
+                                        if elem[-1].isdigit():
+                                            continue
+                                        elem = elem[:-1]
+                            if elem in buf:
+                                continue
+                            ##----------------------------
+                            if elem in list(abb_set.keys()):
+                                if abb_set[elem] <= i+1:
+                                    list_of_added_elems.extend(range(element.span()[0], element.span()[1]+1))
+                                    continue
+                                else:
+                                    buf.append((elem, element.span()))
+                                    st = True
+                            elif all(list(map(lambda x: 1<len(x)<9, elem.split(" ")))) and ((not re.search("[\s.,:;!?]"+elem.lower()+"[\s.,:;!?]", text)) and (not re.search(("[\s.,:;!?]"+elem[0]+elem.lower()[1:])+"[\s.,:;!?]", text))):
+                                if element.span()[0] in list_of_added_elems or element.span()[1] in list_of_added_elems:
+                                    continue
+                                f0 = re.search(r"[(].+[)]", devided_text[i][:element.span()[0]])
+                                f1 = re.search(r"[\t ]*[-—–]", devided_text[i][element.span()[1]:])
+                                f2 = re.search(r"[\t ]*[-—–]", devided_text[i][:element.span()[0]][::-1])
+                                f3 = re.search(r"[(].+[)]", devided_text[i][element.span()[1]-1:])
+                                if f1:
+                                    right_side = devided_text[i][f1.span()[1]-1:].split(" ")
+                                    right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
+                                    line = ""
+                                    st = False
+                                    elem = elem.upper()
+                                    for rig in right_side:
+                                        line += rig.upper()
+                                        if levenstein(line, elem) <= 1:
+                                            st = True
+                                            break
+                                        if len(line) - len(elem) > 4:
+                                            break
+                                    if st:
+                                        abb_set[elem] = i+1
+                                        continue
+                                if f2:
+                                    left_side = devided_text[i][:element.span()[0]][::-1][f2.span()[1]-1:].split(" ")
+                                    left_side = list(map(lambda x: x[-1], list(filter(lambda x: len(x)>1, left_side))))
+                                    left_side.reverse()
+                                    line = ""
+                                    st = False
+                                    elem = elem.upper()
+                                    for lef in left_side:
+                                        line += lef.upper()
+                                        if levenstein(line, elem) <= 1:
+                                            st = True
+                                            break
+                                        if len(line) - len(elem) > 4:
+                                            break
+                                    if st:
+                                        abb_set[elem] = i+1
+                                        continue
+                                if f0 or f3:
+                                    brackets = f0 if f0 else f3
+                                    brackets = list(filter(lambda x: x, brackets.group().split(" ")))
+                                    brackets = list(map(lambda x: x[0], brackets))
+                                    if levenstein(elem, brackets) <= 1:
+                                        abb_set[elem] = i+1
+                                        continue
+                                if devided_text[i][element.span()[0]-1] == "(" and (")" in devided_text[i][element.span()[1]-1:element.span()[1]+2]):
+                                    ## Единая система конструкторской документации (ЕСКД) тут лишь слева
+                                    left_side = devided_text[i][:element.span()[0]][::-1].split(" ")
+                                    left_side = list(map(lambda x: x[-1], list(filter(lambda x: len(x)>1, left_side))))
+                                    left_side.reverse()
+                                    line = ""
+                                    st = False
+                                    elem = elem.upper()
+                                    for lef in left_side:
+                                        line += lef.upper()
+                                        if levenstein(line, elem) <= 1:
+                                            st = True
+                                            break
+                                        if len(line) - len(elem) > 4:
+                                            break
+                                    if st:
+                                        abb_set[elem] = i+1
+                                        continue
+                                    ## тут лишь справа (ЕСКД) Единая система конструкторской документации
+                                    right_side = devided_text[i][element.span()[1]-1:].split(" ")
+                                    right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
+                                    line = ""
+                                    st = False
+                                    elem = elem.upper()
+                                    for rig in right_side:
+                                        line += rig.upper()
+                                        if levenstein(line, elem) <= 1:
+                                            st = True
+                                            break
+                                        if len(line) - len(elem) > 4:
+                                            break
+                                    if st:
+                                        abb_set[elem] = i+1
+                                        continue
+                                    
                                 buf.append((elem, element.span()))
                                 st = True
-                        elif all(list(map(lambda x: 1<len(x)<9, elem.split(" ")))) and ((not re.search("[\s.,:;!?]"+elem.lower()+"[\s.,:;!?]", text)) and (not re.search(("[\s.,:;!?]"+elem[0]+elem.lower()[1:])+"[\s.,:;!?]", text))):
-                            if element.span()[0] in list_of_added_elems or element.span()[1] in list_of_added_elems:
+                            if any([word in devided_text[i].lower() for word in special_words]):
+                                if st:
+                                    buf.pop(-1)
+                                abb_set[elem] = i+1
+                            else:
                                 continue
-                            f0 = re.search(r"[(].+[)]", devided_text[i][:element.span()[0]])
-                            f1 = re.search(r"[\t ]*[-—–]", devided_text[i][element.span()[1]:])
-                            f2 = re.search(r"[\t ]*[-—–]", devided_text[i][:element.span()[0]][::-1])
-                            f3 = re.search(r"[(].+[)]", devided_text[i][element.span()[1]-1:])
-                            if f1:
-                                right_side = devided_text[i][f1.span()[1]-1:].split(" ")
-                                right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
-                                line = ""
-                                st = False
-                                elem = elem.upper()
-                                for rig in right_side:
-                                    line += rig.upper()
-                                    if levenstein(line, elem) <= 1:
-                                        st = True
-                                        break
-                                    if len(line) - len(elem) > 4:
-                                        break
-                                if st:
-                                    abb_set[elem] = i+1
-                                    continue
-                            if f2:
-                                left_side = devided_text[i][:element.span()[0]][::-1][f2.span()[1]-1:].split(" ")
-                                left_side = list(map(lambda x: x[-1], list(filter(lambda x: len(x)>1, left_side))))
-                                left_side.reverse()
-                                line = ""
-                                st = False
-                                elem = elem.upper()
-                                for lef in left_side:
-                                    line += lef.upper()
-                                    if levenstein(line, elem) <= 1:
-                                        st = True
-                                        break
-                                    if len(line) - len(elem) > 4:
-                                        break
-                                if st:
-                                    abb_set[elem] = i+1
-                                    continue
-                            if f0 or f3:
-                                brackets = f0 if f0 else f3
-                                brackets = list(filter(lambda x: x, brackets.group().split(" ")))
-                                brackets = list(map(lambda x: x[0], brackets))
-                                if levenstein(elem, brackets) <= 1:
-                                    abb_set[elem] = i+1
-                                    continue
-                            if devided_text[i][element.span()[0]-1] == "(" and (")" in devided_text[i][element.span()[1]-1:element.span()[1]+2]):
-                                ## Единая система конструкторской документации (ЕСКД) тут лишь слева
-                                left_side = devided_text[i][:element.span()[0]][::-1].split(" ")
-                                left_side = list(map(lambda x: x[-1], list(filter(lambda x: len(x)>1, left_side))))
-                                left_side.reverse()
-                                line = ""
-                                st = False
-                                elem = elem.upper()
-                                for lef in left_side:
-                                    line += lef.upper()
-                                    if levenstein(line, elem) <= 1:
-                                        st = True
-                                        break
-                                    if len(line) - len(elem) > 4:
-                                        break
-                                if st:
-                                    abb_set[elem] = i+1
-                                    continue
-                                ## тут лишь справа (ЕСКД) Единая система конструкторской документации
-                                right_side = devided_text[i][element.span()[1]-1:].split(" ")
-                                right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
-                                line = ""
-                                st = False
-                                elem = elem.upper()
-                                for rig in right_side:
-                                    line += rig.upper()
-                                    if levenstein(line, elem) <= 1:
-                                        st = True
-                                        break
-                                    if len(line) - len(elem) > 4:
-                                        break
-                                if st:
-                                    abb_set[elem] = i+1
-                                    continue
-                                
-                            buf.append((elem, element.span()))
-                            st = True
-                        if any([word in devided_text[i].lower() for word in special_words]):
-                            if st:
-                                buf.pop(-1)
-                            abb_set[elem] = i+1
-                        else:
-                            continue
-            #^------------------------------------------------------------------------------------
+                #^------------------------------------------------------------------------------------
 
             #? Поиск элементов из наших 3 словарей
             if dicts:
@@ -336,5 +340,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None):
                             next_line = devided_text[k]
                             break
                     feedback_list.append(["AbbreviationError", devided_text[i], i+1, r, prev_line, next_line])
+        except Exception as err:
+            logger.error(err)
     #^--------------------------------------------------------------------------------------------------------------------           
     return feedback_list

@@ -2,6 +2,7 @@ from bigtree import Node, tree_to_dict, find
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from roman_numeral import *
+import logging
 
 LETTER_SEARCH = -15         # Сколько шагов назад мы сделаем, чтобы найти подобный буквенный параграф
 NUMBER_SEARCH = 70          # Сколько шагов назад/вперед мы сделаем, чтобы найти числовой параграф
@@ -496,26 +497,39 @@ class Make_tree:
                     self.tree.append(Node(" {}".format(elem[0]), sign=elem[1], pos=elem[2], parent=forbiden_list[0], data_type='None', status='DUPLICATE', delimetr = None))
 
     def walk(self, lst):
+        logging.basicConfig(filename='myapp.log', level=logging.DEBUG, 
+                    format='%(asctime)s %(levelname)s %(name)s %(message)s')
+        logger=logging.getLogger(__name__)
         self.lst = lst
         for elem, k in zip(self.lst, range(len(self.lst))):
             self.k = k
-            if elem[2] == 1385:
-                print()
             if elem[1] in ["таблица", "рисунок", "рис", "схема"]:
                 self.func, self.revfunc = functions[elem[3]]
                 self.n = first_elements[elem[3]]
-                self.non_text(elem)
+                try:
+                    self.non_text(elem)
+                except Exception as err:
+                    logger.error(err)
                 continue
-            if elem[3] == 'numbers':
-                self.numeral_paragraphs(elem)  
+            elif elem[3] == 'numbers':
+                try:
+                    self.numeral_paragraphs(elem)  
+                except Exception as err:
+                    logger.error(err)
             else:
                 self.func, self.revfunc = functions[elem[3]]
                 self.n = first_elements[elem[3]]
 
                 if 'letter' in elem[3] or 'roman' in elem[3]:
-                    self.letters_romans(elem, k)
+                    try:
+                        self.letters_romans(elem, k)
+                    except Exception as err:
+                        logger.error(err)
                 elif elem[3] == 'number':
-                    self.single_numbers(elem, k)
+                    try:
+                        self.single_numbers(elem, k)
+                    except Exception as err:
+                        logger.error(err)
                     
         self.trees.append(tree_to_dict(self.root, all_attrs=True))
         self.roots.append(self.root)
