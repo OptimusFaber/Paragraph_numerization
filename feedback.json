@@ -1,10 +1,50 @@
 [
     {
+        "TypeError": "TextErrorNumber",
+        "ErrorLine": "            (3) balalal",
+        "LineNumber": 5,
+        "Description": "Отсутствует параграф (2)",
+        "PrevLine": "            (1) blalala",
+        "NextLine": "        2. blblbaal"
+    },
+    {
+        "TypeError": "TextErrorNumber",
+        "ErrorLine": "3) balalalala ",
+        "LineNumber": 8,
+        "Description": "Отсутствует параграф 2)",
+        "PrevLine": "    b)blblablabal",
+        "NextLine": "    II. blblbaal"
+    },
+    {
+        "TypeError": "TextErrorNumber",
+        "ErrorLine": "    II. blblbaal",
+        "LineNumber": 9,
+        "Description": "Отсутствует параграф I.",
+        "PrevLine": "3) balalalala ",
+        "NextLine": "    III. blblbaal"
+    },
+    {
         "TypeError": "AbbreviationError",
-        "ErrorLine": "А вот новая ситуация ПЕР ГОР ВАО\r",
-        "LineNumber": 19,
-        "Description": "Неизвестная аббревиатура «ГОР ВАО»",
-        "PrevLine": "Или АПН ПЕР блабла\r",
-        "NextLine": "\r"
+        "ErrorLine": "    II. blblbaal\r",
+        "LineNumber": 9,
+        "Description": "Неизвестная аббревиатура «II»",
+        "PrevLine": "3) balalalala \r",
+        "NextLine": "    III. blblbaal\r"
+    },
+    {
+        "TypeError": "AbbreviationError",
+        "ErrorLine": "    III. blblbaal\r",
+        "LineNumber": 10,
+        "Description": "Неизвестная аббревиатура «III»",
+        "PrevLine": "    II. blblbaal\r",
+        "NextLine": "5) blalaal"
+    },
+    {
+        "TypeError": "TextErrorNumber",
+        "ErrorLine": "5) blalaal",
+        "LineNumber": 11,
+        "Description": "Отсутствует параграф 4)",
+        "PrevLine": "    III. blblbaal",
+        "NextLine": null
     }
 ]

@@ -39,10 +39,11 @@ def test4():
     assert lost == ['2', 'рис 2', '2', 'I', '4']
 
 def test5():
-    lost = []
-    dcts = check_file("tests/test4.txt", test=True)
+    dupliscate = []
+    dcts = check_file("tests/test5.txt", test=True)
+    print(dcts)
     for dct in dcts:
         for key in list(dct.keys())[1:]:
             if dct[key]["status"] == "DUPLICATE":
-                lost.append(dct[key]["name"])
-    assert lost == ['б', '2', 'Таблица 2', 'III', '1']
+                dupliscate.append(dct[key]["name"])
+    assert dupliscate == [' б', ' 2', ' таблица 2', ' 1', ' III']
