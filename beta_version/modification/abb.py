@@ -154,7 +154,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
     ## ВВЕДЕНИЕ начинается в строке content_begin_pos и кончается в content_end_pos
     for c in content_strings:
         try:
-            key = re.sub("[.\d\t\n\r\f\v]", "", devided_text[c])
+            key = re.sub("[.\d\t\n\r\f\v]", "", devided_text[c-1])
             key = " ".join(list(filter(lambda x: x, key.split(" ")))).upper()
             abb_set[key] = 0
         except:

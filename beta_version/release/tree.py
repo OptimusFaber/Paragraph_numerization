@@ -193,13 +193,14 @@ class Make_tree:
                     if self.similarity_check(self.tree[i], elem):
                         if self.tree[i].node_name == elem[0]:
                             self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', status='DUPLICATE', delimetr = None))
-                            return False
+                            return
                         break
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
+                return
             elif self.func(elem[0]) == self.func(self.n):
                 parent=self.tree[-1]
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
-        else:
+                return
             for i in range(-1, max(-len(self.tree)-1, LETTER_SEARCH), -1):  
                 if self.similarity_check(self.tree[i], elem):
                     if ((self.tree[i+1].parent == self.tree[i].parent) or (self.tree[i].parent == parent)) and i < -1:
@@ -220,12 +221,13 @@ class Make_tree:
                     if self.similarity_check(self.tree[i], elem):
                         if self.tree[i].node_name == elem[0]:
                             self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[i].parent, data_type='None', status='DUPLICATE', delimetr = None))
-                            return False
+                            return
                         break
                 if self.func(elem[0]) - self.func(self.n) == 1:
                     parent=self.tree[-1]
                     self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
                     self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
+                    return
         
     def single_numbers(self, elem, k):                 ## Алгоритм работы с числовами параграфами
         parent = None
@@ -243,13 +245,15 @@ class Make_tree:
                         if self.logic_check(elem[0], self.lst[i]): 
                             param = True
                             st += 1
-                    # if self.lst[i][2]-self.ancestor.pos > 100: continue
                     ancestors = [self.ancestor] + list(self.ancestor.ancestors)
                     for n in ancestors[:-1]:
                         if 'number' in n.data_type and n.sign not in ["таблица", "рисунок", "рис", "схема"]:
                             if self.numeral_check(n.name, self.lst[i][0]) and self.lst[i][1] == n.sign:
                                 if (st and not param) or st > 1: parent=self.tree[-1]
-                                elif param: return False
+                                elif param: 
+                                    if self.tree[-1].name == elem[0] and self.tree[-1].sign == elem[1]:
+                                        self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[-1].parent, data_type='None', status='DUPLICATE', delimetr = None))
+                                    return
                                 ok = True
                                 break
                     if ok: break

@@ -4,7 +4,7 @@ from check import check_file
 
 def test1():
     lost = []
-    dcts = check_file("test1.txt", test=True)
+    dcts = check_file("tests/test1.txt", test=True)
     for dct in dcts:
         for key in list(dct.keys())[1:]:
             if dct[key]["status"] == "MISSING":
@@ -13,7 +13,7 @@ def test1():
 
 def test2():
     lost = []
-    dcts = check_file("test2.txt", test=True)
+    dcts = check_file("tests/test2.txt", test=True)
     for dct in dcts:
         for key in list(dct.keys())[1:]:
             if dct[key]["status"] == "MISSING":
@@ -22,7 +22,7 @@ def test2():
 
 def test3():
     lost = []
-    dcts = check_file("test3.txt", test=True)
+    dcts = check_file("tests/test3.txt", test=True)
     for dct in dcts:
         for key in list(dct.keys())[1:]:
             if dct[key]["status"] == "MISSING":
@@ -31,9 +31,18 @@ def test3():
 
 def test4():
     lost = []
-    dcts = check_file("test4.txt", test=True)
+    dcts = check_file("tests/test4.txt", test=True)
     for dct in dcts:
         for key in list(dct.keys())[1:]:
             if dct[key]["status"] == "MISSING":
                 lost.append(dct[key]["name"])
     assert lost == ['2', 'рис 2', '2', 'I', '4']
+
+def test5():
+    lost = []
+    dcts = check_file("tests/test4.txt", test=True)
+    for dct in dcts:
+        for key in list(dct.keys())[1:]:
+            if dct[key]["status"] == "DUPLICATE":
+                lost.append(dct[key]["name"])
+    assert lost == ['б', '2', 'Таблица 2', 'III', '1']
