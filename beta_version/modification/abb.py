@@ -41,7 +41,15 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
     #^--------------------------------------------------------------------------------------------------------------------
         
     #? Поиск где начинается содержание документа
-    idx = re.search("[С|с]одержание", text)
+    pos1 = pos2 = 1000000000
+    idx1 = re.search("[С|с]одержание", text) 
+    if idx1:
+        pos1 = idx1.span()[0]
+    idx2 = re.search("[О|о]главление", text)
+    if idx2:
+        pos2 = idx2.span()[0]
+    idx = {pos1:idx1, pos2:idx2}
+    idx = idx[min(idx)]
     if idx is not None:
         idx = idx.end()
         content_begin_pos = text[:idx].count('\n')+1       
