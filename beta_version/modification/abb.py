@@ -153,9 +153,12 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
     forbidden_list = list(abb_set.values()) + list(range(content_begin_pos, content_end_pos+1))
     ## ВВЕДЕНИЕ начинается в строке content_begin_pos и кончается в content_end_pos
     for c in content_strings:
-        key = re.sub("[.\d\t\n\r\f\v]", "", devided_text[c])
-        key = " ".join(list(filter(lambda x: x, key.split(" ")))).upper()
-        abb_set[key] = 0
+        try:
+            key = re.sub("[.\d\t\n\r\f\v]", "", devided_text[c])
+            key = " ".join(list(filter(lambda x: x, key.split(" ")))).upper()
+            abb_set[key] = 0
+        except:
+            pass
 
     #^ Поиск сокращений в нашем тексте
     feedback_list = []
