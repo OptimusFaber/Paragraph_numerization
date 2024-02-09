@@ -198,10 +198,6 @@ class Make_tree:
                         break
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
                 return
-            # elif self.func(elem[0]) == self.func(self.n):
-            #     parent=self.tree[-1]
-            #     self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
-            #     return
             black_list = []
             duplic = False
             for i in range(-1, max(-len(self.tree)-1, LETTER_SEARCH), -1):  
@@ -394,7 +390,7 @@ class Make_tree:
                 if parent.node_name == 'txt': self.main_line = self.tree[-1]
                 self.ancestor = self.tree[0]
 
-    def numeral_paragraphs(self, elem):                 # Алгоритм работы с параграфами где несколько чисел
+    def numeral_paragraphs(self, elem):                 ## Алгоритм работы с параграфами где несколько чисел
         delimetr = elem[4]
         parent = None
         sp = []
@@ -580,6 +576,8 @@ class Make_tree:
                     
         self.trees.append(tree_to_dict(self.root, all_attrs=True))
         self.roots.append(self.root)
+        if len(self.content_set) > 50:
+            self.content_set = None
         return self.trees
 
     def show(self):

@@ -42,10 +42,10 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
         
     #? Поиск где начинается содержание документа
     pos1 = pos2 = 1000000000
-    idx1 = re.search("[С|с]одержание", text) 
+    idx1 = re.search("^\s*[С|с]одержание", text) 
     if idx1:
         pos1 = idx1.span()[0]
-    idx2 = re.search("[О|о]главление", text)
+    idx2 = re.search("^\s*[О|о]главление", text)
     if idx2:
         pos2 = idx2.span()[0]
     idx = {pos1:idx1, pos2:idx2}
@@ -156,17 +156,19 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
                 continue
             else:
                 c += 1
+    
     #?-----------------------------
 
     forbidden_list = list(abb_set.values()) + list(range(content_begin_pos, content_end_pos+1))
     ## ВВЕДЕНИЕ начинается в строке content_begin_pos и кончается в content_end_pos
-    for c in content_strings:
-        try:
-            key = re.sub("[.\d\t\n\r\f\v]", "", devided_text[c-1])
-            key = " ".join(list(filter(lambda x: x, key.split(" ")))).upper()
-            abb_set[key] = 0
-        except:
-            pass
+    if content_strings is not None:
+        for c in content_strings:
+            try:
+                key = re.sub("[.\d\t\n\r\f\v]", "", devided_text[c-1])
+                key = " ".join(list(filter(lambda x: x, key.split(" ")))).upper()
+                abb_set[key] = 0
+            except:
+                pass
 
     #^ Поиск сокращений в нашем тексте
     feedback_list = []
@@ -330,7 +332,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
                         if devided_text[k] != '':
                             next_line = devided_text[k]
                             break
-                    feedback_list.append(["CorruptionFactorError", devided_text[i], i+1, cor[1], prev_line, next_line])
+                    feedback_list.append(["CorruptionFactorError", devided_text[i], i+1, cor[1], prev_line, next_line, None])
                 for no in no_conn:
                     prev_line, next_line = '', ''
                     for k in range(i-1, -1, -1):
@@ -341,7 +343,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
                         if devided_text[k] != '':
                             next_line = devided_text[k]
                             break
-                    feedback_list.append(["NoConnectionWithNPAError", devided_text[i], i+1, no[1], prev_line, next_line])
+                    feedback_list.append(["NoConnectionWithNPAError", devided_text[i], i+1, no[1], prev_line, next_line, None])
                 for inc in inc_frm:
                     prev_line, next_line = '', ''
                     for k in range(i-1, -1, -1):
@@ -352,7 +354,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
                         if devided_text[k] != '':
                             next_line = devided_text[k]
                             break
-                    feedback_list.append(["IncorrectFormulationError", devided_text[i], i+1, inc[1], prev_line, next_line])  
+                    feedback_list.append(["IncorrectFormulationError", devided_text[i], i+1, inc[1], prev_line, next_line, None])  
             #?------------------------------------------------------------------------------------
             if abbs and buf:
                 buf = list(filter(lambda x: (x[1][0] not in list_of_added_elems) and (x[1][1] not in list_of_added_elems), buf))
@@ -365,7 +367,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
                     res.add(max(buf_y[0][0], buf_f[0][0], key=lambda x: len(x)))
                 #! ErrorType, LineText, LineNumber, ОШИБКА, PrevLineText, NextLine
                 for r in res:
-                    r = "Неизвестная аббревиатура «{}»".format(r)
+                    sentence = "Неизвестная аббревиатура «{}»".format(r)
                     prev_line, next_line = '', ''
                     for k in range(i-1, -1, -1):
                         if devided_text[k] != '':
@@ -375,7 +377,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
                         if devided_text[k] != '':
                             next_line = devided_text[k]
                             break
-                    feedback_list.append(["AbbreviationError", devided_text[i], i+1, r, prev_line, next_line])
+                    feedback_list.append(["AbbreviationError", devided_text[i], i+1, sentence, prev_line, next_line, r])
         except Exception as err:
             logger.error(err)
     #^--------------------------------------------------------------------------------------------------------------------           
