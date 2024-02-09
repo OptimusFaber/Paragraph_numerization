@@ -100,7 +100,8 @@ def parse(text):
 
             p=None
             if sign == ')':
-               p = paragraph + '[)]'
+               p = '(?<=[^А-Яа-яA-Za-z0-9])' + paragraph + '[)]'
+               # p = paragraph + '[)]'
             elif sign == '()':
                p = '[(]' + paragraph + '[)]'
             elif sign == '.':
