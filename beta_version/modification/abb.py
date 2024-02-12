@@ -20,9 +20,9 @@ def levenstein(str_1, str_2):
     return current_row[n]
 #!--------------------------------------------------------------------------------------------------------------------
 
-def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set()):
+def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set(), txt_path=None):
     logging.basicConfig(filename='myapp.log', level=logging.DEBUG, 
-                    format='%(asctime)s %(levelname)s %(name)s %(message)s')
+        format=f'%(asctime)s %(levelname)s module: %(name)s line num: %(lineno)s func: %(funcName)s %(message)s \nText path: {txt_path}\n')
     logger=logging.getLogger(__name__)
     if not abbs and not dicts:
         return []
@@ -167,6 +167,12 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
                 key = re.sub("[.\d\t\n\r\f\v]", "", devided_text[c-1])
                 key = " ".join(list(filter(lambda x: x, key.split(" ")))).upper()
                 abb_set[key] = 0
+                if " И " in key:
+                    new_key = key.split("И ")
+                    for k in new_key:
+                        if k[-1] == " ":
+                            k = k[:-1]
+                        abb_set[k] = 0
             except:
                 pass
 
@@ -176,6 +182,8 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
         try:
             buf = []
             if i not in forbidden_list:
+                if i == 1547:
+                    print()
                 f = [re.finditer(abb_mask1, devided_text[i]), re.finditer(abb_mask2, devided_text[i])]
                 #^------------------------------------------------------------------------------------
                 list_of_added_elems = []
@@ -196,6 +204,10 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
                                 if not elem[-1].isalpha():
                                     if elem[-1] != "»":
                                         elem = elem[:-1]
+                            if elem[-1] == "»" and elem.count("«") == 0:
+                                elem = elem[:-1]
+                            elif elem[0] == "«" and elem.count("»") == 0:
+                                elem = elem[1:]
                             if elem in buf:
                                 continue
                             ##----------------------------

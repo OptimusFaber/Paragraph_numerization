@@ -4,9 +4,9 @@ import logging
 
 roman_numbers = 'IVXLCDM'
 
-def parse(text):
+def parse(text, txt_path):
    logging.basicConfig(filename='myapp.log', level=logging.DEBUG, 
-                    format='%(asctime)s %(levelname)s %(name)s %(message)s')
+      format=f'%(asctime)s %(levelname)s module: %(name)s line num: %(lineno)s func: %(funcName)s %(message)s \nText path: {txt_path}\n')
    logger=logging.getLogger(__name__)
    lst = []
    sign, counter, data_type = 1, 0, None
@@ -100,8 +100,7 @@ def parse(text):
 
             p=None
             if sign == ')':
-               p = '(?<=[^А-Яа-яA-Za-z0-9])' + paragraph + '[)]'
-               # p = paragraph + '[)]'
+               p = '(?<=[^А-Яа-яA-Za-z0-9])|^' + paragraph + '[)]'
             elif sign == '()':
                p = '[(]' + paragraph + '[)]'
             elif sign == '.':

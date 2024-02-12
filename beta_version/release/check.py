@@ -8,7 +8,7 @@ import codecs
 
 def check_file(txt_path=None, json_path=None, output_path=None, text=False, test=False, visualize=False):    
     if json_path:
-        F = open(json_path)
+        F = open(json_path, encoding='utf-8')
         j = json.load(F)
         paragraph_check = j["Settings"]["CheckNumberList"]
         abb_check = j["Settings"]["CheckAbbreviations"]
@@ -20,16 +20,15 @@ def check_file(txt_path=None, json_path=None, output_path=None, text=False, test
     else:
         paragraph_check = abb_check = dict_check = True
     if txt_path:
-        # name = os.txt_path.basename(txt_path)
         F = codecs.open(txt_path, "r", "utf_8_sig")
         t = ' ' + ''.join(F)
     else:
         return 
     content = None
     if paragraph_check:
-        txt = parse(t)
+        txt = parse(t, txt_path)
         tree = Make_tree()
-        dcts = tree.walk(txt)
+        dcts = tree.walk(txt, txt_path)
         if text:
             print(txt)
         if visualize:
@@ -41,7 +40,7 @@ def check_file(txt_path=None, json_path=None, output_path=None, text=False, test
         return dcts
     else:
         feedback = fb(text=t, dictonaries=dcts)
-        feedback2 = abb_finder(text=t, abbs=abb_check, dicts=dict_check,  add_info=add_info, content_strings=content)
+        feedback2 = abb_finder(text=t, abbs=abb_check, dicts=dict_check,  add_info=add_info, content_strings=content, txt_path=txt_path)
         dictionary = []
         if paragraph_check:
             for i in range(len(feedback)):
@@ -68,6 +67,6 @@ def check_file(txt_path=None, json_path=None, output_path=None, text=False, test
             if os.path.exists(out):
                 save_path = output_path
 
-        with codecs.open(save_path, "w") as outfile:
+        with codecs.open(save_path, "w", encoding='utf-8') as outfile:
             outfile.write(json_object)
         outfile.close()
