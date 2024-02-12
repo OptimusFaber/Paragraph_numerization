@@ -42,10 +42,10 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
         
     #? Поиск где начинается содержание документа
     pos1 = pos2 = 1000000000
-    idx1 = re.search("^\s*[С|с]одержание", text) 
+    idx1 = re.search("\n*\s*[С|с]одержание", text) 
     if idx1:
         pos1 = idx1.span()[0]
-    idx2 = re.search("^\s*[О|о]главление", text)
+    idx2 = re.search("\n*\s*[О|о]главление", text)
     if idx2:
         pos2 = idx2.span()[0]
     idx = {pos1:idx1, pos2:idx2}
@@ -168,7 +168,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
                 key = " ".join(list(filter(lambda x: x, key.split(" ")))).upper()
                 abb_set[key] = 0
                 if " И " in key:
-                    new_key = key.split("И ")
+                    new_key = key.split(" И ")
                     for k in new_key:
                         if k[-1] == " ":
                             k = k[:-1]
@@ -182,7 +182,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
         try:
             buf = []
             if i not in forbidden_list:
-                if i == 1547:
+                if i == 388:
                     print()
                 f = [re.finditer(abb_mask1, devided_text[i]), re.finditer(abb_mask2, devided_text[i])]
                 #^------------------------------------------------------------------------------------
