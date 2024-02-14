@@ -1,15 +1,24 @@
 {
   "Document": {
-    "FileId": 867235,
+    "FileID": 472,
+    "PreviewFolderId": 20,
+    "ResultFolderId": 19,
+    "SummaryFolderId": 21,
     "FileExtension": "docx",
-    "PreviewFolderId": 428976,
-    "ResultFolderId": 772633
+    "OriginalFileName": "ТЗ_ИС РСКР_1_обработанное_УстПор"
+  },
+  "User": {
+    "Email": "uais-test@it.mos.ru",
+    "LogonName": "uais-test",
+    "Uid": "ua11is-test@hq.corp.mos.ru",
+    "MiddleName": ""
   },
   "Settings": {
-    "CheckNumberList": true,
+    "DetectNpa": true,
+    "DetectNta": true,
     "CheckAbbreviations": true,
-    "DetectReference": false,
-    "DetectNpa": true
+    "DetectReference": true,
+    "CheckNumberList": true
   },
   "Npa": {
     "SanPin": [
@@ -31,45 +40,218 @@
     ]
   },
   "Dictionaries": {
-    "Corruption": [
+    "Abbreviation": [
       {
-        "Value": "вправе",
-        "Description": null
+        "Value": "ЭВМ",
+        "Description": "Электронная Вычислительная Машина"
       },
       {
-        "Value": "имеет право",
-        "Description": null
-      }
-    ],
-    "Abbreviation": [
+        "Value": "ИСО",
+        "Description": "Международная Организация по Стандартизации (International Organization for Standartization)"
+      },
+      {
+        "Value": "KPI",
+        "Description": "Ключевой показатель эффективности"
+      },
+      {
+        "Value": "ЗАО",
+        "Description": "Закрытое Акционерное Общество"
+      },
       {
         "Value": "ООО",
         "Description": "Общество с Ограниченной Ответственностью"
       },
       {
-        "Value": "ЗАО",
-        "Description": "Закрытое Акционерное Общество"
+        "Value": "ИНН",
+        "Description": "Индивидуальный Номер Налогоплательщика"
+      },
+      {
+        "Value": "ОАО",
+        "Description": "Открытое Акционерное Общество"
+      },
+      {
+        "Value": "АНО",
+        "Description": "Автономная Некоммерческая Организация"
+      },
+      {
+        "Value": "ГКУ",
+        "Description": "Государственное Казенное Учреждение"
+      },
+      {
+        "Value": "РФ",
+        "Description": "Российская Федерация"
+      },
+      {
+        "Value": "ГОСТ",
+        "Description": "Государственный Стандарт"
+      },
+      {
+        "Value": "ФСТЭК",
+        "Description": "Федеральная Служба по Техническому и Экспортному Контролю"
+      },
+      {
+        "Value": "ФЗ",
+        "Description": "Федеральный закон"
+      },
+      {
+        "Value": "ГК",
+        "Description": "Государственный Контракт"
+      }
+    ],
+    "Corruption": [
+      {
+        "Value": "и прочие",
+        "Description": null
+      },
+      {
+        "Value": "имеет право",
+        "Description": null
+      },
+      {
+        "Value": "может",
+        "Description": null
+      },
+      {
+        "Value": "как правило",
+        "Description": null
+      },
+      {
+        "Value": "возможно",
+        "Description": null
+      },
+      {
+        "Value": "допускается",
+        "Description": null
+      },
+      {
+        "Value": "и так далее",
+        "Description": null
+      },
+      {
+        "Value": "и тому подобное",
+        "Description": null
+      },
+      {
+        "Value": "и тому подобные",
+        "Description": null
+      },
+      {
+        "Value": "и др.",
+        "Description": null
+      },
+      {
+        "Value": "и другие",
+        "Description": null
+      },
+      {
+        "Value": "и пр.",
+        "Description": null
+      },
+      {
+        "Value": "вправе",
+        "Description": null
+      },
+      {
+        "Value": "и т.д.",
+        "Description": null
+      },
+      {
+        "Value": "и т.п.",
+        "Description": null
+      }
+    ],
+    "No_NPA": [
+      {
+        "Value": "согласно действующему законодательству",
+        "Description": null
+      },
+      {
+        "Value": "установленным порядком",
+        "Description": null
+      },
+      {
+        "Value": "установленным порядком",
+        "Description": null
+      }
+    ],
+    "IncorrectForm": [
+      {
+        "Value": "при наличии достаточных оснований",
+        "Description": null
+      },
+      {
+        "Value": "в исключительных случаях",
+        "Description": null
+      },
+      {
+        "Value": "в отдельных случаях",
+        "Description": null
+      },
+      {
+        "Value": "целесообразно",
+        "Description": null
+      },
+      {
+        "Value": "при достаточных основаниях",
+        "Description": null
+      },
+      {
+        "Value": "своевременно",
+        "Description": null
+      },
+      {
+        "Value": "согласно установленным правилам",
+        "Description": null
+      },
+      {
+        "Value": "в случае необходимости",
+        "Description": null
+      },
+      {
+        "Value": "по мере необходимости",
+        "Description": null
+      },
+      {
+        "Value": "в соответствии с действующим законодательством",
+        "Description": null
+      }
+    ],
+    "SpecWords": [
+      {
+        "Value": "atest",
+        "Description": null
       }
     ]
   },
-  "Hilights": {
-    "CatalogNotFound": -8355712,
-    "CatalogMismatch": -65536,
-    "CatalogUnknown": -8355712,
-    "CatalogIncorrect": -23296,
-    "FormattingIncorrect": -16181,
+  "Highlights": {
+    "FormattingIncorrect": "magenta",
+    "DocumentStatus": {
+      "Awaits": "green",
+      "Declined": "red",
+      "NotApplicable": "red",
+      "Changed": "red",
+      "NotFound": "lightGray",
+      "Unknown": "lightGray"
+    },
     "NpaColors": {
-      "Gost": -5383962,
-      "RegionalLaw": -1644806,
-      "SanPin": -65281,
-      "FederalLaw": -24454,
-      "GovermentDecree": -5192482
+      "Gost": "green",
+      "RegionalLaw": "green",
+      "SanPin": "green",
+      "FederalLaw": "green",
+      "GovermentDecree": "green"
+    },
+    "Train": {
+      "NpaFull": "red",
+      "NpaShort": "blue",
+      "NtaFull": "green",
+      "NtaShort": "yellow"
     },
     "DictionaryColors": {
-      "Abbreviation": -23296,
-      "Corruption": -5383962,
-      "CommonStatements": -256,
-      "IncorrectStatements": -16744448
+      "Abbreviation": "yellow",
+      "Corruption": "yellow",
+      "No_NPA": "yellow",
+      "IncorrectForm": "yellow",
+      "SpecWords": "yellow"
     }
   }
 }

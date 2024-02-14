@@ -47,3 +47,5 @@ def test5():
             if dct[key]["status"] == "DUPLICATE":
                 dupliscate.append(dct[key]["name"])
     assert dupliscate == [' б', ' 2', ' таблица 2', ' 1', ' III']
+
+test1()
