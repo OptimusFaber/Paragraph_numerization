@@ -40,6 +40,7 @@ class Make_tree:
         self.roots = []         ## Список верхушек деревьев
         self.main_line_num = None
         self.content_set = set()
+        self.last_alpha = None
         #! Special parametrs
         self.p = []
         self.k = None
@@ -57,6 +58,8 @@ class Make_tree:
         
     
     def logic_check(self, elem1, elem2):            ## Метод для проверки что параграфы могут идти друг за другом
+        if elem1 is None or elem2 is None:
+            return
         l_elem = elem2[0]
 
         if isinstance(elem1, Node): f_elem = elem1.node_name
@@ -93,10 +96,10 @@ class Make_tree:
                     return True
             else:
                 if len(elem1) > len(elem2):
-                    if elem2[0] - elem1[0] > 3:
-                        return False
-                    else:
+                    if 1 <= elem2[0] - elem1[0] <= 3:
                         return True
+                    else:
+                        return False
                 dif = 0
                 for i in elem2[1:]:
                     dif += i
@@ -199,9 +202,11 @@ class Make_tree:
                     if self.similarity_check(self.tree[i], elem):
                         if self.tree[i].node_name == elem[0]:
                             self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', status='DUPLICATE', delimetr = None))
+                            self.last_alpha = self.tree[-1]
                             return
                         break
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
+                self.last_alpha = self.tree[-1]
                 return
             black_list = []
             duplic = False
@@ -222,6 +227,7 @@ class Make_tree:
                         for i in range(n2+1, n1):
                             self.tree.append(Node(self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
                         self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
+                        self.last_alpha = self.tree[-1]
                         return 
                     else:
                         black_list.append(self.tree[i].parent)
@@ -230,15 +236,51 @@ class Make_tree:
                     if self.similarity_check(self.tree[i], elem):
                         if self.tree[i].node_name == elem[0]:
                             self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[i].parent, data_type='None', status='DUPLICATE', delimetr = None))
+                            self.last_alpha = self.tree[-1]
                             return
                         break
                 if self.func(elem[0]) - self.func(self.n) == 1:
                     parent=self.tree[-1]
                     self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
                     self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
+                    self.last_alpha = self.tree[-1]
                     return
+                
+            #* КОСТЫЛЬ
+            #* (спускаемся по нераспределенному дереву вниз на пару элементов)------------------------------------------------------------------------------------------------
+            alpha_list = list(filter(lambda par: "number" not in par[3], self.lst[k+1:]))
+            prev = None
+            st = False
+            for i in range(min(len(alpha_list), 10)):  
+            ## иду по нераспределенным элементам, смотрю что впереди
+                if elem[1] == alpha_list[i][1]:
+                    if self.logic_check(elem, alpha_list[i]) and (prev is None or not self.logic_check(prev, alpha_list[i])): 
+                        parent = self.root
+                ## считаем что опечатка может быть лишь в прямой посл-ти (типа 1 2 2 3 4), а не в подпосл-ти (типа 1 2 2.1 2.2 2 3 4)
+                ## сюда попадают цифры 1 и 2, так что новую посл-ть не будем делать, если пред. элемент это также 1 или 2
+                if self.last_alpha:
+                    if self.last_alpha.sign == alpha_list[i][1]:
+                        if self.logic_check(self.last_alpha, alpha_list[i]) and (prev is None or not self.logic_check(prev, alpha_list[i])):
+                            #! СЛАБОЕ МЕСТО-----------------------------------------------------------------------------
+                            if duplic:
+                                self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=duplic.parent, data_type='None', status='DUPLICATE', delimetr = None))
+                                return
+                            #! -----------------------------------------------------------------------------------------
+                prev = alpha_list[i]
+            else:
+                parent, st = self.tree[-1], True  
+            ## Проверяем статус элемента - надо ли добавлять новую ветку или нет
+            if st:
+                if self.func(elem[0]) == 2:
+                    self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+                self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
+                self.last_alpha = self.tree[-1]
+                return
+            #* ---------------------------------------------------------------------------------------------------------------------------------------------------------------
             if duplic:
                 self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=duplic.parent, data_type='None', status='DUPLICATE', delimetr = None))
+                self.last_alpha = self.tree[-1]
+                return
         
     def single_numbers(self, elem, k):                 ## Алгоритм работы с числовами параграфами
         parent = None
@@ -271,8 +313,7 @@ class Make_tree:
                                     #! -----------------------------------------------------------------------------------------
                                     st=True
                                     break
-                        if elem[1] == num_list[i][1]:
-                            prev = num_list[i]
+                        prev = num_list[i]
                     else:
                         ## Проверяем, что дерево у нас не пустое
                         c = 0
@@ -493,18 +534,6 @@ class Make_tree:
                         if self.numeral_check(self.main_line_num.name, num_list[i][0]) and (prev is None or not self.numeral_check(prev, num_list[i])):
                             param = True
                             st += 1
-                        # ancestors = [self.ancestor] + list(self.ancestor.ancestors) 
-                        # for n in ancestors[:-1]:
-                        #     if 'number' in n.data_type and n.sign == num_list[i][1]:
-                        #         if self.numeral_check(n.name, num_list[i][0]):
-                        #             if (st and not param) or st > 1: parent=self.tree[-1]
-                        #             elif param: 
-                        #                 if self.tree[-1].name == elem[0] and self.tree[-1].sign == elem[1]:
-                        #                     self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[-1].parent, data_type='None', status='DUPLICATE', delimetr = None))
-                        #                 return False
-                        #             ok = True
-                        #             break
-                        # if ok: break
                         if self.main_line_num:
                             if self.main_line_num.sign == num_list[i][1]:
                                 if self.numeral_check(self.main_line_num.name, num_list[i][0]) and (prev is None or not self.numeral_check(prev, num_list[i])):
@@ -564,6 +593,8 @@ class Make_tree:
         self.lst = lst
         for elem, k in zip(self.lst, range(len(self.lst))):
             self.k = k
+            if elem[2] == 940:
+                print()
             if elem[1] in ["таблица", "рисунок", "рис", "схема"]:
                 self.func, self.revfunc = functions[elem[3]]
                 self.n = first_elements[elem[3]]

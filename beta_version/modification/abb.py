@@ -182,8 +182,6 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
         try:
             buf = []
             if i not in forbidden_list:
-                if i == 388:
-                    print()
                 f = [re.finditer(abb_mask1, devided_text[i]), re.finditer(abb_mask2, devided_text[i])]
                 #^------------------------------------------------------------------------------------
                 list_of_added_elems = []
