@@ -20,15 +20,15 @@ def levenstein(str_1, str_2):
     return current_row[n]
 #!--------------------------------------------------------------------------------------------------------------------
 
-def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set(), txt_path=None):
+def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = None, txt_path=None):
     logging.basicConfig(filename='myapp.log', level=logging.DEBUG, 
         format=f'%(asctime)s %(levelname)s module: %(name)s line num: %(lineno)s func: %(funcName)s %(message)s \nText path: {txt_path}\n')
     logger=logging.getLogger(__name__)
     if not abbs and not dicts:
         return []
     #& Маски для поиска нужных нам сокращений
-    abb_mask1 = re.compile(r"(?<!-)((«?([А-Я]+и)»?\s?){2,}|(«?([А-Я]{2,})»?\s?)+|(«?[A-Z]{2,}»?\s?)+)([^А-Яа-я0-9-—–]|$)")
-    abb_mask2 = re.compile(r"(?<!-)(((([А-Я]+[а-я]*){2,})\s?)+|((([A-Z]+[a-z]*){2,})\s?)+)([^А-Яа-я0-9-—–]|$)")
+    abb_mask1 = re.compile(r"(?<!-)((«?([А-Я]+и)»?\s?){2,}|(«?([А-Я]{2,})»?\s?)+|(«?[A-Z]{2,}»?\s?)+)([^А-Яа-яA-Za-z0-9-—–]|$)")
+    abb_mask2 = re.compile(r"(?<!-)(((([А-Я]+[а-я]*){2,})\s?)+|((([A-Z]+[a-z]*){2,})\s?)+)([^А-Яа-яA-Za-z0-9-—–]|$)")
     #&--------------------------------------------------------------------------------------------------------------------
     text = text.replace(u'\xa0', u' ')
     #^ Ищем таблицу с сокращениями и их расшифровками 
@@ -98,7 +98,16 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
                             buf2 = i.replace(f.group(), "")
                         else:
                             if buf1:
-                                buf1 = re.sub("[\t\n\r]", "", buf1)
+                                buf1 = re.sub("[\t\n\r]", " ", buf1)
+                                buf1 = re.sub("[ ]{2,}", " ", buf1)
+                                for _ in range(2):
+                                    if not buf1[-1].isalpha():
+                                        if buf1[-1] != "»":
+                                            buf1 = buf1[:-1]
+                                if buf1[-1] == "»" and buf1.count("«") == 0:
+                                    buf1 = buf1[:-1]
+                                elif buf1[0] == "«" and buf1.count("»") == 0:
+                                    buf1 = buf1[1:]
                                 if not buf1[-1].isalpha() and buf1[-1] != "»": buf1=buf1[:-1]
                                 abb_set[buf1] = st
                             c = 0
@@ -182,6 +191,8 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
         try:
             buf = []
             if i not in forbidden_list:
+                if i == 934:
+                    print()
                 f = [re.finditer(abb_mask1, devided_text[i]), re.finditer(abb_mask2, devided_text[i])]
                 #^------------------------------------------------------------------------------------
                 list_of_added_elems = []
@@ -189,7 +200,8 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
                     for element in itter:
                         if element:
                             elem = element.group()
-                            elem = re.sub("[(\t\n\r)]", "", elem)
+                            elem = re.sub("[(\t\n\r)]", " ", elem)
+                            elem = re.sub("[ ]{2,}", " ", elem)
                             #! Проверяем что это не римская цифра
                             if bool(re.search(r"^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$", elem)):
                                 continue
@@ -227,6 +239,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
                                 f3 = re.search(r"(?<=[(]).+(?=[)])", devided_text[i][element.span()[1]-1:])          #* Ищем расшифровку в скобках ООО (...)
                                 if f1:
                                     right_side = devided_text[i][element.span()[1]:][f1.span()[0]:].split(" ")
+                                    right_side = right_side.replace(')', '').replace('(', '')
                                     right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
                                     line = ""
                                     st = False
@@ -243,6 +256,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = set
                                         continue
                                 if f2:
                                     left_side = devided_text[i][:element.span()[0]][::-1][f2.span()[1]-1:].split(" ")
+                                    left_side = left_side.replace(')', '').replace('(', '')
                                     left_side = list(map(lambda x: x[-1], list(filter(lambda x: len(x)>1, left_side))))
                                     left_side.reverse()
                                     line = ""
