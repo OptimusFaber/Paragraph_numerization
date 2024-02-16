@@ -75,6 +75,8 @@ class Make_tree:
             return True  
 
     def numeral_check(self, elem1, elem2):
+        if elem1 is None or elem1 is None:
+            return False
         if isinstance(elem1, Node): elem1 = elem1.node_name     ## Прототип logic_check, но для параграфов с несколькью числами    
         elif isinstance(elem1, list) or isinstance(elem1, tuple): elem1 = elem1[0]          
 
@@ -412,7 +414,8 @@ class Make_tree:
                 prev = None
                 for i in range(len(num_list)):
                     if self.numeral_check(last_num, num_list[i]) and not self.numeral_check(prev, num_list[i]):
-                        posible_relatives = list(filter(lambda x: x.parent.name != 'txt', posible_relatives))
+                        if len(posible_relatives) > 1:
+                            posible_relatives = list(filter(lambda x: x.parent.name != 'txt', posible_relatives))
                         break
                     prev = num_list[i]
             posible_relatives.sort(key = lambda rel: int(elem[0]) - int(rel.name))
@@ -637,7 +640,7 @@ class Make_tree:
         logger=logging.getLogger(__name__)
         self.lst = lst
         for elem, k in zip(self.lst, range(len(self.lst))):
-            if elem[2] == 190:
+            if elem[2] == 80:
                 print()
             self.k = k
             if elem[1] in ["таблица", "рисунок", "рис", "схема"]:
