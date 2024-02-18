@@ -5,14 +5,14 @@
     в) blablabla
 2. blablabla
 Таблица 1
-2. blablabla
+3. blablabla
 Таблица 2
 3. blablabla
 Таблица 2
 
 1. blablabla
-1. blablabla
 2. blablabla
+3. blablabla
     (I) blablabla
     (II) blablabla
     (III) blablabla
