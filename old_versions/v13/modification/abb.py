@@ -191,8 +191,6 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
         try:
             buf = []
             if i not in forbidden_list:
-                if i == 147:
-                    print()
                 f = [re.finditer(abb_mask1, devided_text[i]), re.finditer(abb_mask2, devided_text[i])]
                 #^------------------------------------------------------------------------------------
                 list_of_added_elems = []
@@ -202,12 +200,6 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                             elem = element.group()
                             elem = re.sub("[(\t\n\r)]", " ", elem)
                             elem = re.sub("[ ]{2,}", " ", elem)
-                            #! Проверяем что это не римская цифра
-                            if bool(re.search(r"^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$", elem)):
-                                continue
-                            #! ----------------------------------
-                            st = False 
-                            ##----------------------------
                             if elem[-1].isdigit():
                                 continue
                             for _ in range(2):
@@ -218,6 +210,12 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                 elem = elem[:-1]
                             elif elem[0] == "«" and elem.count("»") == 0:
                                 elem = elem[1:]
+                            #! Проверяем что это не римская цифра
+                            if bool(re.search(r"^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$", elem)):
+                                continue
+                            #! ----------------------------------
+                            st = False 
+                            ##----------------------------
                             if elem in buf:
                                 continue
                             ##----------------------------
@@ -238,8 +236,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                 f2 = re.search(r"[\t ]*[-—–]", devided_text[i][:element.span()[0]][::-1])   #* Ситуацтя типа ... - ООО
                                 f3 = re.search(r"(?<=[(]).+(?=[)])", devided_text[i][element.span()[1]-1:])          #* Ищем расшифровку в скобках ООО (...)
                                 if f1:
-                                    right_side = devided_text[i][element.span()[1]:][f1.span()[0]:].split(" ")
-                                    right_side = right_side.replace(')', '').replace('(', '')
+                                    right_side = devided_text[i][element.span()[1]:][f1.span()[0]:].replace(')', '').replace('(', '').split(" ")
                                     right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
                                     line = ""
                                     st = False
@@ -314,10 +311,15 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                         continue
                                 flag = False
                                 if len(elem.split(" ")) > 1:
-                                    elem1 = elem
+                                    elem1 = elem.split(' ')
                                     elem = []
-                                    for e in elem1.split(' '):
-                                        if e in list(abb_set.keys()):
+                                    a = ''
+                                    for e in range(len(elem1)):
+                                        a += elem1[e] + ' '
+                                        if a[:-1] in list(abb_set.keys()):
+                                            flag = True
+                                        elif elem1[e] in list(abb_set.keys()):
+                                            a = elem1[e] + ' '
                                             flag = True
                                         else:
                                             elem.append(e)
