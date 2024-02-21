@@ -231,84 +231,24 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                             elif all(list(map(lambda x: 1<len(x)<9, elem.split(" ")))) and ((not re.search("[\s.,:;!?]"+elem.lower()+"[\s.,:;!?]", text)) and (not re.search(("[\s.,:;!?]"+elem[0]+elem.lower()[1:])+"[\s.,:;!?]", text))):
                                 if element.span()[0] in list_of_added_elems or element.span()[1] in list_of_added_elems:
                                     continue
-                                f0 = re.search(r"(?<=[(]).+(?=[)])", devided_text[i][:element.span()[0]])            #* Ищем расшифровку в скобках (...) OOO
-                                f1 = re.search(r"[\t ]*[-—–]", devided_text[i][element.span()[1]:])         #* Ситуация типа ООО - ...
-                                f2 = re.search(r"[\t ]*[-—–]", devided_text[i][:element.span()[0]][::-1])   #* Ситуацтя типа ... - ООО
-                                f3 = re.search(r"(?<=[(]).+(?=[)])", devided_text[i][element.span()[1]-1:])          #* Ищем расшифровку в скобках ООО (...)
-                                if f1:
-                                    right_side = devided_text[i][element.span()[1]:][f1.span()[0]:].replace(')', '').replace('(', '').split(" ")
-                                    right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
-                                    line = ""
-                                    st = False
-                                    elem = elem.upper()
-                                    for rig in right_side:
-                                        line += rig.upper()
-                                        if levenstein(line, elem) <= 1:
-                                            st = True
-                                            break
-                                        if len(line) - len(elem) > 4:
-                                            break
-                                    if st:
-                                        abb_set[elem] = i+1
-                                        continue
-                                if f2:
-                                    left_side = devided_text[i][:element.span()[0]][f2.span()[1]-2:].replace(')', '').replace('(', '').split(" ")
-                                    left_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, left_side))))
-                                    left_side.reverse()
-                                    line = ""
-                                    st = False
-                                    elem = elem.upper()
-                                    for lef in left_side:
-                                        line += lef.upper()
-                                        if levenstein(line, elem) <= 1:
-                                            st = True
-                                            break
-                                        if len(line) - len(elem) > 4:
-                                            break
-                                    if st:
-                                        abb_set[elem] = i+1
-                                        continue
-                                if f0 or f3:
-                                    brackets = f0 if f0 else f3
-                                    brackets = list(filter(lambda x: x, brackets.group().split(" ")))
-                                    brackets = list(map(lambda x: x[0], brackets))
-                                    if levenstein(elem, brackets) <= 1:
-                                        abb_set[elem] = i+1
-                                        continue
-                                if devided_text[i][element.span()[0]-1] == "(" and (")" in devided_text[i][element.span()[1]-1:element.span()[1]+2]):
+                                if devided_text[i][element.span()[1]-1] == ")":
                                     ## Единая система конструкторской документации (ЕСКД) тут лишь слева
-                                    left_side = devided_text[i][:element.span()[0]][::-1].split(" ")
-                                    left_side = list(map(lambda x: x[-1], list(filter(lambda x: len(x)>1, left_side))))
-                                    left_side.reverse()
-                                    line = ""
-                                    st = False
-                                    elem = elem.upper()
-                                    for lef in left_side:
-                                        line += lef.upper()
-                                        if levenstein(line, elem) <= 1:
+                                    left_side_ind = len(devided_text[i][element.span()[1]-2::-1]) - re.search("[(]", devided_text[i][element.span()[1]-2::-1]).span()[0]
+                                    bracket_info = devided_text[i][left_side_ind:element.span()[1]-1].split(' ')
+                                    bracket_info = list((filter(lambda x: len(x)>1 and all(xs.isalpha() for xs in x), bracket_info)))
+                                    ## Смотрим есть ли перед аббревиатурой спец слово
+                                    for word in bracket_info:
+                                        if word in special_words:
+                                            ## Если оно есть, то проверяем расшифровку
+                                            left_side = devided_text[i][left_side_ind-1::-1]
+                                            left_side = list(map(lambda x: x[-1], list(filter(lambda x: len(x)>1, left_side))))
+                                            ## Типа провекрка, left_side содержит первые юуквы слов, стоящих перед скобками
                                             st = True
-                                            break
-                                        if len(line) - len(elem) > 4:
                                             break
                                     if st:
                                         abb_set[elem] = i+1
                                         continue
                                     ## тут лишь справа (ЕСКД) Единая система конструкторской документации
-                                    right_side = devided_text[i][element.span()[1]-1:].split(" ")
-                                    right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
-                                    line = ""
-                                    st = False
-                                    elem = elem.upper()
-                                    for rig in right_side:
-                                        line += rig.upper()
-                                        if levenstein(line, elem) <= 1:
-                                            st = True
-                                            break
-                                        if len(line) - len(elem) > 4:
-                                            break
-                                    if st:
-                                        abb_set[elem] = i+1
-                                        continue
                                 flag = False
                                 if len(elem.split(" ")) > 1:
                                     elem1 = elem.split(' ')
@@ -322,7 +262,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                             a = elem1[e] + ' '
                                             flag = True
                                         else:
-                                            elem.append(e)
+                                            elem.append(elem1[e])
                                     if elem:
                                         elem = ' '.join(elem)
                                 if not flag:
@@ -333,12 +273,6 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                         buf.append((elem, element.span()))
                                         st = True
 
-                            if any([word in devided_text[i].lower() for word in special_words]):
-                                if st:
-                                    buf.pop(-1)
-                                abb_set[elem] = i+1
-                            else:
-                                continue
                 #^------------------------------------------------------------------------------------
 
             #? Поиск элементов из наших 3 словарей
