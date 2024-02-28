@@ -9,7 +9,6 @@ def test1():
         for key in list(dct.keys())[1:]:
             if dct[key]["status"] == "MISSING":
                 lost.append(dct[key]["name"])
-    print(lost)
     assert lost == ['2', '2', 'I', '4']
 
 def test2():
@@ -47,5 +46,3 @@ def test5():
             if dct[key]["status"] == "DUPLICATE":
                 dupliscate.append(dct[key]["name"])
     assert dupliscate == [' б', ' 3', ' таблица 2', ' III', ' 3']
-
-test1()

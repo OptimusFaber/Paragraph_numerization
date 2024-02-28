@@ -44,7 +44,7 @@ class Make_tree:
         #! Special parametrs
         self.p = []
         self.k = None
-        self.non_txt_dct = {'таблица':[], 'рисунок':[], 'рис':[], 'схема':[], 'приложение':[]}
+        self.non_txt_dct = {'таблица':[], 'рисунок':[], 'рис':[], 'схема':[]}
         self.content = True
 
     def similarity_check(self, elem1, elem2):       ## Метод для проверки что параграф одного типа (элемент и знак)
@@ -70,13 +70,13 @@ class Make_tree:
         elem = functions[elem2[3]][0](l_elem)
 
         if node >= elem or (elem - node) > 4:
-            return False
+            return
         else:
             return True  
 
     def numeral_check(self, elem1, elem2):
         if elem1 is None or elem1 is None:
-            return False
+            return
         if isinstance(elem1, Node): elem1 = elem1.node_name     ## Прототип logic_check, но для параграфов с несколькью числами    
         elif isinstance(elem1, list) or isinstance(elem1, tuple): elem1 = elem1[0]          
 
@@ -85,33 +85,29 @@ class Make_tree:
         
         elem1, elem2 = list(map(int, elem1.split('.'))), list(map(int, elem2.split('.')))
 
-        if elem1[0] > elem2[0]:                                 ## Случай что если после 2.1 идет 1.9
-            return False
+        if elem1[0] > elem2[0] or elem1 == elem2:                                 ## Случай что если после 2.1 идет 1.9
+            return
 
         if len(elem1) == 1 or len(elem2) == 1:                  ## Случай если число одиночное
             if elem1 == elem2:
-                return False
+                return
             elif len(elem1) == len(elem2):
-                if 0 < int(elem2[0]) - int(elem1[0]) > 3:
-                    return False
+                if 0 < elem2[0] - elem1[0] > 3:
+                    return
                 else:
-                    return True
+                    return elem2[0] - elem1[0]
             else:
                 if len(elem1) > len(elem2):
                     if 1 <= elem2[0] - elem1[0] <= 3:
-                        return True
+                        return  elem2[0] - elem1[0]
                     else:
-                        return False
+                        return
                 dif = 0
                 for i in elem2[1:]:
                     dif += i
                 if dif > 3:
-                    return False
-                return True
-            return False
-        
-        if elem1 == elem2:
-            return False
+                    return
+                return dif
         
         if elem1[0] == elem2[0]:                                ## Первое число совпадает 5.6 и 5.7
             cnt = 0
@@ -123,7 +119,7 @@ class Make_tree:
             for i in range(1, min(len(elem1), len(elem2))):     ## Вдруг после 5.4 идет 5.6 + ищем разницу между параграфами
                 if flag:
                     if elem1[i] > elem2[i]:
-                        return False
+                        return
                     elif elem1[i] < elem2[i]:
                         cnt += abs(elem1[i] - elem2[i])
                         flag = False
@@ -132,19 +128,17 @@ class Make_tree:
                 else:
                     cnt += (elem2[i]-1)
             if cnt > 3:
-                return False
-            return True
+                return
+            return cnt
             
         if elem2[0] - elem1[0] <= 4:                            ## После 5.6 идет 6.1
-            cnt = 1
+            cnt = elem2[0] - elem1[0]
             for i in range(1, min(len(elem1), len(elem2))):     ## Главное чтобы после 5.6 не шло 6.4
                 cnt += abs(0 - elem2[i])
             if cnt > 7:
-                return False
+                return
             else:
-                return True
-        elif elem2[0] - elem1[0] > 1:
-            return False
+                return cnt
         
 
     def non_text(self, elem):
@@ -297,9 +291,17 @@ class Make_tree:
     def single_numbers(self, elem, k):                 ## Алгоритм работы с числовами параграфами
         parent = None
         if (self.func(elem[0]) == self.func(self.n)) or (self.func(elem[0]) - self.func(self.n) < 2 and elem[1] not in self.p):
+            if elem[0] == 2:
+                if self.tree[-1].name == '1' and self.tree[-1].sign == elem[1]:
+                    pass
+                if self.tree[-1].parent.name != 'txt':
+                    prev = list(filter(lambda x: x.data_type == 'number', list(self.tree[-1].ancestors)[:-1]))
+                    if prev:
+                        if prev[0].name == 1 and prev[0].sign == elem[1]:
+                            pass
             st = 0
             if self.ancestor and self.tree:    ## если это не новое дерево 
-                if (self.tree[-1].sign == 'таблица' or self.tree[-1].sign == 'приложение') and elem[2] - self.tree[-1].pos < 7:
+                if self.tree[-1].sign == 'таблица':
                     parent = self.tree[-1]
                     st = True
                 else:
@@ -367,15 +369,15 @@ class Make_tree:
         posible_relatives = []
         black_list = set()
         for i in range(-1, max(-len(self.tree)-1, -NUMBER_SEARCH), -1):  
-            if self.tree[i].sign not in ["таблица", "рисунок", "рис", "схема", "приложение"]:
+            if self.tree[i].sign not in ["таблица", "рисунок", "рис", "схема"]:
                 point = list(self.tree[i].ancestors)      #! СЛАБОЕ МЕСТО
                 break
         table = False
         duplic = False
         for i in range(-1, -len(self.tree)-1, -1):  
-            if ("таблица" in self.tree[i].parent.name or "приложение" in self.tree[i].parent.name) and table:
+            if "таблица" in self.tree[i].parent.name and table:
                 continue
-            if "таблица" in self.tree[i].name or "приложение" in self.tree[i].name:
+            if "таблица" in self.tree[i].name:
                 table = True
                 continue
             if self.tree[i].sign != elem[1]:
@@ -449,7 +451,6 @@ class Make_tree:
                 if self.func(elem[0]) == 2:
                     self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
-                return
 
         for i in range(-1, -len(self.tree)-1, -1):
             if self.similarity_check(self.tree[i], elem):
@@ -462,13 +463,13 @@ class Make_tree:
                             self.content_set.add(elem[2])
                     except:
                         continue
-                    return False
+                    return
                 break
         if duplic:
             self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=duplic.parent, data_type='None', status='DUPLICATE', delimetr = None))
             if elem[0] == '2':
                 self.p.remove(elem[1])
-        return False
+        return
                 
 
     def numeral_paragraphs(self, elem):
@@ -476,7 +477,7 @@ class Make_tree:
         delimetr, parent, sp, black_list, forbiden_list, duplic = elem[4], None, list(), set(), list(), False
         posible_relatives = list()
         buf = list(map(int, elem[0].split('.')))
-        if len(buf) == 2 and buf[0] in [1, 2] and buf[1] in [1, 2, 3] and (self.tree[-1].sign == 'таблица' or self.tree[-1].sign == 'приложение'):
+        if len(buf) == 2 and buf[0] in [1, 2] and buf[1] in [1, 2, 3] and self.tree[-1].sign == 'таблица':
             parent = self.tree[-1]
             self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
             return
@@ -492,50 +493,45 @@ class Make_tree:
                 else:
                     black_list.add(self.tree[i].parent)
         if posible_relatives:
-            posible_relatives.sort(key = lambda rel: int(elem[0].split('.')[0]) - int(rel.name.split('.')[0]))
-            node = posible_relatives[0]
+            if len(posible_relatives) > 1:
+                node = sorted(list(zip(posible_relatives, list(map(lambda x: self.numeral_check(x, elem), posible_relatives)))), key = lambda x: x[1])[0][0]
+            else:
+                node = posible_relatives[0]
             ## добавить определение parent-a тк он думает что отец 1.3.1 это 1.2.1
             parent, delimetr = node, node.delimetr
             rel = list(map(int, node.node_name.split('.')))
             sp = list(map(int, elem[0].split('.')))
-            f = True
+            if len(rel) == len(sp):
+                parent = node.parent
             adress = []
             k1 = k2 = True
             dif = len(sp) - len(rel)
             param = False
             if len(sp) > len(rel):
-                f = False
                 for _ in range(dif):rel.append(0)
             for e in range(min(len(rel), len(sp))):
                 if rel[e] == sp[e] and k1:
                     adress.append(sp[e])
                     continue
                 elif k2:
-                    if f:
-                        for i in range(1, len(rel) - e):
-                            if parent != self.root:
-                                parent = parent.parent
+                    for i in range(1, len(rel) - e):
+                        if parent != self.root:
+                            parent = parent.parent
                     k1 = k2 = False
                     if e==0:
                         for j in range(rel[e]+1, sp[e]):
                             try:
                                 self.tree.append(Node('{}.1'.format(j), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))  
-                                if not f: parent = self.tree[-1]
                                 param = True
                             except:
-                                continue     
+                                continue
+                            
                     else:
-                        buf_parent = parent
-                        if node.data_type == 'number':
-                            if parent.name != 'txt':
-                                buf_parent = parent.parent
                         for j in range(rel[e]+1, sp[e]):  
-                            self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign='.', pos=elem[2], parent=buf_parent, data_type='numbers', status='MISSING', delimetr = delimetr))
-                            if not f: parent = self.tree[-1]
+                            self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))
                             param = True
                         if len(sp) > e+1:
-                            self.tree.append(Node('.'.join(list(map(str, adress+[sp[e]]))), sign='.', pos=elem[2], parent=buf_parent, data_type='numbers', status='MISSING', delimetr = delimetr))
-                            if not f: parent = self.tree[-1]
+                            self.tree.append(Node('.'.join(list(map(str, adress+[sp[e]]))), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))
                             param = True
                     adress.append(sp[e])
                 else:
@@ -543,7 +539,6 @@ class Make_tree:
                         parent = self.tree[-1]
                     for j in range(1, sp[e]):  
                         self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))
-                        if not f: parent = self.tree[-1]
                         param = True
                     adress.append(sp[e])
             
@@ -555,10 +550,10 @@ class Make_tree:
                         for i in range(len(rel) - len(sp)+1):
                             if parent != self.root:
                                 parent = parent.parent
-
-            if ((len(node.node_name) == 1 and parent == node) or (len(parent.node_name.split('.')) == len(elem[0].split('.')) and self.numeral_check(parent, elem))) and parent.node_name != 'txt':
+            if len(node.node_name) == 1 and parent.node_name != 'txt':
                 parent = parent.parent
-
+            if len(parent.node_name.split('.')) == len(elem[0].split('.')) and parent.node_name != 'txt':
+                parent = parent.parent
             self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
             if self.content:
                 self.content_set.add(elem[2])
@@ -649,10 +644,10 @@ class Make_tree:
         logger=logging.getLogger(__name__)
         self.lst = lst
         for elem, k in zip(self.lst, range(len(self.lst))):
-            if elem[2] == 77:
+            if elem[2] == 1374:
                 print()
             self.k = k
-            if elem[1] in ["таблица", "рисунок", "рис", "схема", "приложение"]:
+            if elem[1] in ["таблица", "рисунок", "рис", "схема"]:
                 self.func, self.revfunc = functions[elem[3]]
                 self.n = first_elements[elem[3]]
                 try:
