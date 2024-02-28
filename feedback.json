@@ -1,0 +1,42 @@
+[
+    {
+        "TypeError": "TextErrorNumber",
+        "ErrorLine": "            (3) balalal",
+        "LineNumber": 6,
+        "Description": "Отсутствует параграф (2)",
+        "PrevLine": "            Рис. 1",
+        "NextLine": "            Рис. 3"
+    },
+    {
+        "TypeError": "PictureErrorNumber",
+        "ErrorLine": "            Рис. 3",
+        "LineNumber": 7,
+        "Description": "Отсутствует рис 2",
+        "PrevLine": "            (3) balalal",
+        "NextLine": "        2. blblbaal"
+    },
+    {
+        "TypeError": "TextErrorNumber",
+        "ErrorLine": "3) balalalala ",
+        "LineNumber": 10,
+        "Description": "Отсутствует параграф 2)",
+        "PrevLine": "    b)blblablabal",
+        "NextLine": "    II. blblbaal"
+    },
+    {
+        "TypeError": "TextErrorNumber",
+        "ErrorLine": "    II. blblbaal",
+        "LineNumber": 11,
+        "Description": "Отсутствует параграф I.",
+        "PrevLine": "3) balalalala ",
+        "NextLine": "    III. blblbaal"
+    },
+    {
+        "TypeError": "TextErrorNumber",
+        "ErrorLine": "5) blalaal",
+        "LineNumber": 13,
+        "Description": "Отсутствует параграф 4)",
+        "PrevLine": "    III. blblbaal",
+        "NextLine": null
+    }
+]
