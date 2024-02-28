@@ -250,8 +250,7 @@ class Make_tree:
                         break
                 if self.func(elem[0]) - self.func(self.n) == 1:
                     parent=self.tree[-1]
-                    if chr(i) != 'й' and chr(i) != 'Й':
-                        self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+                    self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
                     self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
                     self.last_alpha = self.tree[-1]
                     return
@@ -640,7 +639,7 @@ class Make_tree:
         logger=logging.getLogger(__name__)
         self.lst = lst
         for elem, k in zip(self.lst, range(len(self.lst))):
-            if elem[2] == 80:
+            if elem[2] == 9:
                 print()
             self.k = k
             if elem[1] in ["таблица", "рисунок", "рис", "схема"]:
