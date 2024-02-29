@@ -31,3 +31,21 @@ Text path: tests/test1.txt
 2024-02-28 20:58:23,447 ERROR module: tree line num: 676 func: walk ord() expected a character, but string of length 3 found 
 Text path: tests/test1.txt
 
+2024-02-29 21:46:45,956 ERROR module: tree line num: 676 func: walk chr() arg not in range(0x110000) 
+Text path: tests/test1.txt
+
+2024-02-29 21:46:45,956 ERROR module: tree line num: 676 func: walk ord() expected a character, but string of length 3 found 
+Text path: tests/test1.txt
+
+2024-02-29 21:50:21,760 ERROR module: tree line num: 676 func: walk ord() expected a character, but string of length 3 found 
+Text path: tests/test2.txt
+
+2024-02-29 21:54:16,141 ERROR module: tree line num: 676 func: walk chr() arg not in range(0x110000) 
+Text path: tests/test4.txt
+
+2024-02-29 21:54:16,141 ERROR module: tree line num: 676 func: walk ord() expected a character, but string of length 3 found 
+Text path: tests/test4.txt
+
+2024-02-29 22:07:35,674 ERROR module: tree line num: 675 func: walk ord() expected a character, but string of length 3 found 
+Text path: tests/test2.txt
+

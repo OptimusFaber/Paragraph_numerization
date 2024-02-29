@@ -1,42 +1,50 @@
 [
     {
         "TypeError": "TextErrorNumber",
-        "ErrorLine": "            (3) balalal",
-        "LineNumber": 6,
-        "Description": "Отсутствует параграф (2)",
-        "PrevLine": "            Рис. 1",
-        "NextLine": "            Рис. 3"
-    },
-    {
-        "TypeError": "PictureErrorNumber",
-        "ErrorLine": "            Рис. 3",
-        "LineNumber": 7,
-        "Description": "Отсутствует рис 2",
-        "PrevLine": "            (3) balalal",
-        "NextLine": "        2. blblbaal"
+        "ErrorLine": "\t1.2.1. blablabla  ",
+        "LineNumber": 3,
+        "Description": "Отсутствует параграф 1.2",
+        "PrevLine": "   1.1 blablabla  ",
+        "NextLine": "        1.3.1. blablabla  "
     },
     {
         "TypeError": "TextErrorNumber",
-        "ErrorLine": "3) balalalala ",
-        "LineNumber": 10,
-        "Description": "Отсутствует параграф 2)",
-        "PrevLine": "    b)blblablabal",
-        "NextLine": "    II. blblbaal"
+        "ErrorLine": "        1.3.1. blablabla  ",
+        "LineNumber": 5,
+        "Description": "Отсутствует параграф 1.3",
+        "PrevLine": "\t1.2.1. blablabla  ",
+        "NextLine": "2. blablabla "
     },
     {
         "TypeError": "TextErrorNumber",
-        "ErrorLine": "    II. blblbaal",
-        "LineNumber": 11,
-        "Description": "Отсутствует параграф I.",
-        "PrevLine": "3) balalalala ",
-        "NextLine": "    III. blblbaal"
+        "ErrorLine": "    2.2 blablabla",
+        "LineNumber": 8,
+        "Description": "Отсутствует параграф 2.1",
+        "PrevLine": "2. blablabla ",
+        "NextLine": "        2.2.2. blablabla  "
     },
     {
         "TypeError": "TextErrorNumber",
-        "ErrorLine": "5) blalaal",
+        "ErrorLine": "        2.2.2. blablabla  ",
+        "LineNumber": 9,
+        "Description": "Отсутствует параграф 2.2.1",
+        "PrevLine": "    2.2 blablabla",
+        "NextLine": "    2.3. blablabla  "
+    },
+    {
+        "TypeError": "TextErrorNumber",
+        "ErrorLine": "4. blablabla",
+        "LineNumber": 12,
+        "Description": "Отсутствует параграф 3.",
+        "PrevLine": "    2.3. blablabla  ",
+        "NextLine": "    4.2 blablabla"
+    },
+    {
+        "TypeError": "TextErrorNumber",
+        "ErrorLine": "    4.2 blablabla",
         "LineNumber": 13,
-        "Description": "Отсутствует параграф 4)",
-        "PrevLine": "    III. blblbaal",
+        "Description": "Отсутствует параграф 4.1",
+        "PrevLine": "4. blablabla",
         "NextLine": null
     }
 ]

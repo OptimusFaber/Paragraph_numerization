@@ -533,6 +533,7 @@ class Make_tree:
                             if not f: parent = self.tree[-1]
                             param = True
                         if len(sp) > e+1:
+                            buf_parent = parent.parent
                             self.tree.append(Node('.'.join(list(map(str, adress+[sp[e]]))), sign='.', pos=elem[2], parent=buf_parent, data_type='numbers', status='MISSING', delimetr = delimetr))
                             if not f: parent = self.tree[-1]
                             param = True
@@ -648,7 +649,7 @@ class Make_tree:
         logger=logging.getLogger(__name__)
         self.lst = lst
         for elem, k in zip(self.lst, range(len(self.lst))):
-            if elem[2] == 77:
+            if elem[2] == 3:
                 print()
             self.k = k
             if elem[1] in ["таблица", "рисунок", "рис", "схема", "приложение"]:
