@@ -65,6 +65,14 @@ def parse(text, txt_path):
             elif sign == "":
                paragraph = re.sub("\t", "", paragraph)
             
+            if paragraph == "п" and sign == ".":
+               buf = re.search("(\d+[.]?)+", txt[pos:])
+               if buf:
+                  if buf.span()[0]-pos < 3:
+                     txt = txt[pos+buf.span()[1]:]
+                     counter+=(pos+buf.span()[1])
+                     continue
+
             #& Обработчик исключений для чисел
             error = False
             try:
@@ -112,17 +120,29 @@ def parse(text, txt_path):
             else:
                p = txt[posx:pos]
 
-            tire = re.search('[-—–]', txt[re.search(p, txt).span()[1]:])
-
-            if tire:
-               if tire.span()[0] < 2:
-                  txt = txt[pos:]
-                  counter+=(pos)
-                  continue
+            if string_num == 277:
+               print()
+            if sign in '.()':
+               ##-----------------Отлавливаю тире справа-------------------
+               tire = re.search('[-—–]', txt[re.search(p, txt).span()[1]:])
+               if tire:
+                  if tire.span()[0] < 2:
+                     txt = txt[pos:]
+                     counter+=(pos)
+                     continue
+               ##-----------------Отлавливаю тире слева-------------------
+               tire = re.search('[-—–]', txt[:re.search(p, txt).span()[0]])
+               if tire:
+                  if tire.span()[0] < 2:
+                     txt = txt[pos:]
+                     counter+=(pos)
+                     continue
+               ##-----------------------------------------------------------
 
             pos1 = re.search(p, txt).span()[0]
+
             if pos1 >= 3 and lst and not f_elem:
-               pos0 = re.findall('[\w-]', txt[:pos1])
+               pos0 = re.findall('[\w]', txt[:pos1])
                pos0 = len(txt[:pos1])-txt[:pos1][::-1].index(pos0[-1]) if pos0 else 0 
                if not re.search('([\t\r]+)|([.:!?;]\W+)', txt[pos0:pos1]):
                   try:
@@ -132,6 +152,15 @@ def parse(text, txt_path):
                      txt = txt[pos:]
                      counter+=(pos)
                      continue  
+            
+
+
+            pos0 = list(re.finditer('(п[.]|пункт|параграф|р[.]|раздел)', txt[:pos1]))
+            if pos0:
+               if pos1 - pos0[-1].span()[1] < 5:
+                  txt = txt[pos:]
+                  counter+=(pos)
+                  continue
 
             if f_elem:
                if re.search("\w", txt[0:list_findings[0][2]]):

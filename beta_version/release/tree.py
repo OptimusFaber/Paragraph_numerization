@@ -47,17 +47,17 @@ class Make_tree:
         self.non_txt_dct = {'таблица':[], 'рисунок':[], 'рис':[], 'схема':[], 'приложение':[]}
         self.content = True
 
-    def similarity_check(self, elem1, elem2):       ## Метод для проверки что параграф одного типа (элемент и знак)
+    def similarity_check(self, elem1, elem2):
+        ## Метод для проверки что параграф одного типа (элемент и знак) ##
         if isinstance(elem1, Node): dt1, sgn1 = elem1.data_type, elem1.sign
         elif isinstance(elem1, list) or isinstance(elem1, tuple): dt1, sgn1 = elem1[3], elem1[1]
-
         if isinstance(elem2, Node): dt2, sgn2 = elem2.data_type, elem2.sign
         elif isinstance(elem2, list) or isinstance(elem2, tuple): dt2, sgn2 = elem2[3], elem2[1]
-        
         return (dt1 == dt2 and sgn1 == sgn2)
         
     
-    def logic_check(self, elem1, elem2):            ## Метод для проверки что параграфы могут идти друг за другом
+    def logic_check(self, elem1, elem2):
+        ## Метод для проверки что параграфы могут идти друг за другом ##
         if elem1 is None or elem2 is None:
             return
         l_elem = elem2[0]
@@ -75,76 +75,62 @@ class Make_tree:
             return True  
 
     def numeral_check(self, elem1, elem2):
+        ## Прототип logic_check, но для параграфов с несколькью числами ##
+        #!-----------Если один из элементов пустой---------------
         if elem1 is None or elem1 is None:
             return False
-        if isinstance(elem1, Node): elem1 = elem1.node_name     ## Прототип logic_check, но для параграфов с несколькью числами    
+        if isinstance(elem1, Node): elem1 = elem1.node_name         
         elif isinstance(elem1, list) or isinstance(elem1, tuple): elem1 = elem1[0]          
-
         if isinstance(elem2, Node): elem2 = elem2.node_name
         elif isinstance(elem2, list) or isinstance(elem2, tuple): elem2 = elem2[0]
-        
+        #!---------Приводим всё к числовому типу данных-----------
         elem1, elem2 = list(map(int, elem1.split('.'))), list(map(int, elem2.split('.')))
-
-        if elem1[0] > elem2[0]:                                 ## Случай что если после 2.1 идет 1.9
-            return False
-
-        if len(elem1) == 1 or len(elem2) == 1:                  ## Случай если число одиночное
-            if elem1 == elem2:
-                return False
-            elif len(elem1) == len(elem2):
-                if 0 < int(elem2[0]) - int(elem1[0]) > 3:
-                    return False
-                else:
+        #!---Невозможные ситуации, которые мы сразу отбрасываем---
+        if elem1[0] > elem2[0] or elem1 == elem2 or (elem2[0] - elem1[0]) > 5:
+            return 0
+        #!--------Случай если одно число одиночное 4 и 5.2--------
+        if len(elem1) == 1 or len(elem2) == 1:
+            if len(elem1) == len(elem2):
+                if elem2[0] - elem1[0] <= 5:
                     return True
             else:
                 if len(elem1) > len(elem2):
-                    if 1 <= elem2[0] - elem1[0] <= 3:
-                        return True
-                    else:
-                        return False
-                dif = 0
-                for i in elem2[1:]:
-                    dif += i
-                if dif > 3:
-                    return False
-                return True
-            return False
-        
-        if elem1 == elem2:
-            return False
-        
-        if elem1[0] == elem2[0]:                                ## Первое число совпадает 5.6 и 5.7
-            cnt = 0
-            dif = len(elem2) - len(elem1)
-            if dif > 0:
-                for _ in range(dif):
+                    if elem2[0] - elem1[0] <= 5: return elem2[0] - elem1[0]
+                dif = elem2[0] - elem1[0]
+                for i in elem2[1:]: dif += i
+                if dif > 7: return 0
+                return dif+1
+        #!---------Первое число совпадает 5.6 и 5.8--------------
+        if elem1[0] == elem2[0]:                                
+            dif = 0
+            if len(elem2) - len(elem1) > 0:
+                for _ in range(len(elem2) - len(elem1)):
                     elem1.append(1)
             flag = True
-            for i in range(1, min(len(elem1), len(elem2))):     ## Вдруг после 5.4 идет 5.6 + ищем разницу между параграфами
+            for i in range(1, min(len(elem1), len(elem2))):
                 if flag:
-                    if elem1[i] > elem2[i]:
-                        return False
+                    if elem1[i] > elem2[i]: return 0
                     elif elem1[i] < elem2[i]:
-                        cnt += abs(elem1[i] - elem2[i])
+                        dif += abs(elem2[i] - elem1[i])
                         flag = False
-                    else:
-                        continue
+                    else: continue
+                else: dif += (elem2[i]-1)
+            if dif > 7: return 0
+            return dif+1
+        #!--------------После 5.6 идет 7.1---------------------- 
+        if elem2[0] - elem1[0] <= 7:
+            dif = 0
+            flag = True
+            for i in range(0, min(len(elem1), len(elem2))):
+                if flag:
+                    dif += abs(elem2[i] - elem1[i] - 1)
+                    if elem2[i] != elem1[i]: flag = False
                 else:
-                    cnt += (elem2[i]-1)
-            if cnt > 3:
-                return False
-            return True
-            
-        if elem2[0] - elem1[0] <= 4:                            ## После 5.6 идет 6.1
-            cnt = 1
-            for i in range(1, min(len(elem1), len(elem2))):     ## Главное чтобы после 5.6 не шло 6.4
-                cnt += abs(0 - elem2[i])
-            if cnt > 7:
-                return False
-            else:
-                return True
-        elif elem2[0] - elem1[0] > 1:
-            return False
+                    dif += abs(elem2[i])
+            if len(elem2) > len(elem1): dif += sum(elem2[len(elem1):])
+            if dif > 7: return 0
+            else: return dif+1
+        #!------------------------------------------------------
         
 
     def non_text(self, elem):
@@ -200,7 +186,7 @@ class Make_tree:
                 except:
                     return
         
-    def letters_romans(self, elem, k):      ## Алгоритм работы с буквенными параграфами
+    def letters_romans(self, elem):      ## Алгоритм работы с буквенными параграфами
         parent = None
         if self.tree:
             if self.func(elem[0]) == self.func(self.n) and self.tree[-1].data_type != elem[3]:   ## Вдруг это первый элемент последовательности
@@ -257,7 +243,7 @@ class Make_tree:
                 
             #* КОСТЫЛЬ
             #* (спускаемся по нераспределенному дереву вниз на пару элементов)------------------------------------------------------------------------------------------------
-            alpha_list = list(filter(lambda par: "number" not in par[3], self.lst[k+1:]))
+            alpha_list = list(filter(lambda par: "number" not in par[3], self.lst[self.k+1:]))
             prev = None
             st = False
             for i in range(min(len(alpha_list), 10)):  
@@ -293,7 +279,7 @@ class Make_tree:
                 self.last_alpha = self.tree[-1]
                 return
         
-    def single_numbers(self, elem, k):                 ## Алгоритм работы с числовами параграфами
+    def single_numbers(self, elem):                 ## Алгоритм работы с числовами параграфами
         parent = None
         if (self.func(elem[0]) == self.func(self.n)) or (self.func(elem[0]) - self.func(self.n) < 2 and elem[1] not in self.p):
             st = 0
@@ -302,7 +288,7 @@ class Make_tree:
                     parent = self.tree[-1]
                     st = True
                 else:
-                    num_list = list(filter(lambda par: "number" in par[3], self.lst[k+1:]))
+                    num_list = list(filter(lambda par: "number" in par[3], self.lst[self.k+1:]))
                     prev = None
                     for i in range(len(num_list)):   
                         ## иду по нераспределенным элементам, смотрю что впереди
@@ -409,7 +395,7 @@ class Make_tree:
             last_num = list(filter(lambda x: x.data_type=="numbers", list(self.main_line_num.descendants)))
             if last_num:
                 last_num = last_num[-1]
-                num_list = list(filter(lambda par: "number" in par[3], self.lst[k+1:]))
+                num_list = list(filter(lambda par: "number" in par[3], self.lst[self.k+1:]))
                 prev = None
                 for i in range(len(num_list)):
                     if self.numeral_check(last_num, num_list[i]) and not self.numeral_check(prev, num_list[i]):
@@ -433,8 +419,20 @@ class Make_tree:
             if parent.node_name == 'txt': self.main_line_num = self.tree[-1]
             self.ancestor = self.tree[-1]
             return 
-        else:
-            if self.func(elem[0]) - self.func(self.n) < 2:
+        if self.func(elem[0]) - self.func(self.n) < 2:
+            last_num = list(filter(lambda x: x.data_type=="numbers", list(self.main_line_num.descendants)))
+            last_num = self.main_line_num if last_num == [] else last_num[-1]
+            num_list = list(filter(lambda par: "number" in par[3], self.lst[self.k+1:]))
+            prev = None
+            for i in range(len(num_list)):
+                if self.numeral_check(last_num, num_list[i]) < self.numeral_check(prev, num_list[i]) and num_list[i][3]:
+                    parent = self.tree[-1]
+                    if self.func(elem[0]) == 2:
+                        self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='MISSING', delimetr = elem[4]))
+                    self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
+                    return
+                prev = num_list[i]
+            else:
                 c = 0
                 for obj in self.tree:            
                     if obj.status == "EXISTING":
@@ -503,7 +501,7 @@ class Make_tree:
             dif = len(sp) - len(rel)
             param = False
             if len(sp) > len(rel):
-                f = False
+                if dif > 1 and rel.count('.') == 0: f = False
                 for _ in range(dif):rel.append(0)
             for e in range(min(len(rel), len(sp))):
                 if rel[e] == sp[e] and k1:
@@ -516,17 +514,21 @@ class Make_tree:
                                 parent = parent.parent
                     k1 = k2 = False
                     if e==0:
+                        buf_parent = parent
                         for j in range(rel[e]+1, sp[e]):
                             try:
-                                self.tree.append(Node('{}.1'.format(j), sign='.', pos=elem[2], parent=parent, data_type='numbers', status='MISSING', delimetr = delimetr))  
-                                if not f: parent = self.tree[-1]
+                                self.tree.append(Node('{}.1'.format(j), sign='.', pos=elem[2], parent=buf_parent, data_type='numbers', status='MISSING', delimetr = delimetr))  
                                 param = True
                             except:
                                 continue     
+                        if not f: parent = self.tree[-1]
                     else:
                         buf_parent = parent
                         if node.data_type == 'number':
                             if parent.name != 'txt':
+                                buf_parent = parent.parent
+                        else:
+                            if len(buf_parent.name.split('.')) == len(adress)+1:
                                 buf_parent = parent.parent
                         for j in range(rel[e]+1, sp[e]):  
                             self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign='.', pos=elem[2], parent=buf_parent, data_type='numbers', status='MISSING', delimetr = delimetr))
@@ -576,7 +578,6 @@ class Make_tree:
                 if find(self.root, lambda node: node.path_name == "/txt/{}.{}".format(*sp)):
                     num_list = list(filter(lambda par: "number" in par[3], self.lst[self.k+1:]))
                     prev = None
-                    # for i in range(self.k+1, min(len(self.lst), self.k+NUM_PARAGRAPH_SEARCH)):
                     for i in range(len(num_list)):
                         param = ok = False
                         if 'number' not in num_list[i][3] or elem[1] != num_list[i][1]: continue
@@ -648,42 +649,30 @@ class Make_tree:
             format=f'%(asctime)s %(levelname)s module: %(name)s line num: %(lineno)s func:%(funcName)s %(message)s \nText path: {txt_path}\n')
         logger=logging.getLogger(__name__)
         self.lst = lst
-        for elem, k in zip(self.lst, range(len(self.lst))):
-            if elem[2] == 3:
-                print()
-            self.k = k
+        for elem, self.k in zip(self.lst, range(len(self.lst))):
             if elem[1] in ["таблица", "рисунок", "рис", "схема", "приложение"]:
                 self.func, self.revfunc = functions[elem[3]]
                 self.n = first_elements[elem[3]]
-                try:
-                    self.non_text(elem)
-                except Exception as err:
-                    logger.error(err)
+                try: self.non_text(elem)
+                except Exception as err: logger.error(err)
                 continue
             elif elem[3] == 'numbers':
-                try:
-                    self.numeral_paragraphs(elem)  
-                except Exception as err:
-                    logger.error(err)
+                try: self.numeral_paragraphs(elem)  
+                except Exception as err: logger.error(err)
             else:
                 self.func, self.revfunc = functions[elem[3]]
                 self.n = first_elements[elem[3]]
 
                 if 'letter' in elem[3] or 'roman' in elem[3]:
-                    try:
-                        self.letters_romans(elem, k)
-                    except Exception as err:
-                        logger.error(err)
+                    try: self.letters_romans(elem)
+                    except Exception as err: logger.error(err)
                 elif elem[3] == 'number':
-                    try:
-                        self.single_numbers(elem, k)
-                    except Exception as err:
-                        logger.error(err)
+                    try: self.single_numbers(elem)
+                    except Exception as err: logger.error(err)
                     
         self.trees.append(tree_to_dict(self.root, all_attrs=True))
         self.roots.append(self.root)
-        if len(self.content_set) > 150:
-            self.content_set = None
+        if len(self.content_set) > 150: self.content_set = None
         return self.trees
 
     def show(self):
