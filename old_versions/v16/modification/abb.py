@@ -31,14 +31,9 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
     abb_mask2 = re.compile(r"(?<!-)(((([А-Я]+[а-я]*){2,})\s?)+|((([A-Z]+[a-z]*){2,})\s?)+)([^А-Яа-яA-Za-z0-9-—–]|$)")
     #&--------------------------------------------------------------------------------------------------------------------
     text = text.replace(u'\xa0', u' ')
-    #^ Ищем таблицу с сокращениями и их расшифровками и термины
+    #^ Ищем таблицу с сокращениями и их расшифровками 
     pos = []
     for match in re.finditer("[С|с]окр", text):
-        if match is not None:
-            idx = match.end()
-            string_num = text[:idx].count('\n')+1
-            pos.append((idx, string_num))
-    for match in re.finditer("[Т|т]ермин", text):
         if match is not None:
             idx = match.end()
             string_num = text[:idx].count('\n')+1
@@ -75,8 +70,8 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
     if pos:
         idx = 0
         for p in pos:
-            # if idx - p[1] > 7:
-            #     continue
+            if idx - p[1] > 7:
+                break
             b, idx = p[0], p[1]
             s = text[b:].split("\n")[1:]
             c, st = 0, 0

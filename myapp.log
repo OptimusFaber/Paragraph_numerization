@@ -49,3 +49,1435 @@ Text path: tests/test4.txt
 2024-02-29 22:07:35,674 ERROR module: tree line num: 675 func: walk ord() expected a character, but string of length 3 found 
 Text path: tests/test2.txt
 
+2024-03-01 12:15:24,517 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1/4.1.5/4.1.5.1 
+Text path: text/text_docx_libreoffice.txt
+
+2024-03-01 12:15:24,517 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1/4.1.5/4.1.5.1 
+Text path: text/text_docx_libreoffice.txt
+
+2024-03-01 12:15:24,623 ERROR module: tree line num: 676 func: walk 'ä' 
+Text path: text/text_docx_libreoffice.txt
+
+2024-03-01 12:15:24,624 ERROR module: tree line num: 676 func: walk 'ä' 
+Text path: text/text_docx_libreoffice.txt
+
+2024-03-01 12:15:24,626 ERROR module: tree line num: 681 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: text/text_docx_libreoffice.txt
+
+2024-03-01 12:15:24,626 ERROR module: tree line num: 681 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: text/text_docx_libreoffice.txt
+
+2024-03-01 12:15:24,626 ERROR module: tree line num: 681 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: text/text_docx_libreoffice.txt
+
+2024-03-01 12:15:24,626 ERROR module: tree line num: 681 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: text/text_docx_libreoffice.txt
+
+2024-03-01 12:15:24,626 ERROR module: tree line num: 676 func: walk ord() expected a character, but string of length 3 found 
+Text path: text/text_docx_libreoffice.txt
+
+2024-03-01 12:15:24,630 ERROR module: tree line num: 676 func: walk ord() expected a character, but string of length 2 found 
+Text path: text/text_docx_libreoffice.txt
+
+2024-03-01 12:15:24,630 ERROR module: tree line num: 676 func: walk ord() expected a character, but string of length 3 found 
+Text path: text/text_docx_libreoffice.txt
+
+2024-03-01 12:15:24,630 ERROR module: tree line num: 676 func: walk ord() expected a character, but string of length 2 found 
+Text path: text/text_docx_libreoffice.txt
+
+2024-03-01 12:22:47,518 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:22:47,518 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:22:47,518 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:22:47,518 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:22:47,519 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:22:47,519 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:22:47,529 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.3/2.3.1/ 2.3.1.2 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:22:47,539 ERROR module: tree line num: 681 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:25:10,738 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:25:10,738 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:25:10,738 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:25:10,738 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.2 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:25:10,766 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.3/2.3.1/ 2.3.1.2 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:25:10,780 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:25:10,780 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:25:10,800 ERROR module: tree line num: 666 func: walk ord() expected a character, but string of length 2 found 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:25:10,800 ERROR module: tree line num: 666 func: walk ord() expected a character, but string of length 2 found 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:25:10,801 ERROR module: tree line num: 666 func: walk ord() expected a character, but string of length 2 found 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:25:10,805 ERROR module: tree line num: 666 func: walk ord() expected a character, but string of length 2 found 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:25:10,805 ERROR module: tree line num: 666 func: walk ord() expected a character, but string of length 2 found 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:25:10,808 ERROR module: tree line num: 666 func: walk ord() expected a character, but string of length 2 found 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:25:10,810 ERROR module: tree line num: 666 func: walk ord() expected a character, but string of length 2 found 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:35:24,321 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:35:24,321 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:35:24,321 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:35:24,321 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:35:24,321 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:35:24,321 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:35:24,345 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.3/2.3.1/ 2.3.1.2 
+Text path: text/text_docx_3.txt
+
+2024-03-01 12:35:24,365 ERROR module: tree line num: 681 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 13:48:17,118 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 13:48:17,118 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 13:48:17,118 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 13:48:17,118 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.2 
+Text path: text/text_docx_3.txt
+
+2024-03-01 13:48:17,183 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.3/2.3.1/ 2.3.1.2 
+Text path: text/text_docx_3.txt
+
+2024-03-01 13:48:17,207 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 13:48:17,207 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 13:48:17,248 ERROR module: tree line num: 666 func: walk ord() expected a character, but string of length 2 found 
+Text path: text/text_docx_3.txt
+
+2024-03-01 13:48:17,248 ERROR module: tree line num: 666 func: walk ord() expected a character, but string of length 2 found 
+Text path: text/text_docx_3.txt
+
+2024-03-01 13:48:17,248 ERROR module: tree line num: 666 func: walk ord() expected a character, but string of length 2 found 
+Text path: text/text_docx_3.txt
+
+2024-03-01 13:48:17,256 ERROR module: tree line num: 666 func: walk ord() expected a character, but string of length 2 found 
+Text path: text/text_docx_3.txt
+
+2024-03-01 13:48:17,256 ERROR module: tree line num: 666 func: walk ord() expected a character, but string of length 2 found 
+Text path: text/text_docx_3.txt
+
+2024-03-01 13:48:17,264 ERROR module: tree line num: 666 func: walk ord() expected a character, but string of length 2 found 
+Text path: text/text_docx_3.txt
+
+2024-03-01 13:48:17,264 ERROR module: tree line num: 666 func: walk ord() expected a character, but string of length 2 found 
+Text path: text/text_docx_3.txt
+
+2024-03-01 14:26:42,582 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 14:26:42,582 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 14:26:42,582 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 14:26:42,582 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 14:26:42,582 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 14:26:42,588 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 14:26:42,606 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.3/2.3.1/ 2.3.1.2 
+Text path: text/text_docx_3.txt
+
+2024-03-01 14:26:42,629 ERROR module: tree line num: 682 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 14:26:55,809 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 14:26:55,809 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 14:26:55,809 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 14:26:55,809 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 14:26:55,809 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 14:26:55,809 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 14:26:55,839 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.3/2.3.1/ 2.3.1.2 
+Text path: text/text_docx_3.txt
+
+2024-03-01 14:26:55,855 ERROR module: tree line num: 682 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 10:41:15,768 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 10:41:15,768 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 10:41:15,768 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 10:41:15,768 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 10:41:15,773 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 10:41:15,773 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 10:41:15,809 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.3/2.3.1/ 2.3.1.2 
+Text path: text/text_docx_3.txt
+
+2024-03-01 10:41:15,828 ERROR module: tree line num: 682 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: text/text_docx_3.txt
+
+2024-03-01 17:45:13,896 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 17:45:13,898 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 17:45:13,898 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:14:25,682 ERROR module: parser_part line num: 188 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:14:25,756 ERROR module: parser_part line num: 188 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:14:25,756 ERROR module: parser_part line num: 188 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:14:25,813 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:14:25,813 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:14:25,816 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:14:37,139 ERROR module: parser_part line num: 188 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:14:37,188 ERROR module: parser_part line num: 188 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:14:37,188 ERROR module: parser_part line num: 188 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:14:37,229 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:14:37,229 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:14:37,237 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:16:08,046 ERROR module: parser_part line num: 188 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:16:08,174 ERROR module: parser_part line num: 188 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:16:08,183 ERROR module: parser_part line num: 188 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:16:08,395 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:16:08,405 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:16:08,411 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,800 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,800 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,800 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,808 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,808 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,808 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,808 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,808 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,808 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,808 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,816 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,817 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,817 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,817 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,817 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,817 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,817 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,817 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,817 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,817 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,826 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,826 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,828 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,828 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,828 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,828 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,831 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,831 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,831 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,834 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,834 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,834 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,834 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,834 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,834 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,834 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,834 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,842 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,842 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,842 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,842 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,842 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,842 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,842 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,850 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,851 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,852 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,852 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,852 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,852 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,852 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,852 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,858 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,858 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,858 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,858 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,858 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,858 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,858 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,858 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,858 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,866 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,866 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,866 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,866 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,866 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,866 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,866 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,875 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,875 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,875 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,875 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,875 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,875 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,875 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,875 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,883 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,884 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,885 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,885 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,885 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,885 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,885 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,885 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,891 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,891 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,891 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,891 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,891 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,891 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,891 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,891 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,901 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,903 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,903 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,907 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,907 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,907 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,907 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,907 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,907 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,907 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,907 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,915 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,915 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,915 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,915 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,915 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,915 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,915 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,924 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,924 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,925 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,925 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,925 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,925 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,925 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,925 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,925 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,925 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,925 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,932 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,933 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,934 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,934 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,934 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,934 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,934 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,934 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,934 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,940 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,940 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,940 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,940 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,940 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,940 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,940 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,940 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,940 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,949 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,950 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,954 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,955 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,955 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,956 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,958 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,959 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,960 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,960 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,960 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,960 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,960 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,965 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,966 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,967 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,967 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,967 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,967 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,967 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,967 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,973 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,973 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,973 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,973 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,973 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,973 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,973 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,973 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,981 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:17:20,981 ERROR module: parser_part line num: 189 func: parse findall() missing 1 required positional argument: 'string' 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:22:39,484 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:22:39,502 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:22:39,508 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:22:56,619 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:22:56,619 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:22:56,619 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:25:09,417 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:25:09,435 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:25:09,444 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:34:37,863 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:34:37,867 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:34:37,875 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:48:04,627 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:48:04,627 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:48:04,627 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:48:14,013 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:48:14,013 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:48:14,013 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:53:11,585 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:53:11,585 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:53:11,585 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:53:11,585 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:53:11,585 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-01 18:53:11,593 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 06:49:18,463 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 06:49:18,463 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 06:49:18,463 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 06:49:18,463 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 06:49:18,463 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 06:49:18,463 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 06:52:03,815 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 06:52:03,815 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 06:52:03,815 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 06:52:03,815 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 06:52:03,823 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 06:52:03,825 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 06:54:49,458 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 06:54:49,458 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 06:54:49,458 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 06:54:49,458 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 06:54:49,458 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 14:18:54,565 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 14:18:54,565 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 14:18:54,565 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7.1 
+Text path: text_docx_libreoffice.txt
+
+2024-03-05 15:46:58,696 ERROR module: tree line num: 685 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: mistake3.txt
+
+2024-03-05 15:47:06,665 ERROR module: tree line num: 685 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: mistake3.txt
+
+2024-03-05 17:30:55,368 ERROR module: tree line num: 685 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: mistake3.txt
+
+2024-03-05 17:49:42,771 ERROR module: tree line num: 694 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: mistake3.txt
+
+2024-03-05 17:54:05,647 ERROR module: tree line num: 696 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: mistake3.txt
+
+2024-03-05 17:58:39,772 ERROR module: tree line num: 695 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: mistake3.txt
+
+2024-03-05 18:00:55,400 ERROR module: tree line num: 697 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: mistake3.txt
+
+2024-03-05 18:34:03,126 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 18:34:03,126 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 18:34:03,142 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.2/4.2.2.2 
+Text path: mistake3.txt
+
+2024-03-05 18:34:03,157 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 18:34:03,157 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 18:34:03,173 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 18:34:03,189 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 18:40:48,250 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 18:40:48,271 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 18:40:48,331 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.2/4.2.2.2 
+Text path: mistake3.txt
+
+2024-03-05 18:40:48,360 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 18:40:48,410 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 18:40:48,429 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 18:40:48,516 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 18:40:48,584 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: mistake3.txt
+
+2024-03-05 18:43:29,034 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 18:43:29,055 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 18:43:29,116 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.2/4.2.2.2 
+Text path: mistake3.txt
+
+2024-03-05 18:43:29,145 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 18:43:29,192 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 18:43:29,211 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 18:43:29,298 ERROR module: tree line num: 657 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 18:43:29,365 ERROR module: tree line num: 667 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: mistake3.txt
+
+2024-03-05 18:52:31,448 ERROR module: tree line num: 658 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 18:52:31,469 ERROR module: tree line num: 658 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 18:52:31,528 ERROR module: tree line num: 658 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.2/4.2.2.2 
+Text path: mistake3.txt
+
+2024-03-05 18:52:31,557 ERROR module: tree line num: 658 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 18:52:31,604 ERROR module: tree line num: 658 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 18:52:31,624 ERROR module: tree line num: 658 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 18:52:31,729 ERROR module: tree line num: 658 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 18:52:43,995 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: mistake3.txt
+
+2024-03-05 18:54:12,016 ERROR module: tree line num: 658 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 18:54:12,037 ERROR module: tree line num: 658 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 18:54:12,098 ERROR module: tree line num: 658 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.2/4.2.2.2 
+Text path: mistake3.txt
+
+2024-03-05 18:54:12,127 ERROR module: tree line num: 658 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 18:54:12,174 ERROR module: tree line num: 658 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 18:54:12,195 ERROR module: tree line num: 658 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 18:54:12,302 ERROR module: tree line num: 658 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 18:54:16,353 ERROR module: tree line num: 668 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: mistake3.txt
+
+2024-03-05 18:57:53,450 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 18:57:53,471 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 18:57:53,532 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.2/4.2.2.2 
+Text path: mistake3.txt
+
+2024-03-05 18:57:53,561 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 18:57:53,608 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 18:57:53,629 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 18:57:53,736 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 18:58:00,188 ERROR module: tree line num: 673 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: mistake3.txt
+
+2024-03-05 19:00:12,817 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 19:00:12,839 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 19:00:12,898 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.2/4.2.2.2 
+Text path: mistake3.txt
+
+2024-03-05 19:00:12,926 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 19:00:12,973 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 19:00:12,993 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 19:00:13,099 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 19:00:17,177 ERROR module: tree line num: 673 func: walk Duplicate node with same path
+There exist a node with same path /txt/1 
+Text path: mistake3.txt
+
+2024-03-05 21:15:35,331 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 21:15:35,352 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 21:15:35,414 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.2/4.2.2.2 
+Text path: mistake3.txt
+
+2024-03-05 21:15:35,443 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 21:15:35,493 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 21:15:35,513 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 21:15:35,602 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 21:46:41,297 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 21:46:41,318 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 21:46:41,380 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.2/4.2.2.2 
+Text path: mistake3.txt
+
+2024-03-05 21:46:41,412 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 21:46:41,461 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 21:46:41,481 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 21:46:41,569 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 21:48:53,979 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 21:48:54,000 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4/4.2.1/4.2.1.1 
+Text path: mistake3.txt
+
+2024-03-05 21:48:54,060 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.2/4.2.2.2 
+Text path: mistake3.txt
+
+2024-03-05 21:48:54,090 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 21:48:54,139 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4/4.2/4.2.1 
+Text path: mistake3.txt
+
+2024-03-05 21:48:54,159 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 21:48:54,246 ERROR module: tree line num: 663 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1.3/4.3/4.3.1 
+Text path: mistake3.txt
+
+2024-03-05 23:07:19,639 ERROR module: tree line num: 668 func: walk ord() expected a character, but string of length 3 found 
+Text path: tests/test2.txt
+
+2024-03-05 23:07:24,714 ERROR module: tree line num: 671 func: walk 'NoneType' object has no attribute 'name' 
+Text path: tests/test3.txt
+
+2024-03-05 23:07:24,714 ERROR module: tree line num: 661 func: walk 'NoneType' object has no attribute 'node_name' 
+Text path: tests/test3.txt
+
+2024-03-05 23:07:24,715 ERROR module: tree line num: 661 func: walk 'NoneType' object has no attribute 'name' 
+Text path: tests/test3.txt
+
+2024-03-05 23:07:24,715 ERROR module: tree line num: 661 func: walk 'NoneType' object has no attribute 'node_name' 
+Text path: tests/test3.txt
+
+2024-03-05 23:07:24,715 ERROR module: tree line num: 671 func: walk 'NoneType' object has no attribute 'name' 
+Text path: tests/test3.txt
+
+2024-03-05 23:07:24,715 ERROR module: tree line num: 661 func: walk 'NoneType' object has no attribute 'node_name' 
+Text path: tests/test3.txt
+
+2024-03-05 23:07:57,422 ERROR module: tree line num: 671 func: walk 'NoneType' object has no attribute 'name' 
+Text path: tests/test3.txt
+
+2024-03-05 23:07:57,423 ERROR module: tree line num: 661 func: walk 'NoneType' object has no attribute 'node_name' 
+Text path: tests/test3.txt
+
+2024-03-05 23:07:57,423 ERROR module: tree line num: 661 func: walk 'NoneType' object has no attribute 'name' 
+Text path: tests/test3.txt
+
+2024-03-05 23:07:57,423 ERROR module: tree line num: 661 func: walk 'NoneType' object has no attribute 'node_name' 
+Text path: tests/test3.txt
+
+2024-03-05 23:07:57,423 ERROR module: tree line num: 671 func: walk 'NoneType' object has no attribute 'name' 
+Text path: tests/test3.txt
+
+2024-03-05 23:07:57,423 ERROR module: tree line num: 661 func: walk 'NoneType' object has no attribute 'node_name' 
+Text path: tests/test3.txt
+

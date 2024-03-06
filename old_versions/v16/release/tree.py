@@ -530,18 +530,15 @@ class Make_tree:
                         else:
                             if len(buf_parent.name.split('.')) == len(adress)+1:
                                 buf_parent = parent.parent
-                        r = rel[e]
-                        if rel[e] == 0:
-                            r = 1
-                        for j in range(r+1, sp[e]+1):  
+                        for j in range(rel[e]+1, sp[e]):  
                             self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign='.', pos=elem[2], parent=buf_parent, data_type='numbers', status='MISSING', delimetr = delimetr))
                             if not f: parent = self.tree[-1]
                             param = True
-                        # if len(sp) > e+1:
-                        #     buf_parent = parent.parent
-                        #     self.tree.append(Node('.'.join(list(map(str, adress+[sp[e]]))), sign='.', pos=elem[2], parent=buf_parent, data_type='numbers', status='MISSING', delimetr = delimetr))
-                        #     if not f: parent = self.tree[-1]
-                        #     param = True
+                        if len(sp) > e+1:
+                            buf_parent = parent.parent
+                            self.tree.append(Node('.'.join(list(map(str, adress+[sp[e]]))), sign='.', pos=elem[2], parent=buf_parent, data_type='numbers', status='MISSING', delimetr = delimetr))
+                            if not f: parent = self.tree[-1]
+                            param = True
                     adress.append(sp[e])
                 else:
                     if param:
