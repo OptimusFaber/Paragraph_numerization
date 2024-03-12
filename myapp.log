@@ -1481,3 +1481,944 @@ Text path: tests/test3.txt
 2024-03-05 23:07:57,423 ERROR module: tree line num: 661 func: walk 'NoneType' object has no attribute 'node_name' 
 Text path: tests/test3.txt
 
+2024-03-05 23:11:44,738 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.1 
+Text path: tests/test3.txt
+
+2024-03-05 23:11:46,861 ERROR module: tree line num: 671 func: walk 'NoneType' object has no attribute 'name' 
+Text path: tests/test3.txt
+
+2024-03-05 23:11:46,861 ERROR module: tree line num: 661 func: walk 'NoneType' object has no attribute 'node_name' 
+Text path: tests/test3.txt
+
+2024-03-05 23:11:46,862 ERROR module: tree line num: 661 func: walk 'NoneType' object has no attribute 'name' 
+Text path: tests/test3.txt
+
+2024-03-05 23:11:46,862 ERROR module: tree line num: 661 func: walk 'NoneType' object has no attribute 'node_name' 
+Text path: tests/test3.txt
+
+2024-03-05 23:11:46,862 ERROR module: tree line num: 671 func: walk 'NoneType' object has no attribute 'name' 
+Text path: tests/test3.txt
+
+2024-03-05 23:11:46,862 ERROR module: tree line num: 661 func: walk 'NoneType' object has no attribute 'node_name' 
+Text path: tests/test3.txt
+
+2024-03-05 23:12:14,929 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.1 
+Text path: tests/test3.txt
+
+2024-03-06 10:42:44,320 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.1 
+Text path: tests/test3.txt
+
+2024-03-06 10:42:54,741 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.1 
+Text path: tests/test3.txt
+
+2024-03-06 10:43:08,278 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.1 
+Text path: tests/test3.txt
+
+2024-03-06 10:45:39,234 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.2 
+Text path: tests/test3.txt
+
+2024-03-06 10:45:39,234 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.3 
+Text path: tests/test3.txt
+
+2024-03-06 10:45:39,792 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.2 
+Text path: tests/test3.txt
+
+2024-03-06 10:45:39,792 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.3 
+Text path: tests/test3.txt
+
+2024-03-06 10:45:40,297 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.2 
+Text path: tests/test3.txt
+
+2024-03-06 10:45:40,297 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.3 
+Text path: tests/test3.txt
+
+2024-03-06 10:45:40,846 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.2 
+Text path: tests/test3.txt
+
+2024-03-06 10:45:40,846 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.3 
+Text path: tests/test3.txt
+
+2024-03-06 10:48:06,939 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.1 
+Text path: tests/test3.txt
+
+2024-03-06 11:05:04,400 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:05:04,401 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.2/2.2.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:05:04,402 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.3 
+Text path: tests/test3.txt
+
+2024-03-06 11:05:04,402 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:05:37,801 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,801 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,801 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.4 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,801 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.5 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,801 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.6 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,802 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.7 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,802 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.8 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,802 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,802 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,802 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,802 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.2/3.2.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,803 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.2/3.2.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,803 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,803 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1/4.1.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,803 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1/4.1.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,803 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1/4.1.4 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,803 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1/4.1.5 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,804 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1/4.1.6 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,804 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1/4.1.7 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,804 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1/4.1.8 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,804 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,804 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2/4.2.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,804 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2/4.2.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,805 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2/4.2.4 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,805 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2/4.2.5 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,805 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2/4.2.6 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,806 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,806 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.4 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,807 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/6.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,807 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/6.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,807 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/6.4 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,807 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/6.5 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,807 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/6.6 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,808 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/7.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,808 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/7.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,808 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/7.4 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,809 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/9.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,809 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/приложение Б/2.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,809 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/приложение Б/2.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,810 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/приложение Б/3.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,810 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/приложение Б/4.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,810 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/приложение Б/4.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,811 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/приложение Б/4.4 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,811 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/приложение Б/4.5 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,812 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,812 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,812 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.4 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,812 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.5 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,813 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.6 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,813 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.7 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,813 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.8 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,813 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,813 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,813 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,813 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.2/3.2.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,813 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.2/3.2.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,814 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,814 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1/4.1.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,814 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1/4.1.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,814 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1/4.1.4 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,814 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1/4.1.5 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,815 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1/4.1.6 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,815 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1/4.1.7 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,815 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.1/4.1.8 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,815 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,815 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2/4.2.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,816 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2/4.2.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,816 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2/4.2.4 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,816 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2/4.2.5 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,817 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2/4.2.6 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,817 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,817 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.4 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,818 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/6.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,818 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/6.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,818 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/6.4 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,819 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/6.5 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,819 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/6.6 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,819 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/7.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,819 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/7.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,820 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/7.4 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,820 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/9.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,822 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,822 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,822 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/3.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,823 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,823 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.3 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,823 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.4 
+Text path: mistake4.txt
+
+2024-03-06 11:05:37,823 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.5 
+Text path: mistake4.txt
+
+2024-03-06 11:07:11,174 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:07:11,175 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.2/2.2.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:07:11,175 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.3 
+Text path: tests/test3.txt
+
+2024-03-06 11:07:11,175 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:07:41,921 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:07:41,921 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.2/2.2.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:07:41,921 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.3 
+Text path: tests/test3.txt
+
+2024-03-06 11:07:41,921 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:08:03,671 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:10:10,780 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.1 
+Text path: tests/test3.txt
+
+2024-03-06 11:10:10,780 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:10:10,780 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.2/2.2.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:10:10,780 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.3 
+Text path: tests/test3.txt
+
+2024-03-06 11:10:10,781 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:10:27,931 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.1 
+Text path: tests/test3.txt
+
+2024-03-06 11:10:27,932 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:10:27,932 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.2/2.2.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:10:27,932 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.3 
+Text path: tests/test3.txt
+
+2024-03-06 11:10:27,932 ERROR module: tree line num: 664 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:10:48,319 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/1.1 
+Text path: tests/test3.txt
+
+2024-03-06 11:10:48,319 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:10:48,319 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.2/2.2.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:10:48,319 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/2.3 
+Text path: tests/test3.txt
+
+2024-03-06 11:10:48,319 ERROR module: tree line num: 661 func: walk Duplicate node with same path
+There exist a node with same path /txt/4.2 
+Text path: tests/test3.txt
+
+2024-03-06 11:14:38,593 ERROR module: tree line num: 671 func: walk 'NoneType' object has no attribute 'name' 
+Text path: tests/test3.txt
+
+2024-03-06 11:14:38,593 ERROR module: tree line num: 661 func: walk 'NoneType' object has no attribute 'node_name' 
+Text path: tests/test3.txt
+
+2024-03-06 11:14:38,593 ERROR module: tree line num: 661 func: walk 'NoneType' object has no attribute 'name' 
+Text path: tests/test3.txt
+
+2024-03-06 11:14:38,593 ERROR module: tree line num: 661 func: walk 'NoneType' object has no attribute 'node_name' 
+Text path: tests/test3.txt
+
+2024-03-06 11:14:38,593 ERROR module: tree line num: 671 func: walk 'NoneType' object has no attribute 'name' 
+Text path: tests/test3.txt
+
+2024-03-06 11:14:38,593 ERROR module: tree line num: 661 func: walk 'NoneType' object has no attribute 'node_name' 
+Text path: tests/test3.txt
+
+2024-03-07 15:23:37,015 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,015 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,016 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,016 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,016 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,016 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,016 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,016 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,016 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,016 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,016 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,016 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,016 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,017 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,017 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,017 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,017 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,017 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,017 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,017 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,017 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,017 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,017 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,017 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,017 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,017 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,017 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,017 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,017 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,018 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,018 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,018 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,018 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,018 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,018 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,018 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,018 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,018 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,018 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,018 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,018 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,018 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,018 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,018 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,018 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,019 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,019 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,019 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,019 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,019 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,019 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,019 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,019 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,019 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 7 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,025 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/таблица 2/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,025 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/таблица 2/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,026 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/таблица 2/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,026 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/таблица 2/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,026 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/таблица 2/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,026 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/таблица 2/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,026 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/таблица 2/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,031 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,031 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,031 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 4 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,036 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 10 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,036 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 10 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,036 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 10 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,039 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,039 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,039 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,039 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,039 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,039 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,039 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,039 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-07 15:23:37,039 ERROR module: tree line num: 671 func: walk Duplicate node with same path
+There exist a node with same path /txt/ 6 
+Text path: new_check.txt
+
+2024-03-11 19:35:50,845 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:35:50,850 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:35:50,855 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:35:50,859 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:35:50,863 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:35:50,867 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:35:50,872 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:35:50,876 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:35:50,880 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:36:37,263 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:36:37,269 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:36:37,275 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:36:37,285 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:36:37,289 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:36:37,294 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:36:37,298 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:36:37,302 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:36:37,307 ERROR module: __main__ line num: 174 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:37:10,067 ERROR module: __main__ line num: 173 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:37:10,068 ERROR module: __main__ line num: 173 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:37:10,068 ERROR module: __main__ line num: 173 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:37:10,068 ERROR module: __main__ line num: 173 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:37:10,068 ERROR module: __main__ line num: 173 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:37:10,070 ERROR module: __main__ line num: 173 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:37:10,070 ERROR module: __main__ line num: 173 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:37:10,070 ERROR module: __main__ line num: 173 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
+2024-03-11 19:37:10,070 ERROR module: __main__ line num: 173 func: parse unhashable type: 'dict' 
+Text path: excel.json
+
