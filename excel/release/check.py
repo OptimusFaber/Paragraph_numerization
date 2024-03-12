@@ -4,7 +4,7 @@ from feedback import *
 from modification.abb import *
 import os
 import json
-import codecs
+from modification.sentence_compare import *
 
 def check_file(excel_path=None, json_path=None, output_path=None, text=False, test=False, visualize=False):    
     if json_path:
@@ -56,6 +56,11 @@ def check_file(excel_path=None, json_path=None, output_path=None, text=False, te
                         if cl['Address'] in feedback.keys():
                             cl['Error'] = feedback[cl['Address']][1]
                             cl['Feedback'] = feedback[cl['Address']][0]
+                        if cl['Entities']:
+                            ok = compare_single_text(cl['Entities'][0]["document_text"], cl['Entities'][0]["catalog_title"])
+                            if ok != True:
+                                cl['Error'] = "Incorrect entities"
+                                cl['Feedback'] = ok
 
             save_path = "out.json"
             if output_path:
