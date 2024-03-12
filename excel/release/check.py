@@ -5,8 +5,15 @@ from modification.abb import *
 import os
 import json
 from modification.sentence_compare import *
+from modification.report import *
 
-def check_file(excel_path=None, json_path=None, output_path=None, text=False, test=False, visualize=False):    
+def check_file(excel_path=None, json_path=None, report_output=None, output_path=None, text=False, test=False, visualize=False):  
+    """
+    excel_path - json file with data
+    json_path - json file with configuration
+    report_output - path where to store the report
+    output_path - path where to store new json with new fields (error and feedback)
+    """  
     if json_path:
         F = open(json_path, encoding='utf-8')
         j = json.load(F)
@@ -49,6 +56,7 @@ def check_file(excel_path=None, json_path=None, output_path=None, text=False, te
         if paragraph_check:
             F = open(excel_path, encoding='utf-8')
             t = json.load(F)
+            res = []
             for sheet in t['Worksheets']:
                 text = []
                 for st in sheet['Rows']:
@@ -56,11 +64,18 @@ def check_file(excel_path=None, json_path=None, output_path=None, text=False, te
                         if cl['Address'] in feedback.keys():
                             cl['Error'] = feedback[cl['Address']][1]
                             cl['Feedback'] = feedback[cl['Address']][0]
+                            res.append(cl)
+                        else:
+                            cl['Error'] = None
+                            cl['Feedback'] = None
                         if cl['Entities']:
                             ok = compare_single_text(cl['Entities'][0]["document_text"], cl['Entities'][0]["catalog_title"])
                             if ok != True:
-                                cl['Error'] = "Incorrect entities"
+                                cl['Error'] = "Неверные сущности"
                                 cl['Feedback'] = ok
+                                res.append(cl)
+
+            generate(dict_list=res, output_pdf=report_output)
 
             save_path = "out.json"
             if output_path:
