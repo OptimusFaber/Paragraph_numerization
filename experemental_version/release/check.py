@@ -46,15 +46,14 @@ def check_file(txt_path=None, json_path=None, output_path=None, text=False, test
         if paragraph_check:
             for i in range(len(feedback)):
                 if not dictionary.get(feedback[i][2]):
-                    dictionary[feedback[i][2]] = [{"ErrorType": feedback[i][0],"Description": feedback[i][1]}]
+                    dictionary[feedback[i][2]] = [{"ErrorType": feedback[i][0],"Description": feedback[i][1], "Element": feedback[i][3]}]
                 else:
-                    dictionary[feedback[i][2]].append({"ErrorType": feedback[i][0],"Description": feedback[i][1]})
+                    dictionary[feedback[i][2]].append({"ErrorType": feedback[i][0],"Description": feedback[i][1], "Element": feedback[i][3]})
         for i in range(len(feedback2)):
             if not dictionary.get(feedback2[i][2]):
-                dictionary[feedback2[i][2]] = [{"ErrorType": feedback2[i][0],"Description": feedback2[i][1]}]
+                dictionary[feedback2[i][2]] = [{"ErrorType": feedback2[i][0],"Description": feedback2[i][1], "Element": feedback2[i][3]}]
             else:
-                dictionary[feedback2[i][2]].append({"ErrorType": feedback2[i][0],"Description": feedback2[i][1]})
-        # dictionary = sorted(dictionary, key=lambda x: x["LineNumber"])
+                dictionary[feedback2[i][2]].append({"ErrorType": feedback2[i][0],"Description": feedback2[i][1], "Element": feedback2[i][3]})
 
         F = codecs.open(txt_path, "r", "utf_8_sig")
         t = json.load(F)
@@ -62,17 +61,17 @@ def check_file(txt_path=None, json_path=None, output_path=None, text=False, test
             if elem == 'Paragraphs':
                 for e in range(len(t[elem])):
                     if t[elem][e]['Index'] in dictionary.keys():
-                        t[elem][e]['Error'] = dictionary[t[elem][e]['Index']]
+                        t[elem][e]['Errors'] = dictionary[t[elem][e]['Index']]
                     else:
-                        t[elem][e]['Error'] = None
+                        t[elem][e]['Errors'] = None
             elif elem == 'Tables':
                 for e in range(len(t[elem])):
                     for cell in range(len(t[elem][e]['Rows'])):
                         for c in range(len(t[elem][e]['Rows'][cell]['Cells'])):
                             if t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Index'] in dictionary.keys():
-                                t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Error'] = dictionary[t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Index']]
+                                t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Errors'] = dictionary[t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Index']]
                             else:
-                                t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Error'] = None
+                                t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Errors'] = None
                         
 
         json_object = json.dumps(t, indent=4, ensure_ascii=False)

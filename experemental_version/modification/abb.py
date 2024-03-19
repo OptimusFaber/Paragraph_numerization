@@ -219,13 +219,13 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
 
                     for cor in corr_fac:
                         sentence = "Фраза «{}»".format(cor[1])
-                        feedback_list.append(["CorruptionFactorError", sentence, string['Index']])
+                        feedback_list.append(["Corruption", sentence, string['Index'], cor[1]])
                     for no in no_conn:
                         sentence = "Фраза «{}»".format(no[1])
-                        feedback_list.append(["NoConnectionWithNPAError", sentence, string['Index']])
+                        feedback_list.append(["NoNPA", sentence, string['Index'], no[1]])
                     for inc in inc_frm:
                         sentence = "Фраза «{}»".format(inc[1])
-                        feedback_list.append(["IncorrectFormulationError", sentence, string['Index']])  
+                        feedback_list.append(["IncorrectForm", sentence, string['Index'], inc[1]])  
                 #?------------------------------------------------------------------------------------
                 if abbs and buf:
                     buf = list(filter(lambda x: (x[1][0] not in list_of_added_elems) and (x[1][1] not in list_of_added_elems), buf))
@@ -239,7 +239,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                     #! ErrorType, LineText, LineNumber, ОШИБКА, PrevLineText, NextLine
                     for r in res:
                         sentence = "Неизвестная аббревиатура «{}»".format(r)
-                        feedback_list.append(["AbbreviationError", sentence, string['Index']])
+                        feedback_list.append(["Abbreviation", sentence, string['Index'], r])
             except Exception as err:
                 logger.error(err)
     #^--------------------------------------------------------------------------------------------------------------------           

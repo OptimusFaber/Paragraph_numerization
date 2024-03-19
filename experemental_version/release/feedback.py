@@ -20,16 +20,16 @@ def fb(dictonaries):
             feedback_list[i][3] = feedback_list[i][0]  + "."
         else:
             feedback_list[i][3] = feedback_list[i][0]
-        
+
         if feedback_list[i][1] == "таблица" or feedback_list[i][1] == "схема" or feedback_list[i][1] == "приложение":
-            feedback_list[i][0] = "TableErrorNumber"
+            feedback_list[i][0] = "Numbering" if feedback_list[i][5] == "MISSING" else "DuplicateEntity"
             feedback_list[i][1] = text + feedback_list[i][3]
         elif feedback_list[i][1] == "рисунок" or feedback_list[i][1] == "рис":
-            feedback_list[i][0] = "PictureErrorNumber"
+            feedback_list[i][0] = "Numbering" if feedback_list[i][5] == "MISSING" else "DuplicateEntity"
             feedback_list[i][1] = text + feedback_list[i][3]
         else:
-            feedback_list[i][0] = "TextErrorNumber"
+            feedback_list[i][0] = "Numbering" if feedback_list[i][5] == "MISSING" else "DuplicateEntity"
             feedback_list[i][1] = text + "параграф " + feedback_list[i][3]
-        feedback_list[i] = feedback_list[i][:3]
+        feedback_list[i] = feedback_list[i][:4]
     
     return feedback_list   
