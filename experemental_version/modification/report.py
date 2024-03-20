@@ -40,7 +40,6 @@ def generate(dict_list=None, output_pdf="./", inputFileName = "standart_format.d
             for key in value_dictionary.keys():
                 if dict_list[j]["Feedback"]["DocumentType"] in value_dictionary[key]:
                     dict_list[j]["Feedback"]["MainStatus"] = key
-
     var = {
         'Действует': 0,
         'Не действует': 0,
@@ -69,12 +68,14 @@ def generate(dict_list=None, output_pdf="./", inputFileName = "standart_format.d
         'date': date,
         'mistakes': [],
         'statistics': [],
-        'fed_npa': [],
-        'moscow_npa':[],
-        'gost':[],
-        'SanPin':[],
-        'SNiP': [],
-        'others': []
+        'tables': [
+            {"full": 0, "name": "Федеральные НПА", "info": []},
+            {"full": 0, "name": "НПА г. Москвы", "info": []},
+            {"full": 0, "name": "ГОСТ", "info": []},
+            {"full": 0, "name": "СанПиН", "info": []},
+            {"full": 0, "name": "СНиП", "info": []},
+            {"full": 0, "name": "Иные виды НПА и НТА", "info": []}
+        ]
     }
     mistakes = {'Сокращение не введено': 0,
                 'Подозрение на неоднозначное требование': 0,
@@ -120,24 +121,26 @@ def generate(dict_list=None, output_pdf="./", inputFileName = "standart_format.d
         active = stat['Действует'] if stat['Действует'] else "Нет"
         inactive = stat['Не действует'] if stat['Не действует'] else "Нет"
         unknown = stat['Не определен'] if stat['Не определен'] else "Нет"
+        if active == inactive == unknown == "Нет":
+            continue
         row = {"type":elem, "active":"{}".format(active), "inactive":"{}".format(inactive), "unknown":"{}".format(unknown)}
         context['statistics'].append(row)
     #&--------------------------------------------------------
         
     buf = {
-        "Unknown": [context['others'], 0],
-        "FZ": [context['fed_npa'], 0],
-        "Moscow": [context['moscow_npa'], 0],
-        "Decree": [context['fed_npa'], 0],
-        "NpaSnip": [context['SNiP'], 0],
-        "Gost": [context['gost'], 0],
-        "SanPin": [context['SanPin'], 0]
+        "Unknown": [context['tables'][5], 0],
+        "FZ": [context['tables'][0], 0],
+        "Moscow": [context['tables'][1], 0],
+        "NpaSnip": [context['tables'][4], 0],
+        "Gost": [context['tables'][2], 0],
+        "SanPin": [context['tables'][3], 0]
     }
     
     #! Create docx file
     res = list(map(lambda x: x['Feedback'],list(filter(lambda x: x['Error'] == 'Неверные сущности', dict_list))))
     for i in range(len(res)): 
-        tytle = buf[res[i]["MainStatus"]][0]
+        tytle = buf[res[i]["MainStatus"]][0]['info']
+        buf[res[i]["MainStatus"]][0]['full']+=1
         buf[res[i]["MainStatus"]][1] += 1
         fed_npa= {'num': buf[res[i]["MainStatus"]][1], 'doc': res[i]["Text"],'status': status[res[i]["Status"]],'link': "" if res[i]["CatalogLink"] is None else res[i]["CatalogLink"]}
         tytle.append(fed_npa)
