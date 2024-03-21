@@ -20,9 +20,9 @@ def levenstein(str_1, str_2):
     return current_row[n]
 #!--------------------------------------------------------------------------------------------------------------------
 
-def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = None, txt_path=None):
-    logging.basicConfig(filename='myapp.log', level=logging.DEBUG, 
-        format=f'%(asctime)s %(levelname)s module: %(name)s line num: %(lineno)s func: %(funcName)s %(message)s \nText path: {txt_path}\n')
+def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = None, json_path=None, log_path='myapp.log'):
+    logging.basicConfig(filename=log_path, level=logging.DEBUG, 
+        format=f'%(asctime)s %(levelname)s module: %(name)s line num: %(lineno)s func: %(funcName)s %(message)s \nText path: {json_path}\n')
     logger=logging.getLogger(__name__)
     if not abbs and not dicts:
         return []
@@ -37,6 +37,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
     con = 0
     con_end = 0
     c = 0
+    flag = 1
     for elem in text.keys():
         if elem == 'Paragraphs':
             js.append(text[elem])
@@ -44,27 +45,29 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                 match = re.search("([С|с]окр)|([Т|т]ермин)", e['Text'])
                 if match is not None:
                     pos.append(e['Index'])
-                
-                context = re.search("\s*(([С|с]одержание)|([О|о]главление))", e['Text'])
-                if context is not None and not con:
-                    con = e['Index']
-                if con and not con_end:
-                    if c == 5:
-                        con_end = e['Index']-2
-                        break
-                    list_findings = [re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|((([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[.]))", re.ASCII), e['Text']) != None,
-                                    re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), e['Text']) != None,
-                                    re.search(re.compile(r"((?<=\s)|(?<=^))[(]((\d+[.]?)+|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), e['Text']) != None]
-                    if any(list_findings):
-                        c = 0
-                        continue
-                    else:
-                        c += 1
+                if flag:
+                    context = re.search("\s*(([С|с]одержание)|([О|о]главление))", e['Text'])
+                    if context is not None and not con:
+                        con = e['Index']
+                    if con and not con_end:
+                        if c == 5:
+                            con_end = e['Index']-2
+                            flag=0
+                        list_findings = [re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|((([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[.]))", re.ASCII), e['Text']) != None,
+                                        re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), e['Text']) != None,
+                                        re.search(re.compile(r"((?<=\s)|(?<=^))[(]((\d+[.]?)+|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), e['Text']) != None]
+                        if any(list_findings):
+                            c = 0
+                            continue
+                        else:
+                            c += 1
 
         elif elem == 'Tables':
             for table in text[elem]:
                 buf = []
-                js.append(table)
+                for cell in table['Rows']:
+                    buf.append(cell['Cells'][0]["Paragraphs"][0])
+                js.append(buf)
                 num = table['Index']
                 for p in pos:
                     if 0 < num - p < 5:
@@ -167,7 +170,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                         buf.append((elem, element.span()))
                                         st = True
                                 #! -------------------------------------------
-                                elif all(list(map(lambda x: 1<len(x)<9, elem.split(" ")))) and ((not re.search("[\s.,:;!?]"+elem.lower()+"[\s.,:;!?]", text)) and (not re.search(("[\s.,:;!?]"+elem[0]+elem.lower()[1:])+"[\s.,:;!?]", text))):
+                                elif all(list(map(lambda x: 1<len(x)<9, elem.split(" ")))):
                                     if element.span()[0] in list_of_added_elems or element.span()[1] in list_of_added_elems:
                                         continue
                                     if string['Text'][element.span()[1]-1] == ")":

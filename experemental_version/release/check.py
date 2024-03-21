@@ -1,3 +1,7 @@
+import sys
+global_path = __file__
+global_path = global_path.replace("/check.py", "")
+sys.path.append(global_path)
 from parser_part import *
 from tree import *
 from feedback import *
@@ -8,9 +12,9 @@ import codecs
 from modification.sentence_compare import *
 from modification.report import *
 
-def check_file(txt_path=None, json_path=None, report_output=None, output_path=None, text=False, test=False, visualize=False):    
-    if json_path:
-        F = open(json_path, encoding='utf-8')
+def check_file(json_path=None, config_path=None, report_output=None, json_output=None, log_path='myapp.log', text=False, test=False, visualize=False):    
+    if config_path:
+        F = open(config_path, encoding='utf-8')
         j = json.load(F)
         paragraph_check = j["Settings"]["CheckNumberList"]
         abb_check = j["Settings"]["CheckAbbreviations"]
@@ -21,17 +25,17 @@ def check_file(txt_path=None, json_path=None, report_output=None, output_path=No
             add_info = None
     else:
         paragraph_check = abb_check = dict_check = True
-    if txt_path:
-        F = codecs.open(txt_path, "r", "utf_8_sig")
+    if json_path:
+        F = codecs.open(json_path, "r", "utf_8_sig")
         t = json.load(F)
         F.close()
     else:
         return 
     content = None
     if paragraph_check:
-        txt = parse(t, txt_path)
+        txt = parse(t, json_path, log_path)
         tree = Make_tree()
-        dcts = tree.walk(txt, txt_path)
+        dcts = tree.walk(txt, json_path, log_path)
         if text:
             print(txt)
         if visualize:
@@ -43,7 +47,7 @@ def check_file(txt_path=None, json_path=None, report_output=None, output_path=No
         return dcts
     else:
         feedback = fb(dictonaries=dcts)
-        feedback2 = abb_finder(text=t, abbs=abb_check, dicts=dict_check,  add_info=add_info, content_strings=content, txt_path=txt_path)
+        feedback2 = abb_finder(text=t, abbs=abb_check, dicts=dict_check,  add_info=add_info, content_strings=content, json_path=json_path, log_path=log_path)
         feedback.extend(feedback2)
         dictionary =  {}
         for i in range(len(feedback)):
@@ -53,7 +57,7 @@ def check_file(txt_path=None, json_path=None, report_output=None, output_path=No
                 dictionary[feedback[i][2]].append({"ErrorType": feedback[i][0],"Description": feedback[i][1], "Element": feedback[i][3]})
 
 
-        F = codecs.open(txt_path, "r", "utf_8_sig")
+        F = codecs.open(json_path, "r", "utf_8_sig")
         t = json.load(F)
         report = []
         for elem in t.keys():
@@ -68,7 +72,7 @@ def check_file(txt_path=None, json_path=None, report_output=None, output_path=No
 
                     if t[elem][e]['Entities']:
                         for j in range(len(t[elem][e]['Entities'])):
-                            mistake = compare_single_text(t[elem][e]['Entities'][j])
+                            mistake = compare_single_text(json=t[elem][e]['Entities'][j], log_path=report_output, txt_path=json_path)
                             if mistake:
                                 if t[elem][e]['Errors']:
                                     t[elem][e]['Errors'].append(mistake)
@@ -91,7 +95,7 @@ def check_file(txt_path=None, json_path=None, report_output=None, output_path=No
                             
                             if t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities']:
                                 for j in range(len(t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'])):
-                                    mistake = compare_single_text(t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j])
+                                    mistake = compare_single_text(json=t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j], log_path=report_output, txt_path=json_path)
                                     if mistake:
                                         if t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Errors']:
                                             t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0].append(mistake)
@@ -100,15 +104,15 @@ def check_file(txt_path=None, json_path=None, report_output=None, output_path=No
                                     report.append({"Error": "Неверные сущности",
                                                     "Feedback": t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]})
                         
-        generate(dict_list=report, output_pdf=report_output)
+        generate(dict_list=report, output_pdf=report_output, log_path=log_path, txt_path=json_path)
 
         json_object = json.dumps(t, indent=4, ensure_ascii=False)
 
         save_path = "feedback.json"
-        if output_path:
-            out = re.sub("[/\\]\w*[.]json", "", output_path)
+        if json_output:
+            out = re.sub("[/\\]\w*[.]json", "", json_output)
             if os.path.exists(out):
-                save_path = output_path
+                save_path = json_output
 
         with codecs.open(save_path, "w", encoding='utf-8') as outfile:
             outfile.write(json_object)
