@@ -81,7 +81,7 @@ def parse(text, txt_path):
                if paragraph[0].isdigit():
                   if '.' in paragraph:
                         for i in paragraph.split('.'):
-                           if len(i) >= 3:
+                           if len(i) > 3:
                               error = True
                               break
                            if i:

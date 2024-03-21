@@ -473,6 +473,9 @@ class Make_tree:
         delimetr, parent, sp, black_list, forbiden_list, duplic = elem[4], None, list(), set(), list(), False
         posible_relatives = list()
         buf = list(map(int, elem[0].split('.')))
+        if elem[0].split('.')[-1] == '0':
+            self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=self.tree[-1], data_type='numbers', status='INCORRECT', delimetr = elem[4]))
+            return
         if len(buf) == 2 and buf[0] in [1, 2] and buf[1] in [1, 2, 3] and (self.tree[-1].sign == 'таблица' or self.tree[-1].sign == 'приложение'):
             parent = self.tree[-1]
             self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], status='EXISTING', delimetr = elem[4]))
@@ -650,6 +653,8 @@ class Make_tree:
         logger=logging.getLogger(__name__)
         self.lst = lst
         for elem, self.k in zip(self.lst, range(len(self.lst))):
+            if elem[2] == 679:
+                print()
             if elem[1] in ["таблица", "рисунок", "рис", "схема", "приложение"]:
                 self.func, self.revfunc = functions[elem[3]]
                 self.n = first_elements[elem[3]]

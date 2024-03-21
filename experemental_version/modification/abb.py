@@ -93,7 +93,8 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                 else:
                     f = None
                 if f:
-                    abb_set[f.group()] = cell['Paragraphs'][0]['Index']
+                    if not abb_set.get(f.group()):
+                        abb_set[f.group()] = cell['Paragraphs'][0]['Index']
                 break         
     #^--------------------------------------------------------------------------------------------------------------------
                 
@@ -158,6 +159,8 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                 #! Проверяем нет ли нашего элемента в словаре
                                 if elem in list(abb_set.keys()):
                                     if abb_set[elem] <= string['Index']:
+                                        pos = re.search(elem, string['Text']).span()
+                                        list_of_added_elems.extend(range(pos[0], pos[1]))
                                         list_of_added_elems.extend(range(element.span()[0], element.span()[1]+1))
                                         continue
                                     else:
@@ -182,9 +185,45 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                                 st = True
                                                 break
                                         if st:
-                                            abb_set[elem] = string['Index']
+                                            if not abb_set.get(elem):
+                                                abb_set[elem] = string['Index']
+                                            else:
+                                                if string['Index'] < abb_set[elem]:
+                                                    abb_set[elem] = string['Index']
+                                            continue
+                                        ## Единая система конструкторской документации (ЕСКД) тут лишь слева
+                                        left_side = string['Text'][:element.span()[0]][::-1].split(" ")
+                                        left_side = list(map(lambda x: x[-1], list(filter(lambda x: len(x)>1, left_side))))
+                                        left_side.reverse()
+                                        line = ""
+                                        st = False
+                                        elem = elem.upper()
+                                        for lef in left_side:
+                                            line += lef.upper()
+                                            if levenstein(line, elem) <= 1:
+                                                st = True
+                                                break
+                                            if len(line) - len(elem) > 4:
+                                                break
+                                        if st:
+                                            abb_set[elem] = string['Index']+1
                                             continue
                                         ## тут лишь справа (ЕСКД) Единая система конструкторской документации
+                                        right_side = string['Text'][element.span()[1]-1:].split(" ")
+                                        right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
+                                        line = ""
+                                        st = False
+                                        elem = elem.upper()
+                                        for rig in right_side:
+                                            line += rig.upper()
+                                            if levenstein(line, elem) <= 1:
+                                                st = True
+                                                break
+                                            if len(line) - len(elem) > 4:
+                                                break
+                                        if st:
+                                            abb_set[elem] = string['Index']+1
+                                            continue
                                     flag = False
                                     if len(elem.split(" ")) > 1:
                                         elem1 = elem.split(' ')

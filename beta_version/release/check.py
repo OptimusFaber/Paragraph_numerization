@@ -45,19 +45,20 @@ def check_file(txt_path=None, json_path=None, output_path=None, text=False, test
         if paragraph_check:
             for i in range(len(feedback)):
                 dictionary.append({"TypeError": feedback[i][0],
-                                            "ErrorLine": feedback[i][1],
-                                            "LineNumber": feedback[i][2],
-                                            "Description": feedback[i][3],
-                                            "PrevLine": feedback[i][4],
-                                            "NextLine": feedback[i][5]})
+                                    "ErrorLine": feedback[i][1],
+                                    "LineNumber": feedback[i][2],
+                                    "Description": feedback[i][3],
+                                    "PrevLine": feedback[i][4],
+                                    "NextLine": feedback[i][5],
+                                    "Element": None})
         for i in range(len(feedback2)):
             dictionary.append({"TypeError": feedback2[i][0],
-                                        "ErrorLine": feedback2[i][1],
-                                        "LineNumber": feedback2[i][2],
-                                        "Description": feedback2[i][3],
-                                        "PrevLine": feedback2[i][4],
-                                        "NextLine": feedback2[i][5],
-                                        "Element": feedback2[i][6]})
+                                "ErrorLine": feedback2[i][1],
+                                "LineNumber": feedback2[i][2],
+                                "Description": feedback2[i][3],
+                                "PrevLine": feedback2[i][4],
+                                "NextLine": feedback2[i][5],
+                                "Element": feedback2[i][6]})
         dictionary = sorted(dictionary, key=lambda x: x["LineNumber"])
         json_object = json.dumps(dictionary, indent=4, ensure_ascii=False)
 

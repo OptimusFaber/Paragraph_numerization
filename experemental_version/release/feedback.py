@@ -10,7 +10,7 @@ def fb(dictonaries):
 
     for i in range(len(feedback_list)):
         #! ErrorType, LineText, LineNumber, ОШИБКА, PrevLineText, NextLine
-        text = "Отсутствует " if feedback_list[i][5] == "MISSING" else "Дублирующаяся " if feedback_list[i][1] == "таблица" or feedback_list[i][1] == "схема" else "Дублирующийся "
+        text = "Отсутствует " if feedback_list[i][5] == "MISSING" else "Дублирующаяся " if feedback_list[i][1] == "таблица" or feedback_list[i][1] == "схема" else "Неверный " if feedback_list[i][5] == "INCORRECT" else "Дублирующийся "
 
         if feedback_list[i][1] == "()":
             feedback_list[i][3] = "(" + feedback_list[i][0]  + ")"

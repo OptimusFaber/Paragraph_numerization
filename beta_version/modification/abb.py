@@ -75,8 +75,6 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
     if pos:
         idx = 0
         for p in pos:
-            # if idx - p[1] > 7:
-            #     continue
             b, idx = p[0], p[1]
             s = text[b:].split("\n")[1:]
             c, st = 0, 0
@@ -114,7 +112,8 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                 elif buf1[0] == "«" and buf1.count("»") == 0:
                                     buf1 = buf1[1:]
                                 if not buf1[-1].isalpha() and buf1[-1] != "»": buf1=buf1[:-1]
-                                abb_set[buf1] = st
+                                if not abb_set.get(buf1):
+                                    abb_set[buf1] = st 
                             c = 0
                             st = idx
                             buf1 = f.group()
@@ -129,7 +128,8 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
             if buf1:
                 if not buf1[-1].isalpha() and buf1[-1] != "»": buf1=buf1[:-1]
                 buf1 = re.sub("[\t\n\r]", "", buf1)
-                abb_set[buf1] = st
+                if not abb_set.get(buf1):
+                    abb_set[buf1] = st
                 buf1, buf2 = '', ''
     #^--------------------------------------------------------------------------------------------------------------------
                 
@@ -193,6 +193,8 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
     #^ Поиск сокращений в нашем тексте
     feedback_list = []
     for i in range(len(devided_text)):
+        if i == 446:
+            print()
         try:
             buf = []
             if i not in forbidden_list:
@@ -229,7 +231,8 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                             #! Проверяем нет ли нашего элемента в словаре
                             if elem in list(abb_set.keys()):
                                 if abb_set[elem] <= i+1:
-                                    list_of_added_elems.extend(range(element.span()[0], element.span()[1]+1))
+                                    pos = re.search(elem, devided_text[i]).span()
+                                    list_of_added_elems.extend(range(pos[0], pos[1]))
                                     continue
                                 else:
                                     buf.append((elem, element.span()))
@@ -239,7 +242,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                 if element.span()[0] in list_of_added_elems or element.span()[1] in list_of_added_elems:
                                     continue
                                 if devided_text[i][element.span()[1]-1] == ")":
-                                    ## Единая система конструкторской документации (ЕСКД) тут лишь слева
+                                    ## В скобках написана аббревиатура а (далее ЕСКД) перед ней слово далее
                                     left_side_ind = len(devided_text[i][element.span()[1]-2::-1]) - re.search("[(]", devided_text[i][element.span()[1]-2::-1]).span()[0]
                                     bracket_info = devided_text[i][left_side_ind:element.span()[1]-1].split(' ')
                                     bracket_info = list((filter(lambda x: len(x)>1 and all(xs.isalpha() for xs in x), bracket_info)))
@@ -253,9 +256,45 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                             st = True
                                             break
                                     if st:
+                                        if not abb_set.get(elem):
+                                            abb_set[elem] = i+1
+                                        else:
+                                            if i+1 < abb_set[elem]:
+                                                abb_set[elem] = i+1
+                                        continue
+                                    ## Единая система конструкторской документации (ЕСКД) тут лишь слева
+                                    left_side = devided_text[i][:element.span()[0]][::-1].split(" ")
+                                    left_side = list(map(lambda x: x[-1], list(filter(lambda x: len(x)>1, left_side))))
+                                    left_side.reverse()
+                                    line = ""
+                                    st = False
+                                    elem = elem.upper()
+                                    for lef in left_side:
+                                        line += lef.upper()
+                                        if levenstein(line, elem) <= 1:
+                                            st = True
+                                            break
+                                        if len(line) - len(elem) > 4:
+                                            break
+                                    if st:
                                         abb_set[elem] = i+1
                                         continue
                                     ## тут лишь справа (ЕСКД) Единая система конструкторской документации
+                                    right_side = devided_text[i][element.span()[1]-1:].split(" ")
+                                    right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
+                                    line = ""
+                                    st = False
+                                    elem = elem.upper()
+                                    for rig in right_side:
+                                        line += rig.upper()
+                                        if levenstein(line, elem) <= 1:
+                                            st = True
+                                            break
+                                        if len(line) - len(elem) > 4:
+                                            break
+                                    if st:
+                                        abb_set[elem] = i+1
+                                        continue
                                 flag = False
                                 if len(elem.split(" ")) > 1:
                                     elem1 = elem.split(' ')

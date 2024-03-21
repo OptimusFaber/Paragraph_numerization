@@ -474,6 +474,9 @@ class Make_tree:
         delimetr, parent, sp, black_list, forbiden_list, duplic = elem[4], None, list(), set(), list(), False
         posible_relatives = list()
         buf = list(map(int, elem[0].split('.')))
+        if buf[-1] == 0:
+            self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=self.tree[-1], data_type='numbers', status='INCORRECT', delimetr = elem[4]))
+            return
         if len(buf) == 2 and buf[0] in [1, 2] and buf[1] in [1, 2, 3]:
             if not self.tree:
                 if buf[0] == 2:

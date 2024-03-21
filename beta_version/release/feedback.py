@@ -7,7 +7,7 @@ def fb(text, dictonaries):
     for dct in dictonaries:
         keys = list(dct.keys())
         for i in range(1, len(keys)):
-            if dct[keys[i]]['status'] == 'MISSING' or dct[keys[i]]['status'] == 'DUPLICATE':
+            if dct[keys[i]]['status'] == 'MISSING' or dct[keys[i]]['status'] == 'DUPLICATE' or dct[keys[i]]['status'] == 'INCORRECT':
                 feedback_list.append([dct[keys[i]]['name'], dct[keys[i]]['sign'], dct[keys[i]]['pos'], dct[keys[i]]['delimetr'], dct[keys[i]]['data_type'], dct[keys[i]]['status']])
 
     splited_t = text.split("\n")
@@ -27,7 +27,7 @@ def fb(text, dictonaries):
         ##-----------------------------
 
         #! ErrorType, LineText, LineNumber, ОШИБКА, PrevLineText, NextLine
-        text = "Отсутствует " if feedback_list[i][5] == "MISSING" else "Дублирующаяся " if feedback_list[i][1] == "таблица" or feedback_list[i][1] == "схема" else "Дублирующийся "
+        text = "Отсутствует " if feedback_list[i][5] == "MISSING" else "Дублирующаяся " if feedback_list[i][1] == "таблица" or feedback_list[i][1] == "схема" else "Неверный " if feedback_list[i][5] == "INCORRECT" else "Дублирующийся "
 
         if feedback_list[i][1] == "()":
             feedback_list[i][3] = "(" + feedback_list[i][0]  + ")"
