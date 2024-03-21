@@ -74,8 +74,9 @@ def check_file(txt_path=None, json_path=None, report_output=None, output_path=No
                                     t[elem][e]['Errors'].append(mistake)
                                 else:
                                     t[elem][e]['Errors'] = [mistake]
-                                report.append({"Error": "Неверные сущности",
-                                               "Feedback": t[elem][e]['Entities'][j]})
+                            
+                            report.append({"Error": "Неверные сущности",
+                                            "Feedback": t[elem][e]['Entities'][j]})
                         
             elif elem == 'Tables':
                 for e in range(len(t[elem])):
@@ -96,8 +97,8 @@ def check_file(txt_path=None, json_path=None, report_output=None, output_path=No
                                             t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0].append(mistake)
                                         else:
                                             t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0] = [mistake]
-                                        report.append({"Error": "Неверные сущности",
-                                                       "Feedback": t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]})
+                                    report.append({"Error": "Неверные сущности",
+                                                    "Feedback": t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]})
                         
         generate(dict_list=report, output_pdf=report_output)
 

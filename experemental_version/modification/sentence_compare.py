@@ -10,12 +10,14 @@ def compare_single_text(json, threshold=0.6):
             return {"ErrorType": "EntityDate",
                     "Description": f"Разные даты {doc_data} и {cat_data}",
                     "Element": json["Text"]}
+        return False
     elif doc_n and cat_n:
         if json["Number"] != json["CatalogNumber"]:
             # N не соответствует
             return {"ErrorType": "EntityNumber",
                     "Description": f"Разные номера {doc_n} и {cat_n}",
                     "Element": json["Text"]}
+        return False
     elif doc and cat:
         if json["Title"]:
             #& ----------------
@@ -31,6 +33,7 @@ def compare_single_text(json, threshold=0.6):
                 return {"ErrorType": "EntityTitle",
                         "Description": "Разные сущности",
                         "Element": json["Text"]}
+            return False
     else:
         # Предложения схожи по смыслу
         return False

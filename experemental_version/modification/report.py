@@ -28,7 +28,7 @@ def generate(dict_list=None, output_pdf="./", inputFileName = "standart_format.d
     date = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
     #* Containers and dictionaries
     value_dictionary = {
-        "Unknown": ["CustomsUnionDecision", "RD", "RDS", "OST", "MGSN", "CustomsReglament", "SP", "MethodicalRecommendations", "GlobalNPA"],
+        "Unknown": ["CustomsUnionDecision", "RD", "RDS", "OST", "MGSN", "CustomsReglament", "SP", "MethodicalRecommendations", "GlobalNPA", "Unknown"],
         "FZ": ["FederalLaw", "PresidentDecree", "FSTEKDecree", "FSBDecree", "MinkomSvyazDecree", "SanDoctorDecree", "GovermentDecree", "DecreeMinTruda", "DecreeMinZdrav", "DecreeMinStroy", "DecreeMinEnergo", "DecreeMinRegion", "DecreeRosStandard", "DecreeFns", "DecreeMinistryOther"],
         "Moscow": ["MoscowLaw", "DecreeMoscow", "DecreeITMoscow"],
         "NpaSnip": ["SNiP"],
