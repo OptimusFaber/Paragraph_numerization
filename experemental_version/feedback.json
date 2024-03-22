@@ -4856,13 +4856,13 @@
                 },
                 {
                     "ErrorType": "Abbreviation",
-                    "Description": "Неизвестная аббревиатура «XML»",
-                    "Element": "XML"
+                    "Description": "Неизвестная аббревиатура «HTTP»",
+                    "Element": "HTTP"
                 },
                 {
                     "ErrorType": "Abbreviation",
-                    "Description": "Неизвестная аббревиатура «HTTP»",
-                    "Element": "HTTP"
+                    "Description": "Неизвестная аббревиатура «XML»",
+                    "Element": "XML"
                 }
             ],
             "IsToc": false
@@ -7806,8 +7806,8 @@
             "Errors": [
                 {
                     "ErrorType": "Abbreviation",
-                    "Description": "Неизвестная аббревиатура «ЛИБО»",
-                    "Element": "ЛИБО"
+                    "Description": "Неизвестная аббревиатура «ИСКЛЮЧАЯ»",
+                    "Element": "ИСКЛЮЧАЯ"
                 },
                 {
                     "ErrorType": "Abbreviation",
@@ -7816,8 +7816,8 @@
                 },
                 {
                     "ErrorType": "Abbreviation",
-                    "Description": "Неизвестная аббревиатура «ИСКЛЮЧАЯ»",
-                    "Element": "ИСКЛЮЧАЯ"
+                    "Description": "Неизвестная аббревиатура «ЛИБО»",
+                    "Element": "ЛИБО"
                 }
             ],
             "IsToc": false
@@ -9160,13 +9160,13 @@
             "Errors": [
                 {
                     "ErrorType": "Abbreviation",
-                    "Description": "Неизвестная аббревиатура «MSSQL»",
-                    "Element": "MSSQL"
+                    "Description": "Неизвестная аббревиатура «MYSQL»",
+                    "Element": "MYSQL"
                 },
                 {
                     "ErrorType": "Abbreviation",
-                    "Description": "Неизвестная аббревиатура «MYSQL»",
-                    "Element": "MYSQL"
+                    "Description": "Неизвестная аббревиатура «MSSQL»",
+                    "Element": "MSSQL"
                 }
             ],
             "IsToc": false
@@ -9271,13 +9271,13 @@
             "Errors": [
                 {
                     "ErrorType": "Abbreviation",
-                    "Description": "Неизвестная аббревиатура «MSSQL»",
-                    "Element": "MSSQL"
+                    "Description": "Неизвестная аббревиатура «MYSQL»",
+                    "Element": "MYSQL"
                 },
                 {
                     "ErrorType": "Abbreviation",
-                    "Description": "Неизвестная аббревиатура «MYSQL»",
-                    "Element": "MYSQL"
+                    "Description": "Неизвестная аббревиатура «MSSQL»",
+                    "Element": "MSSQL"
                 }
             ],
             "IsToc": false

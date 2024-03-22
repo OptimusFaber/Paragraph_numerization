@@ -12,7 +12,29 @@ import codecs
 from modification.sentence_compare import *
 from modification.report import *
 
-def check_file(json_path=None, config_path=None, report_output=None, json_output=None, log_path='myapp.log', text=False, test=False, visualize=False):    
+def check_file(json_path=None, config_path=None, report_output=None, json_output=None, log_path='myapp.log', text=False, test=False, visualize=False, global_log_path=None):    
+    if log_path=='myapp.log':
+        log_path = global_path + '/' + log_path
+    try:
+        with open(log_path, "w") as f:
+            pass
+    except:
+        if not os.path.exists(log_path):
+            try:
+                with open(global_path + '/myapp.log', "w") as f:
+                    pass
+                log_path = global_path + '/myapp.log'
+            except:
+                log_path = global_path + '/myapp.log'
+
+    if os.path.exists(global_log_path):
+        os.remove(global_log_path)
+    try:
+        with open(global_log_path, "w") as f:
+            pass
+    except:
+        sys.exit("Error while creating log file")
+
     if config_path:
         F = open(config_path, encoding='utf-8')
         j = json.load(F)
@@ -33,9 +55,23 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
         return 
     content = None
     if paragraph_check:
-        txt = parse(t, json_path, log_path)
-        tree = Make_tree()
-        dcts = tree.walk(txt, json_path, log_path)
+        try:
+            txt = parse(t, json_path, log_path)
+        except Exception as err:
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s %(levelname)s module: parser.py \nText path: {json_path}\n')
+            logger=logging.getLogger(__name__)
+            logger.error(err)
+            sys.exit("Error while parsimg data!")
+        try:
+            tree = Make_tree()
+            dcts = tree.walk(txt, json_path, log_path)
+        except Exception as err:
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s %(levelname)s module: tree.py \nText path: {json_path}\n')
+            logger=logging.getLogger(__name__)
+            logger.error(err)
+            sys.exit("Error while working with paragraphs!")
         if text:
             print(txt)
         if visualize:
@@ -46,8 +82,22 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
     if test:
         return dcts
     else:
-        feedback = fb(dictonaries=dcts)
-        feedback2 = abb_finder(text=t, abbs=abb_check, dicts=dict_check,  add_info=add_info, content_strings=content, json_path=json_path, log_path=log_path)
+        try:
+            feedback = fb(dictonaries=dcts)
+        except Exception as err:
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s %(levelname)s module: fedback.py \nText path: {json_path}\n')
+            logger=logging.getLogger(__name__)
+            logger.error(err)
+            sys.exit("Error while printing result!")
+        try:
+            feedback2 = abb_finder(text=t, abbs=abb_check, dicts=dict_check,  add_info=add_info, content_strings=content, json_path=json_path, log_path=log_path)
+        except Exception as err:
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s %(levelname)s module: abb.py \nText path: {json_path}\n')
+            logger=logging.getLogger(__name__)
+            logger.error(err)
+            sys.exit("Error with abbriviations!")
         feedback.extend(feedback2)
         dictionary =  {}
         for i in range(len(feedback)):
@@ -78,7 +128,8 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
                                     t[elem][e]['Errors'].append(mistake)
                                 else:
                                     t[elem][e]['Errors'] = [mistake]
-                            
+                            if not t[elem][e]['Entities'][j]["IsValid"]:
+                                continue
                             report.append({"Error": "Неверные сущности",
                                             "Feedback": t[elem][e]['Entities'][j]})
                         
@@ -103,17 +154,33 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
                                             t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0] = [mistake]
                                     report.append({"Error": "Неверные сущности",
                                                     "Feedback": t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]})
-                        
-        generate(dict_list=report, output_pdf=report_output, log_path=log_path, txt_path=json_path)
+
+        try:             
+            generate(dict_lis=report, output_pdf=report_output, log_path=log_path, txt_path=json_path)
+        except Exception as err:
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s %(levelname)s module: report.py \nText path: {json_path}\n')
+            logger=logging.getLogger(__name__)
+            logger.error(err)
+            # sys.exit()
 
         json_object = json.dumps(t, indent=4, ensure_ascii=False)
 
         save_path = "feedback.json"
         if json_output:
-            out = re.sub("[/\\]\w*[.]json", "", json_output)
+            out = re.sub(re.compile(r"[/\\]\w*[.]json", re.ASCII), "", json_output)
             if os.path.exists(out):
                 save_path = json_output
+            else:
+                sys.exit("Report json haven't been saved!")
+        else:
+            sys.exit("Outfile haven't been specified!")
 
         with codecs.open(save_path, "w", encoding='utf-8') as outfile:
             outfile.write(json_object)
         outfile.close()
+
+        if os.path.getsize(global_log_path) == 0:
+            os.remove(global_log_path)
+        if os.path.getsize(log_path) == 0:
+            os.remove(log_path)

@@ -5,7 +5,7 @@ from datetime import datetime
 import logging
 
 
-def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, originalfilename = "отчёт", save_doc=False, log_path='myapp.log', txt_path=None): 
+def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, originalfilename = None, save_doc=False, log_path='myapp.log', txt_path=None): 
     """
     json_path (string) -> path to .json file with statistics,
     output_pdf (string) -> folder where to place pdf file,
@@ -14,6 +14,8 @@ def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, or
     originalfilename (string) -> report name,
     save_doc (boolean) -> save docx with statistics if true
     """
+    if originalfilename is None:
+        originalfilename = "отчет"
     logging.basicConfig(filename=log_path, level=logging.DEBUG, 
             format=f'%(asctime)s %(levelname)s module: %(name)s line num: %(lineno)s func:%(funcName)s %(message)s \nText path: {txt_path}\n')
     logger=logging.getLogger(__name__)
