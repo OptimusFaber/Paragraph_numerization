@@ -156,13 +156,13 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
                                                     "Feedback": t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]})
 
         try:             
-            generate(dict_lis=report, output_pdf=report_output, log_path=log_path, txt_path=json_path)
+            generate(dict_list=report, output_pdf=report_output, log_path=log_path, txt_path=json_path)
         except Exception as err:
             logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
             format=f'%(asctime)s %(levelname)s module: report.py \nText path: {json_path}\n')
             logger=logging.getLogger(__name__)
             logger.error(err)
-            # sys.exit()
+            sys.exit()
 
         json_object = json.dumps(t, indent=4, ensure_ascii=False)
 
