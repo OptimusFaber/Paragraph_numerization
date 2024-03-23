@@ -12,48 +12,94 @@ import codecs
 from modification.sentence_compare import *
 from modification.report import *
 
-def check_file(json_path=None, config_path=None, report_output=None, json_output=None, log_path='myapp.log', text=False, test=False, visualize=False, global_log_path=None):    
+def check_file(json_path=None, config_path=None, report_output=None, json_output=None, global_log_path=None, log_path='myapp.log', text=False, test=False, visualize=False):    
     if log_path=='myapp.log':
         log_path = global_path + '/' + log_path
-    try:
-        with open(log_path, "w") as f:
-            pass
-    except:
-        if not os.path.exists(log_path):
-            try:
-                with open(global_path + '/myapp.log', "w") as f:
-                    pass
-                log_path = global_path + '/myapp.log'
-            except:
-                log_path = global_path + '/myapp.log'
+
+    if os.path.exists(log_path):
+        os.remove(log_path)
+    else:
+        out_error = '/'.join(log_path.split('/')[:-1])
+        if not os.path.exists(out_error):
+            log_path = global_path + '/myapp.log'
 
     if os.path.exists(global_log_path):
         os.remove(global_log_path)
-    try:
-        with open(global_log_path, "w") as f:
-            pass
-    except:
-        sys.exit("Error while creating log file")
-
+    else:
+        out_error = '/'.join(global_log_path.split('/')[:-1])
+        if not os.path.exists(out_error):
+            sys.exit("Error while creating log file")
+    #? CHECKING INPUT CONFIGURATION DIRECTORY
     if config_path:
-        F = open(config_path, encoding='utf-8')
-        j = json.load(F)
-        paragraph_check = j["Settings"]["CheckNumberList"]
-        abb_check = j["Settings"]["CheckAbbreviations"]
-        dict_check = j["Settings"]["DetectReference"]
         try:
-            add_info = j["Dictionaries"]
-        except:
-            add_info = None
+            F = open(config_path, encoding='utf-8')
+            j = json.load(F)
+            paragraph_check = j["Settings"]["CheckNumberList"]
+            abb_check = j["Settings"]["CheckAbbreviations"]
+            dict_check = j["Settings"]["DetectReference"]
+            try:
+                add_info = j["Dictionaries"]
+            except:
+                add_info = None
+        except Exception as err:
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s %(levelname)s module: check.py\n%(message)s\nIncorrect Configuration file directory\nConfiguration path: {config_path}\n')
+            logger=logging.getLogger(__name__)
+            logger.error(err)
+            sys.exit("Wrong config directory!")
     else:
         paragraph_check = abb_check = dict_check = True
+    #* CHECKING INPUT-JSON DIRECTORY
     if json_path:
-        F = codecs.open(json_path, "r", "utf_8_sig")
-        t = json.load(F)
-        F.close()
+        try:
+            F = codecs.open(json_path, "r", "utf_8_sig")
+            t = json.load(F)
+            F.close()
+        except Exception as err:
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s %(levelname)s module: check.py\n%(message)s\nIncorrect text-json file directory\nText path: {json_path}\n')
+            logger=logging.getLogger(__name__)
+            logger.error(err)
+            sys.exit("Wrong input-json directory!")
     else:
-        return 
+        logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+        format=f'%(asctime)s %(levelname)s module: check.py\nNo text-json file')
+        logger=logging.getLogger(__name__)
+        # logger.error(err)
+        sys.exit("Missing a directory!") 
     content = None
+
+    #! CHECKING OUTPUT-PDF DIRECTORY---------------------------------------------------------------------------------------------------------------
+    if report_output:
+        report_dir = '/'.join(report_output.split('/')[:-1])
+        if not os.path.exists(report_dir):
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s module: check.py\n%(message)s\nOutput directory for pdf-report: {report_output}\n')
+            logger=logging.getLogger(__name__)
+            logger.error("Incorrect pdf-report file output directory")
+            sys.exit("Wrong output-pdf directory!")
+    else:
+        logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+        format=f'%(asctime)s module: check.py\n(message)s\next path: {json_path}\n')
+        logger=logging.getLogger(__name__)
+        logger.error("Incorrect pdf-report file output directory")
+        sys.exit("Missing a pdf-report directory!")
+    #! CHECKING OUTPUT-JSON DIRECTORY--------------------------------------------------------------------------------------------------------------
+    if json_output:
+        report_dir = '/'.join(json_output.split('/')[:-1])
+        if not os.path.exists(report_dir):
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s module: check.py\n%(message)s\nOutput directory for json-report: {json_output}\n')
+            logger=logging.getLogger(__name__)
+            logger.error("Incorrect pdf-report file output directory")
+            sys.exit("Wrong output-json directory!")
+    else:
+        logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+        format=f'%(asctime)s module: check.py\n%(message)s\nText path: {json_path}\n')
+        logger=logging.getLogger(__name__)
+        logger.error("Incorrect pdf-report file output directory")
+        sys.exit("Missing a pdf-report directory!")
+    #!----------------------------------------------------------------------------------------------------------------------------------------------
     if paragraph_check:
         try:
             txt = parse(t, json_path, log_path)
@@ -130,8 +176,9 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
                                     t[elem][e]['Errors'] = [mistake]
                             if not t[elem][e]['Entities'][j]["IsValid"]:
                                 continue
-                            report.append({"Error": "Неверные сущности",
-                                            "Feedback": t[elem][e]['Entities'][j]})
+                            if not t[elem][e]['Entities'][j]["IsSkip"]:
+                                report.append({"Error": "Неверные сущности",
+                                                "Feedback": t[elem][e]['Entities'][j]})
                         
             elif elem == 'Tables':
                 for e in range(len(t[elem])):
@@ -152,35 +199,28 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
                                             t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0].append(mistake)
                                         else:
                                             t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0] = [mistake]
-                                    report.append({"Error": "Неверные сущности",
-                                                    "Feedback": t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]})
+                                    if not t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]["IsSkip"]:
+                                        report.append({"Error": "Неверные сущности",
+                                                        "Feedback": t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]})
 
-        try:             
-            generate(dict_list=report, output_pdf=report_output, log_path=log_path, txt_path=json_path)
+        try:
+            name = json_path.split('/')[-1]
+            generate(dict_list=report, output_pdf=report_output, txt_path=json_path, originalfilename=name)
         except Exception as err:
             logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
-            format=f'%(asctime)s %(levelname)s module: report.py \nText path: {json_path}\n')
+            format=f'%(asctime)s %(levelname)s module: report.py\nError while generating the pdf-report\nText path: {json_path}\n')
             logger=logging.getLogger(__name__)
             logger.error(err)
-            sys.exit()
+            sys.exit("Error while generating the report!")
 
-        json_object = json.dumps(t, indent=4, ensure_ascii=False)
-
-        save_path = "feedback.json"
-        if json_output:
-            out = re.sub(re.compile(r"[/\\]\w*[.]json", re.ASCII), "", json_output)
-            if os.path.exists(out):
-                save_path = json_output
-            else:
-                sys.exit("Report json haven't been saved!")
-        else:
-            sys.exit("Outfile haven't been specified!")
-
-        with codecs.open(save_path, "w", encoding='utf-8') as outfile:
-            outfile.write(json_object)
-        outfile.close()
-
-        if os.path.getsize(global_log_path) == 0:
-            os.remove(global_log_path)
-        if os.path.getsize(log_path) == 0:
-            os.remove(log_path)
+        try:
+            json_object = json.dumps(t, indent=4, ensure_ascii=False)
+            with codecs.open(json_output, "w", encoding='utf-8') as outfile: 
+                outfile.write(json_object)
+            outfile.close()
+        except Exception as err:
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s %(levelname)s module: report.py\nError while generating the json-report\nText path: {json_path}\n')
+            logger=logging.getLogger(__name__)
+            logger.error(err)
+            sys.exit("Error while generating the report!")
