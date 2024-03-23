@@ -8,6 +8,10 @@ def compare_single_text(json, threshold=0.6, log_path="myapp.log", txt_path=None
     try:
         doc_data, cat_data = json["Date"], json["CatalogDate"]
         doc_n, cat_n = json["Number"], json["CatalogNumber"]
+
+        if len(cat_n) > len(doc_n) and cat_n.endswith(doc_n):
+            return False
+
         doc, cat = json["Title"], json["CatalogTitle"]
         if doc_data and cat_data:
             if json["Date"] != json["CatalogDate"]:
@@ -15,15 +19,13 @@ def compare_single_text(json, threshold=0.6, log_path="myapp.log", txt_path=None
                 return {"ErrorType": "EntityDate",
                         "Description": f"Разные даты {doc_data} и {cat_data}",
                         "Element": json["Text"]}
-            return False
-        elif doc_n and cat_n:
+        if doc_n and cat_n:
             if json["Number"] != json["CatalogNumber"]:
                 # N не соответствует
                 return {"ErrorType": "EntityNumber",
                         "Description": f"Разные номера {doc_n} и {cat_n}",
                         "Element": json["Text"]}
-            return False
-        elif doc and cat:
+        if doc and cat:
             if json["Title"]:
                 #& ----------------
                 if len(doc) > len(cat):

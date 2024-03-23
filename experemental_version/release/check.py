@@ -148,9 +148,9 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
         dictionary =  {}
         for i in range(len(feedback)):
             if not dictionary.get(feedback[i][2]):
-                dictionary[feedback[i][2]] = [{"ErrorType": feedback[i][0],"Description": feedback[i][1], "Element": feedback[i][3]}]
+                dictionary[feedback[i][2]] = [{"Type": feedback[i][0],"Description": feedback[i][1], "Element": feedback[i][3]}]
             else:
-                dictionary[feedback[i][2]].append({"ErrorType": feedback[i][0],"Description": feedback[i][1], "Element": feedback[i][3]})
+                dictionary[feedback[i][2]].append({"Type": feedback[i][0],"Description": feedback[i][1], "Element": feedback[i][3]})
 
 
         F = codecs.open(json_path, "r", "utf_8_sig")
@@ -162,7 +162,7 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
                     if t[elem][e]['Index'] in dictionary.keys():
                         t[elem][e]['Errors'] = dictionary[t[elem][e]['Index']]
                         report.append({"Error": dictionary[t[elem][e]['Index']][0]["Description"],
-                                               "Feedback": dictionary[t[elem][e]['Index']][0]["ErrorType"]})
+                                               "Feedback": dictionary[t[elem][e]['Index']][0]["Type"]})
                     else:
                         t[elem][e]['Errors'] = None
 
@@ -170,10 +170,10 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
                         for j in range(len(t[elem][e]['Entities'])):
                             mistake = compare_single_text(json=t[elem][e]['Entities'][j], log_path=report_output, txt_path=json_path)
                             if mistake:
-                                if t[elem][e]['Errors']:
-                                    t[elem][e]['Errors'].append(mistake)
+                                if t[elem][e]['Entities'][j]['Errors']:
+                                    t[elem][e]['Entities'][j]['Errors'].append(mistake)
                                 else:
-                                    t[elem][e]['Errors'] = [mistake]
+                                    t[elem][e]['Entities'][j]['Errors'] = [mistake]
                             if not t[elem][e]['Entities'][j]["IsValid"]:
                                 continue
                             if not t[elem][e]['Entities'][j]["IsSkip"]:
@@ -187,7 +187,7 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
                             if t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Index'] in dictionary.keys():
                                 t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Errors'] = dictionary[t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Index']]
                                 report.append({"Error": dictionary[t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Index']][0]["Description"],
-                                               "Feedback": dictionary[t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Index']][0]["ErrorType"]})
+                                               "Feedback": dictionary[t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Index']][0]["Type"]})
                             else:
                                 t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Errors'] = None
                             
@@ -195,10 +195,10 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
                                 for j in range(len(t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'])):
                                     mistake = compare_single_text(json=t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j], log_path=report_output, txt_path=json_path)
                                     if mistake:
-                                        if t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Errors']:
-                                            t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0].append(mistake)
+                                        if t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]['Errors']:
+                                            t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]['Errors'].append(mistake)
                                         else:
-                                            t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0] = [mistake]
+                                            t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]['Errors'] = [mistake]
                                     if not t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]["IsSkip"]:
                                         report.append({"Error": "Неверные сущности",
                                                         "Feedback": t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]})
