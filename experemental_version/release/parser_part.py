@@ -64,6 +64,11 @@ def parse(text, txt_path, log_path='myapp.log'):
                else:
                   counter+=len(txt)+1
                   break
+
+               if posx > 8:
+                  counter+=len(txt)+1
+                  break
+
                paragraph = list_findings[0][0].group()
                if re.search("\D.\d", paragraph):
                   paragraph = re.sub(re.compile(r"\D[.]", re.ASCII), "", paragraph)
@@ -85,7 +90,7 @@ def parse(text, txt_path, log_path='myapp.log'):
                      if buf.span()[0]-pos < 3:
                         txt = txt[pos+buf.span()[1]:]
                         counter+=(pos+buf.span()[1])
-                        continue
+                        break
 
                #& Обработчик исключений для чисел
                error = False
@@ -116,13 +121,13 @@ def parse(text, txt_path, log_path='myapp.log'):
                if error:
                   txt = txt[pos:]
                   counter+=(pos)
-                  continue
+                  break
 
                cut = txt[:pos][::-1]
                if sign == ')' and cut.count('(') == cut.count(')'):
                   txt = txt[pos:]
                   counter+=(pos)
-                  continue
+                  break
 
                p=None
                if sign == ')':
@@ -141,14 +146,14 @@ def parse(text, txt_path, log_path='myapp.log'):
                      if tire.span()[0] < 2:
                         txt = txt[pos:]
                         counter+=(pos)
-                        continue
+                        break
                   ##-----------------Отлавливаю тире слева-------------------
                   tire = re.search('[-—–]', txt[:re.search(p, txt).span()[0]])
                   if tire:
                      if tire.span()[0] < 2:
                         txt = txt[pos:]
                         counter+=(pos)
-                        continue
+                        break
                   ##-----------------------------------------------------------
 
                pos1 = re.search(p, txt).span()[0]
@@ -163,7 +168,7 @@ def parse(text, txt_path, log_path='myapp.log'):
                      except:
                         txt = txt[pos:]
                         counter+=(pos)
-                        continue  
+                        break  
                
 
 
@@ -172,7 +177,7 @@ def parse(text, txt_path, log_path='myapp.log'):
                   if pos1 - pos0[-1].span()[1] < 5:
                      txt = txt[pos:]
                      counter+=(pos)
-                     continue
+                     break
 
                if f_elem:
                   if re.search("\w", txt[0:list_findings[0][2]]):
@@ -187,7 +192,7 @@ def parse(text, txt_path, log_path='myapp.log'):
                   if Roman2Num(paragraph) - Roman2Num(elem) > 7:
                      txt = txt[pos:]
                      counter+=(pos)
-                     continue 
+                     break 
                   else:
                      first_elements[data_type][sign] = paragraph
                elif paragraph.isalpha():
@@ -200,7 +205,7 @@ def parse(text, txt_path, log_path='myapp.log'):
                   if ord(paragraph) - ord(elem) > 7:
                      txt = txt[pos:]
                      counter+=(pos)
-                     continue 
+                     break 
                   else:
                      first_elements[data_type][sign] = paragraph
                else:
@@ -210,7 +215,7 @@ def parse(text, txt_path, log_path='myapp.log'):
                      if int(paragraph) - int(elem) > 7:
                         txt = txt[pos:]
                         counter+=(pos)
-                        continue 
+                        break 
                      else:
                         first_elements[data_type][sign] = paragraph
 
