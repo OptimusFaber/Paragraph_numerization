@@ -358,6 +358,7 @@ class Make_tree:
                 break
         table = False
         duplic = False
+        go_back = 0
         for i in range(-1, -len(self.tree)-1, -1):  
             if "приложение" in self.tree[i].parent.name and table:
                 continue
@@ -388,7 +389,9 @@ class Make_tree:
                             num2 = int(str(self.tree[i].name).split('.')[0])
                             if num2 - num1 < 3:
                                 duplic = self.tree[i]
-                break
+                if go_back == 5:
+                    break
+                go_back += 1
             table = True
 
 
@@ -669,6 +672,8 @@ class Make_tree:
         for lst in lsts:
             self.lst = lst
             for elem, self.k in zip(self.lst, range(len(self.lst))):
+                if elem[2] == 189:
+                    print()
                 if elem[1] in ["таблица", "рисунок", "рис", "схема", "приложение"]:
                     self.func, self.revfunc = functions[elem[3]]
                     self.n = first_elements[elem[3]]
