@@ -6,7 +6,7 @@ def fb(dictonaries):
         keys = list(dct.keys())
         for i in range(1, len(keys)):
             if dct[keys[i]]['status'] == 'MISSING' or dct[keys[i]]['status'] == 'DUPLICATE':
-                feedback_list.append([dct[keys[i]]['name'], dct[keys[i]]['sign'], dct[keys[i]]['pos'], dct[keys[i]]['delimetr'], dct[keys[i]]['data_type'], dct[keys[i]]['status'], dct[keys[i]]['sup']])
+                feedback_list.append([dct[keys[i]]['name'], dct[keys[i]]['sign'], dct[keys[i]]['pos'], dct[keys[i]]['delimetr'], dct[keys[i]]['data_type'], dct[keys[i]]['status'], dct[keys[i]]['sup'], dct[keys[i]]['elem_name']])
 
     for i in range(len(feedback_list)):
         #! ErrorType, LineText, LineNumber, ОШИБКА, PrevLineText, NextLine
@@ -23,7 +23,7 @@ def fb(dictonaries):
             feedback_list[i][3] = feedback_list[i][6]  + "."
         else:
             elem = feedback_list[i][0]
-            feedback_list[i][3] = feedback_list[i][6]
+            feedback_list[i][3] = feedback_list[i][7]
 
         if feedback_list[i][1] == "таблица" or feedback_list[i][1] == "схема" or feedback_list[i][1] == "приложение":
             feedback_list[i][0] = "Numbering"

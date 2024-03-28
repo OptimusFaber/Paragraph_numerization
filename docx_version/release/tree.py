@@ -305,7 +305,9 @@ class Make_tree:
                             if self.main_line_num.sign == num_list[i][1]:
                                 if self.numeral_check(self.main_line_num.name, num_list[i][0]):
                                     if prev is not None:
-                                        if self.numeral_check(prev, num_list[i]) and prev[1] != num_list[i][1]:
+                                        if prev[1] != num_list[i][1]:
+                                            flag = True
+                                        elif not self.numeral_check(prev, num_list[i]):
                                             flag = True
                                     else:
                                         flag = True
@@ -672,7 +674,7 @@ class Make_tree:
         for lst in lsts:
             self.lst = lst
             for elem, self.k in zip(self.lst, range(len(self.lst))):
-                if elem[2] == 111:
+                if elem[2] == 676:
                     print()
                 if elem[1] in ["таблица", "рисунок", "рис", "схема", "приложение"]:
                     self.func, self.revfunc = functions[elem[3]]

@@ -17,13 +17,13 @@ def compare_single_text(json, threshold=0.6, log_path="myapp.log", txt_path=None
         if doc_data and cat_data:
             if json["Date"] != json["CatalogDate"]:
                 # Даты разные
-                return {"ErrorType": "EntityDate",
+                return {"Type": "EntityDate",
                         "Description": f"Разные даты {doc_data} и {cat_data}",
                         "Element": json["Text"]}
         if doc_n and cat_n:
-            if json["Number"] != json["CatalogNumber"]:
+            if json["Number"].replace('-','').replace(' ','').replace(u'\u2014', '') != json["CatalogNumber"].replace('-','').replace(' ','').replace(u'\u2014', ''):
                 # N не соответствует
-                return {"ErrorType": "EntityNumber",
+                return {"Type": "EntityNumber",
                         "Description": f"Разные номера {doc_n} и {cat_n}",
                         "Element": json["Text"]}
         if doc and cat:
@@ -38,7 +38,7 @@ def compare_single_text(json, threshold=0.6, log_path="myapp.log", txt_path=None
 
                 if all(num < threshold for num in ratio_list):
                     # Предложения различаются по смыслу
-                    return {"ErrorType": "EntityTitle",
+                    return {"Type": "EntityTitle",
                             "Description": "Разные сущности",
                             "Element": json["Text"]}
                 return False

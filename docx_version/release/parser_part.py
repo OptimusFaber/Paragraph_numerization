@@ -38,12 +38,16 @@ def parse(text, txt_path, log_path='myapp.log'):
          txt = string["Text"]
          if string["IsToc"]:
             continue
+         if string.get('Vanish'):
+            if string["Vanish"]:
+               continue
          if string["Numbering"]:
             txt = string["Numbering"] + ' ' + txt
          try:
             f_elem = True
             begin = True
             while txt and sign:
+               txt = re.sub(r'\u00A0', ' ', txt)
                list_findings = [[re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|((([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[.]))", re.ASCII), txt), ".", None, None],
                               [re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt), ")", None, None],
                               [re.search(re.compile(r"(^|(?<=^\s)\s*)[Тт]аблица [№]?\d+", re.ASCII), txt) if begin else None, "таблица", None, None],

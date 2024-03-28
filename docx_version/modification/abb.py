@@ -20,6 +20,17 @@ def levenstein(str_1, str_2):
     return current_row[n]
 #!--------------------------------------------------------------------------------------------------------------------
 
+def compare(s1, s2):
+    n = len(s1)
+    if n>=5:
+        for i in range(1, min(n, 3)):
+            if levenstein(s1[:-i], s2) <= 1:
+                return True
+    if levenstein(s1, s2) <= 1:
+        return True
+    else:
+        return False
+
 def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = None, json_path=None, log_path='myapp.log'):
     logging.basicConfig(filename=log_path, level=logging.DEBUG, 
         format=f'%(asctime)s %(levelname)s module: %(name)s line num: %(lineno)s func: %(funcName)s %(message)s \nText path: {json_path}\n')
@@ -27,8 +38,8 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
     if not abbs and not dicts:
         return []
     #& Маски для поиска нужных нам сокращений
-    abb_mask1 = re.compile(r"(^|\s)(?<!-)((«?([А-Я]+и)»?\s?){2,}|(«?([А-Я]{2,})»?\s?)+|(«?[A-Z]{2,}»?\s?)+)([^А-Яа-яA-Za-z0-9-—–]|$)")
-    abb_mask2 = re.compile(r"(^|\s)(?<!-)(((([А-Я]+[а-я]*){2,})\s?)+|((([A-Z]+[a-z]*){2,})\s?)+)([^А-Яа-яA-Za-z0-9-—–]|$)")
+    abb_mask1 = re.compile(r"(?<![a-zA-Zа-яА-Я0-9-—–])((«?([А-Я]+и)»?\s?){2,}|(«?([А-Я]{2,})»?\s?)+|(«?[A-Z]{2,}»?\s?)+)([^А-Яа-яA-Za-z0-9-—–]|$)")
+    abb_mask2 = re.compile(r"(?<![a-zA-Zа-яА-Я0-9-—–])(?<!-)(((([А-Я]+[а-я]*){2,})\s?)+|((([A-Z]+[a-z]*){2,})\s?)+)([^А-Яа-яA-Za-z0-9-—–]|$)")
     #&--------------------------------------------------------------------------------------------------------------------
     all_words = ""
     pos = []
@@ -43,7 +54,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
             js.append(text[elem])
             for e in text[elem]:
                 all_words += e["Text"] + " "
-                match = re.search(re.compile(r"[С|с]окращени[я|й]", flags=re.IGNORECASE), e['Text'])
+                match = re.search(re.compile(r"(С|с)окращени(я|й)|(Т|т)ермин(ы|ов)", flags=re.IGNORECASE), e['Text'])
                 if match is not None:
                     pos.append(e['Index'])
                 if flag:
@@ -68,8 +79,9 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                 buf = []
                 for cell in table['Rows']:
                     for n in range(len(cell['Cells'])):
-                        buf.append(cell['Cells'][0]["Paragraphs"][0])
-                        all_words += cell['Cells'][n]["Paragraphs"][0]["Text"] + " "
+                        for m in range(len(cell['Cells'][n]["Paragraphs"])):
+                            buf.append(cell['Cells'][n]["Paragraphs"][m])
+                            all_words += cell['Cells'][n]["Paragraphs"][m]["Text"] + " "
 
                 js.append(buf)
                 num = table['Index']
@@ -90,8 +102,9 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
     for tab in tables:
         for row in tab['Rows']:
             for cell in row['Cells']:
-                f1 = re.search(abb_mask1, cell['Paragraphs'][0]['Text'])
-                f2 = re.search(abb_mask2, cell['Paragraphs'][0]['Text'])
+                txt = cell['Paragraphs'][0]['Text'].replace(u'\xa0', u' ')
+                f1 = re.search(abb_mask1, txt)
+                f2 = re.search(abb_mask2, txt)
                 if f1 and f2:
                     f = f1 if (len(f1.group()) > len(f2.group())) else f2
                 elif f1 or f2:
@@ -104,14 +117,24 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                     f = re.sub("[\t\n\r]", " ", f)
                     f = re.sub("[ ]{2,}", " ", f)
                     for _ in range(2):
-                        if not f[-1].isalpha():
-                            if f[-1] != "»":
-                                f = f[:-1]
+                        if not f[-1].isalpha() and f[-1] != "»":
+                            f = f[:-1]
+                        if not f[0].isalpha() and f[0] != "«":
+                            f = f[1:]
                     if f[-1] == "»" and f.count("«") == 0:
                         f = f[:-1]
-                    elif f[0] == "«" and f.count("»") == 0:
+                    if not f[-1].isalpha() and f[-1] != "»": 
+                        f=f[:-1]
+                    if f[0] == "«" and f.count("»") == 0:
                         f = f[1:]
-                    if not f[-1].isalpha() and f[-1] != "»": f=f[:-1]
+                    if not f[0].isalpha() and f[0] != "«":
+                        f = f[1:]
+                    
+                    if f.count("«") == 1 and f.count("»") == 0:
+                        f += "»"
+                    if f.count("«") == 0 and f.count("»") == 1:
+                        f = "«" + f
+                    
                     if not abb_set.get(f):
                         abb_set[f] = cell['Paragraphs'][0]['Index']
                 break         
@@ -142,9 +165,12 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
     for part in js:
         for string in part:
             try:
-                if string['Index'] == 1342:
-                    print()
                 buf = []
+                if string['Index'] == 23:
+                    print()
+                string['Text'] = string['Text'].replace(u'\xa0', u' ')
+                string['Text'] = re.sub(r'[\u2013\u2014]', '-', string['Text'])
+                string['Text'] = re.sub(r'\u00A0', ' ', string['Text'])
                 if string['Index'] not in forbidden_list:
                     f = [re.finditer(abb_mask1, string['Text']), re.finditer(abb_mask2, string['Text'])]
                     #^------------------------------------------------------------------------------------
@@ -158,17 +184,24 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                 if elem[-1].isdigit():
                                     continue
                                 for _ in range(2):
-                                    if not elem[-1].isalpha():
-                                        if elem[-1] != "»":
-                                            elem = elem[:-1]
+                                    if not elem[-1].isalpha() and elem[-1] != "»":
+                                        elem = elem[:-1]
+                                    if not elem[0].isalpha() and elem[0] != "«":
+                                        elem = elem[1:]
                                 if elem[0] == "«" and elem[-1] == "»":
                                     elem = elem[1:len(elem)-1]
                                 if elem[-1] == "»" and elem.count("«") == 0:
                                     elem = elem[:-1]
-                                elif elem[0] == "«" and elem.count("»") == 0:
+                                if elem[0] == "«" and elem.count("»") == 0:
                                     elem = elem[1:]
+                                if not elem[0].isalpha() and f[0] != "«":
+                                    elem = elem[1:]
+                                if elem.count("«") == 1 and elem.count("»") == 0:
+                                    elem += "»"
+                                if elem.count("«") == 0 and elem.count("»") == 1:
+                                    elem = "«" + elem
                                 #! Проверяем что это не римская цифра
-                                if bool(re.search(r"^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$", elem)):
+                                if bool(re.search(r"^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$", elem)) and elem != "CD":
                                     continue
                                 #! ----------------------------------
                                 st = False 
@@ -188,23 +221,61 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                     #     st = True
                                 #! -------------------------------------------
                                 if all(list(map(lambda x: 1<len(x)<9, elem.split(" ")))):
-                                    if string['Numbering']:
-                                        if string['Text'].isupper():
-                                            continue
-
+                                    #?Убираем параграф если он весь написан большими буквами
+                                    if string['Text'].isupper():
+                                        continue
+                                    
+                                    st = False
                                     exp = elem.split(" ")
                                     for i in range(len(exp)):
                                         if len(exp[i])>=9:
-                                            # exp[i] = ""
-                                            continue
+                                            st = True
+                                            break
                                         if exp[i].lower() in all_words:
-                                            # exp[i] = ""
-                                            continue
-                                        
+                                            st = True
+                                            break
+                                    if st: continue
                                         
                                     if element.span()[0] in list_of_added_elems or element.span()[1] in list_of_added_elems:
                                         continue
-                                    if string['Text'][element.span()[1]-1] == ")":
+                                    f1 = re.search(r"^[\t ]*[-—–]", string['Text'][element.span()[1]:])         #* Ситуация типа ООО - ...
+                                    f2 = re.search(r"^[\t ]*[-—–]", string['Text'][:element.span()[0]][::-1])   #* Ситуацтя типа ... - ООО
+
+                                    if f1:
+                                        right_side = string['Text'][element.span()[1]:][f1.span()[0]:].replace(')', '').replace('(', '').split(" ")
+                                        right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
+                                        line = ""
+                                        st = False
+                                        elem = elem.upper()
+                                        for rig in right_side:
+                                            line += rig.upper()
+                                            if levenstein(line, elem):
+                                                st = True
+                                                break
+                                            if len(line) - len(elem) > 4:
+                                                break
+                                        if st:
+                                            abb_set[elem] = string['Index']
+                                            continue
+                                    if f2:
+                                        left_side = string['Text'][:element.span()[0]][f2.span()[1]-2::-1].replace(')', '').replace('(', '').split(" ")
+                                        left_side = list(map(lambda x: x[-1], list(filter(lambda x: len(x)>1, left_side))))
+                                        # left_side.reverse()
+                                        line = ""
+                                        st = False
+                                        elem = elem.upper()
+                                        for lef in left_side:
+                                            line = lef.upper() + line
+                                            if levenstein(line, elem):
+                                                st = True
+                                                break
+                                            if len(line) - len(elem) > 4:
+                                                break
+                                        if st:
+                                            abb_set[elem] = string['Index']
+                                            continue
+
+                                    if string['Text'][element.span()[1]-1] == ")" or "(" in string['Text'][element.span()[0]-2:element.span()[0]]:
                                         ## Единая система конструкторской документации (ЕСКД) тут лишь слева
                                         left_side_ind = len(string['Text'][element.span()[1]-2::-1]) - re.search("[(]", string['Text'][element.span()[1]-2::-1]).span()[0]
                                         bracket_info = string['Text'][left_side_ind:element.span()[1]-1]
@@ -228,13 +299,13 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                         elem = elem.upper()
                                         for lef in left_side:
                                             line = lef.upper() + line
-                                            if levenstein(line, elem) <= 1:
+                                            if compare(line, elem):
                                                 st = True
                                                 break
                                             if len(line) - len(elem) > 4:
                                                 break
                                         if st:
-                                            abb_set[elem] = string['Index']+1
+                                            abb_set[elem] = string['Index']
                                             continue
                                         ## тут лишь справа (ЕСКД) Единая система конструкторской документации
                                         right_side = string['Text'][element.span()[1]-1:].split(" ")
@@ -250,7 +321,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                             if len(line) - len(elem) > 4:
                                                 break
                                         if st:
-                                            abb_set[elem] = string['Index']+1
+                                            abb_set[elem] = string['Index']
                                             continue
                                     flag = False
                                     if len(elem.split(" ")) > 1:
@@ -260,15 +331,22 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                         for e in range(len(elem1)):
                                             a += elem1[e] + ' '
                                             if a[:-1] in list(abb_set.keys()):
-                                                flag = True
+                                                if abb_set[a[:-1]] <= string['Index']:
+                                                    flag = True
+                                                else:
+                                                    elem.append(elem1[e])
                                             elif elem1[e] in list(abb_set.keys()):
-                                                a = elem1[e] + ' '
-                                                flag = True
+                                                if abb_set[elem1[e]] <= string['Index']:
+                                                    a = elem1[e] + ' '
+                                                    flag = True
+                                                    elem = []
+                                                else:
+                                                    elem.append(elem1[e])
                                             else:
                                                 elem.append(elem1[e])
                                         if elem:
                                             elem = ' '.join(elem)
-                                    if not flag:
+                                    if not flag or elem:
                                         buf.append((elem, element.span()))
                                         st = True
                                     else:
