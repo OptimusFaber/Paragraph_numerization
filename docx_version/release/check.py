@@ -156,6 +156,7 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
 
         F = codecs.open(json_path, "r", "utf_8_sig")
         t = json.load(F)
+        file_name = t["Name"]
         report = []
         for elem in t.keys():
             if elem == 'Paragraphs':
@@ -206,9 +207,8 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
                                                             "Feedback": t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][g]['Entities'][j]})
 
         try:
-            name = json_path.split('/')[-1]
             buf = report.copy()
-            generate(dict_list=buf, output_pdf=report_output, originalfilename=name, libre_path=libre_path)
+            generate(dict_list=buf, output_pdf=report_output, originalfilename=file_name, libre_path=libre_path)
         except Exception as err:
             logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
             format=f'%(asctime)s %(levelname)s module: report.py\nError while generating the pdf-report\nText path: {json_path}\n')

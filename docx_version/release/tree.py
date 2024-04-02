@@ -500,7 +500,7 @@ class Make_tree:
                     forbiden_list.append(self.tree[i].parent)
                     if not duplic and i > -20:
                         duplic = self.tree[i]
-                if self.numeral_check(self.tree[i], elem) and all([ancestor not in black_list for ancestor in self.tree[i].ancestors]) and (self.tree[i] not in forbiden_list):
+                if self.numeral_check(self.tree[i], elem) and all([ancestor not in black_list for ancestor in self.tree[i].ancestors]) and (self.tree[i] not in black_list):
                     posible_relatives.append(self.tree[i])
                     black_list.add(self.tree[i].parent)
                 else:
@@ -674,7 +674,7 @@ class Make_tree:
         for lst in lsts:
             self.lst = lst
             for elem, self.k in zip(self.lst, range(len(self.lst))):
-                if elem[2] == 676:
+                if elem[2] == 692:
                     print()
                 if elem[1] in ["таблица", "рисунок", "рис", "схема", "приложение"]:
                     self.func, self.revfunc = functions[elem[3]]

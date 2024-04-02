@@ -30,6 +30,16 @@ def compare(s1, s2):
         return True
     else:
         return False
+    
+def letter_extractor(string, ind):
+    line = []
+    for st in string:
+        if len(st) > 1 or st == 'и':
+            for s in range(len(st)-1, -1, -1):
+                if st[s].isupper() or s == ind:
+                    line.append(st[s].upper())
+    return line        
+        
 
 def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = None, json_path=None, log_path='myapp.log'):
     logging.basicConfig(filename=log_path, level=logging.DEBUG, 
@@ -42,12 +52,8 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
     abb_mask2 = re.compile(r"(?<![a-zA-Zа-яА-Я0-9-—–])(?<!-)(((([А-Я]+[а-я]*){2,})\s?)+|((([A-Z]+[a-z]*){2,})\s?)+)([^А-Яа-яA-Za-z0-9-—–]|$)")
     #&--------------------------------------------------------------------------------------------------------------------
     all_words = ""
-    pos = []
-    js = []
-    tables = []
-    con = 0
-    con_end = 0
-    c = 0
+    pos, js, tables = [], [], []
+    con = con_end = c = 0
     flag = 1
     for elem in text.keys():
         if elem == 'Paragraphs':
@@ -166,7 +172,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
         for string in part:
             try:
                 buf = []
-                if string['Index'] == 23:
+                if string['Index'] == 485:
                     print()
                 string['Text'] = string['Text'].replace(u'\xa0', u' ')
                 string['Text'] = re.sub(r'[\u2013\u2014]', '-', string['Text'])
@@ -216,9 +222,6 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                         list_of_added_elems.extend(range(pos[0], pos[1]))
                                         list_of_added_elems.extend(range(element.span()[0], element.span()[1]+1))
                                         continue
-                                    # else:
-                                    #     buf.append((elem, element.span()))
-                                    #     st = True
                                 #! -------------------------------------------
                                 if all(list(map(lambda x: 1<len(x)<9, elem.split(" ")))):
                                     #?Убираем параграф если он весь написан большими буквами
@@ -243,13 +246,14 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
 
                                     if f1:
                                         right_side = string['Text'][element.span()[1]:][f1.span()[0]:].replace(')', '').replace('(', '').split(" ")
-                                        right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
+                                        right_side = letter_extractor(right_side, 0)
+                                        # right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
                                         line = ""
                                         st = False
                                         elem = elem.upper()
                                         for rig in right_side:
-                                            line += rig.upper()
-                                            if levenstein(line, elem):
+                                            line += rig
+                                            if levenstein(line, elem) <= 1:
                                                 st = True
                                                 break
                                             if len(line) - len(elem) > 4:
@@ -258,15 +262,17 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                             abb_set[elem] = string['Index']
                                             continue
                                     if f2:
-                                        left_side = string['Text'][:element.span()[0]][f2.span()[1]-2::-1].replace(')', '').replace('(', '').split(" ")
-                                        left_side = list(map(lambda x: x[-1], list(filter(lambda x: len(x)>1, left_side))))
+                                        left_side = string['Text'][element.span()[0]-1::-1][f2.span()[0]:].replace(')', '').replace('(', '').split(" ")
+                                        left_side = list(map(lambda x: x[::-1], left_side))
+                                        left_side = letter_extractor(left_side, 0)
+                                        # left_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, left_side))))
                                         # left_side.reverse()
                                         line = ""
                                         st = False
                                         elem = elem.upper()
                                         for lef in left_side:
-                                            line = lef.upper() + line
-                                            if levenstein(line, elem):
+                                            line = lef + line
+                                            if levenstein(line, elem) <= 1:
                                                 st = True
                                                 break
                                             if len(line) - len(elem) > 4:
@@ -275,7 +281,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                             abb_set[elem] = string['Index']
                                             continue
 
-                                    if string['Text'][element.span()[1]-1] == ")" or "(" in string['Text'][element.span()[0]-2:element.span()[0]]:
+                                    if ")" in string['Text'][element.span()[1]:min(element.span()[1]+10, len(string['Text']))] or "(" in string['Text'][max(element.span()[0]-10, 0):element.span()[0]]:
                                         ## Единая система конструкторской документации (ЕСКД) тут лишь слева
                                         left_side_ind = len(string['Text'][element.span()[1]-2::-1]) - re.search("[(]", string['Text'][element.span()[1]-2::-1]).span()[0]
                                         bracket_info = string['Text'][left_side_ind:element.span()[1]-1]
@@ -292,8 +298,10 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                                     abb_set[elem] = string['Index']
                                             continue
                                         ## Единая система конструкторской документации (ЕСКД) тут лишь слева
-                                        left_side = string['Text'][:element.span()[0]][::-1].split(" ")
-                                        left_side = list(map(lambda x: x[-1], list(filter(lambda x: len(x)>1, left_side))))
+                                        left_side = string['Text'][:element.span()[0]][::-1].replace('(', '').replace(')', '').replace('«', '').replace('»', '').split(" ")
+                                        left_side = list(map(lambda x: x[::-1], left_side))
+                                        left_side = letter_extractor(left_side, 0)
+                                        # left_side = list(map(lambda x: x[-1], list(filter(lambda x: len(x)>1, left_side))))
                                         line = ""
                                         st = False
                                         elem = elem.upper()
@@ -309,7 +317,8 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                             continue
                                         ## тут лишь справа (ЕСКД) Единая система конструкторской документации
                                         right_side = string['Text'][element.span()[1]-1:].split(" ")
-                                        right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
+                                        right_side = letter_extractor(right_side, 0)
+                                        # right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
                                         line = ""
                                         st = False
                                         elem = elem.upper()

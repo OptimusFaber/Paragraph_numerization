@@ -9,23 +9,23 @@ def compare_single_text(json, threshold=0.6, log_path="myapp.log", txt_path=None
         doc_data, cat_data = json["Date"], json["CatalogDate"]
         doc_n, cat_n = json["Number"], json["CatalogNumber"]
 
-        if doc_n and cat_n: 
-            if len(cat_n) > len(doc_n) and cat_n.endswith(doc_n):
-                return False
+        #if doc_n and cat_n: 
+            #if len(cat_n) > len(doc_n) and cat_n.endswith(doc_n):
+                #return False
 
         doc, cat = json["Title"], json["CatalogTitle"]
-        if doc_data and cat_data:
-            if json["Date"] != json["CatalogDate"]:
+        #if doc_data and cat_data:
+            #if json["Date"] != json["CatalogDate"]:
                 # Даты разные
-                return {"Type": "EntityDate",
-                        "Description": f"Разные даты {doc_data} и {cat_data}",
-                        "Element": json["Text"]}
-        if doc_n and cat_n:
-            if json["Number"].replace('-','').replace(' ','').replace(u'\u2014', '') != json["CatalogNumber"].replace('-','').replace(' ','').replace(u'\u2014', ''):
+                #return {"Type": "EntityDate",
+                        #"Description": f"Разные даты {doc_data} и {cat_data}",
+                        #"Element": json["Text"]}
+        #if doc_n and cat_n:
+            #if json["Number"].replace('ГОСТ Р',).replace('ГОСТ','').replace('-','').replace(' ','').replace(u'\u2014', '').replace(u'\u2013','') != json["CatalogNumber"].replace('ГОСТ Р','').replace('ГОСТ').replace('-','').replace(' ','').replace(u'\u2014', '').replace(u'\u2013',''):
                 # N не соответствует
-                return {"Type": "EntityNumber",
-                        "Description": f"Разные номера {doc_n} и {cat_n}",
-                        "Element": json["Text"]}
+                #return {"Type": "EntityNumber",
+                        #"Description": f"Разные номера {doc_n} и {cat_n}",
+                        #"Element": json["Text"]}
         if doc and cat:
             if json["Title"]:
                 #& ----------------

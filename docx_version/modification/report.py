@@ -46,6 +46,9 @@ def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, or
             for key in value_dictionary.keys():
                 if dict_list[j]["Feedback"]["DocumentType"] in value_dictionary[key]:
                     dict_list[j]["Feedback"]["MainStatus"] = key
+                    break
+            else:
+                dict_list[j]["Feedback"]["MainStatus"] = "Unknown"
     var = {
         'Действует': 0,
         'Не действует': 0,

@@ -19,7 +19,8 @@ def parse(text, txt_path, log_path='myapp.log'):
          for table in text[elem]:
             buf = []
             for cell in table['Rows']:
-               buf.append(cell['Cells'][0]["Paragraphs"][0])
+               for j in range(len(cell['Cells'][0]["Paragraphs"])):
+                  buf.append(cell['Cells'][0]["Paragraphs"][j])
             js.append(buf)
             lst.append([])
    
@@ -56,7 +57,7 @@ def parse(text, txt_path, log_path='myapp.log'):
                               [re.search(re.compile(r"(^|(?<=^\s)\s*)[Сс]хема [№]?\d+", re.ASCII), txt) if begin else None, "схема", None, None],
                               [re.search(re.compile(r"(^|(?<=^\s)\s*)[Пп]риложение [№]?(\d+|[А-Яа-яA-Za-z]((?=\s)|(?=\w)))", re.ASCII), txt) if begin else None, "приложение", None, None],
                               [re.search(re.compile(r"((?<=\s)|(?<=^))[(]((\d+[.]?)+|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt), "()", None, None],
-                              [re.search(re.compile(r"(^\d+((?=\s)|$))|((?<=^\s)\s*\d+((?=\s)|$))", re.ASCII), txt) if begin else None, "NaN", None, None],
+                              [re.search(re.compile(r"(^\d+)|((?<=^\s)\s*\d+)", re.ASCII), txt) if begin else None, "NaN", None, None],
                               [re.search(re.compile(r"((?<=\s)|(?<=^))[A-Za-zА-Яа-я][.](((\d+[.])+\d+)|(\d+))[.]*", re.ASCII), txt), ".", None, None]]
 
                begin = False 
