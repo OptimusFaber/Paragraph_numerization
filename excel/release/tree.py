@@ -644,8 +644,8 @@ class Make_tree:
                     if self.content:
                         self.content_set.add(elem[2])
 
-    def walk(self, lst, txt_path):
-        logging.basicConfig(filename='myapp.log', level=logging.DEBUG, 
+    def walk(self, lst, txt_path, log_path='myapp.log'):
+        logging.basicConfig(filename=log_path, level=logging.DEBUG, 
             format=f'%(asctime)s %(levelname)s module: %(name)s line num: %(lineno)s func:%(funcName)s %(message)s \nText path: {txt_path}\n')
         logger=logging.getLogger(__name__)
         self.lst = lst

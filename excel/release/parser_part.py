@@ -5,9 +5,9 @@ import json
 
 roman_numbers = 'IVXLCDM'
 
-def parse(json_text, json_path):
-   logging.basicConfig(filename='myapp.log', level=logging.DEBUG, 
-      format=f'%(asctime)s %(levelname)s module: %(name)s line num: %(lineno)s func: %(funcName)s %(message)s \nText path: {json_path}\n')
+def parse(json_text, txt_path, log_path='myapp.log'):
+   logging.basicConfig(filename=log_path, level=logging.DEBUG, 
+      format=f'%(asctime)s %(levelname)s module: %(name)s line num: %(lineno)s func: %(funcName)s %(message)s \nText path: {txt_path}\n')
    logger=logging.getLogger(__name__)
    sign, data_type = 1, None
    res_dct = dict(zip([i['Name'] for i in json_text['Worksheets']], [[] for _ in range(len(json_text['Worksheets']))]))

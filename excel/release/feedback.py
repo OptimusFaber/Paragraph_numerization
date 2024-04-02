@@ -1,6 +1,4 @@
-import re
-
-def fb(text, dictonaries):
+def fb(dictonaries):
     if not dictonaries:
         return []
     feedback_list = []
@@ -10,22 +8,7 @@ def fb(text, dictonaries):
             if dct[keys[i]]['status'] == 'MISSING' or dct[keys[i]]['status'] == 'DUPLICATE':
                 feedback_list.append([dct[keys[i]]['name'], dct[keys[i]]['sign'], dct[keys[i]]['addinfo'], dct[keys[i]]['delimetr'], dct[keys[i]]['status']])
 
-    # splited_t = text.split("\n")
     for i in range(len(feedback_list)):
-    #     ## Строка, в которой проблема
-    #     n = feedback_list[i][2]
-    #     ## Строки, которые стоят рядом
-    #     n_prev, n_next = None, None
-    #     for j in range(n-2, -1, -1):
-    #         if re.search("(\w|[А-Яа-я])", splited_t[j]):
-    #             n_prev = splited_t[j].replace("\r", "")
-    #             break
-    #     for j in range(n, len(splited_t)):
-    #         if re.search("(\w|[А-Яа-я])", splited_t[j]):
-    #             n_next = splited_t[j].replace("\r", "")
-    #             break
-        ##-----------------------------
-
         #! ErrorType, LineText, LineNumber, ОШИБКА, PrevLineText, NextLine
         text = "Отсутствует " if feedback_list[i][4] == "MISSING" else "Дублирующаяся " if feedback_list[i][1] == "таблица" or feedback_list[i][1] == "схема" else "Дублирующийся "
 

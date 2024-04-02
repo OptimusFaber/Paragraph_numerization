@@ -1,10 +1,9 @@
 from docxtpl import DocxTemplate
 import os,sys
-import json
 from datetime import datetime   
 
 
-def generate(dict_list=None, output_pdf="./", inputFileName = "standart_format.docx", output_docx = "./report.docx", originalfilename = "отчёт", save_doc=False): 
+def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, originalfilename = None, save_doc=False, libre_path=None): 
     """
     json_path (string) -> path to .json file with statistics,
     output_pdf (string) -> folder where to place pdf file,
@@ -13,20 +12,43 @@ def generate(dict_list=None, output_pdf="./", inputFileName = "standart_format.d
     originalfilename (string) -> report name,
     save_doc (boolean) -> save docx with statistics if true
     """
+    if originalfilename is None:
+        originalfilename = "отчет"
+    if inputFileName is None:
+        inputFileName = __file__
+        inputFileName = inputFileName.replace("report.py", "standart_format.docx")
     #? Data
     basedir = os.path.dirname(sys.argv[0]).replace('release', 'modification')
     path = os.path.join(basedir, "", inputFileName)
+    output_docx = output_pdf.replace("pdf", "docx")
+    output_pdf = "/".join(output_pdf.split('/')[:-1])
     if len(output_docx.split('/'))==1:
         output_docx = os.path.join(basedir, "", output_docx)
     template = DocxTemplate(path)
     #?------------------------------------
 
     #? Manage outputdir for pdf
-    if output_pdf is None:
-        output_pdf = "./"    
+    if output_pdf is None or output_pdf == '.':
+        output_pdf = "./"  
     #?------------------------------
     date = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
     #* Containers and dictionaries
+    value_dictionary = {
+        "Unknown": ["CustomsUnionDecision", "RD", "RDS", "OST", "MGSN", "CustomsReglament", "SP", "MethodicalRecommendations", "GlobalNPA", "Unknown"],
+        "FZ": ["FederalLaw", "PresidentDecree", "FSTEKDecree", "FSBDecree", "MinkomSvyazDecree", "SanDoctorDecree", "GovermentDecree", "DecreeMinTruda", "DecreeMinZdrav", "DecreeMinStroy", "DecreeMinEnergo", "DecreeMinRegion", "DecreeRosStandard", "DecreeFns", "DecreeMinistryOther"],
+        "Moscow": ["MoscowLaw", "DecreeMoscow", "DecreeITMoscow"],
+        "NpaSnip": ["SNiP"],
+        "Gost": ["GOST"],
+        "SanPin": ["SanPin"]
+    }
+    for j in range(len(dict_list)):
+        if dict_list[j]["Error"] == 'Неверные сущности':
+            for key in value_dictionary.keys():
+                if dict_list[j]["Feedback"]["DocumentType"] in value_dictionary[key]:
+                    dict_list[j]["Feedback"]["MainStatus"] = key
+                    break
+            else:
+                dict_list[j]["Feedback"]["MainStatus"] = "Unknown"
     var = {
         'Действует': 0,
         'Не действует': 0,
@@ -55,12 +77,14 @@ def generate(dict_list=None, output_pdf="./", inputFileName = "standart_format.d
         'date': date,
         'mistakes': [],
         'statistics': [],
-        'fed_npa': [],
-        'moscow_npa':[],
-        'gost':[],
-        'SanPin':[],
-        'SNiP': [],
-        'others': []
+        'tables': [
+            {"full": 0, "name": "Федеральные НПА", "info": []},
+            {"full": 0, "name": "НПА г. Москвы", "info": []},
+            {"full": 0, "name": "ГОСТ", "info": []},
+            {"full": 0, "name": "СанПиН", "info": []},
+            {"full": 0, "name": "СНиП", "info": []},
+            {"full": 0, "name": "Иные виды НПА и НТА", "info": []}
+        ]
     }
     mistakes = {'Сокращение не введено': 0,
                 'Подозрение на неоднозначное требование': 0,
@@ -74,13 +98,12 @@ def generate(dict_list=None, output_pdf="./", inputFileName = "standart_format.d
         "СанПиН": "SanPin", 
         "СНиП": "NpaSnip", 
         "Иные виды НПА и НТА": "Unknown"}
-    mstks_frmt = {'AbbreviationError': 'Сокращение не введено',
-                'CorruptionFactorError': 'Подозрение на неоднозначное требование',
-                'NoConnectionWithNPAError': 'Нет связи с НПА (НТА)',
-                'IncorrectFormulationError': 'Некорректная формулировка',
-                'TextErrorNumber': 'Ошибка нумерации',
-                'PictureErrorNumber': 'Ошибка нумерации',
-                'TableErrorNumber': 'Ошибка нумерации'}
+    mstks_frmt = {'Abbreviation': 'Сокращение не введено',
+                'Corruption': 'Подозрение на неоднозначное требование',
+                'NoNPA': 'Нет связи с НПА (НТА)',
+                'IncorrectForm': 'Некорректная формулировка',
+                'Numbering': 'Ошибка нумерации',
+                'DuplicateEntity': 'Ошибка нумерации'}
     #*------------------------
     
     #! Mistakes statistics
@@ -99,7 +122,7 @@ def generate(dict_list=None, output_pdf="./", inputFileName = "standart_format.d
     #& Filling in data
     for elem in dict_list:
         if elem['Error'] == 'Неверные сущности':
-            data[elem['Entities'][0]["document_type"]][status[elem['Entities'][0]["status"]]]+=1
+            data[elem["Feedback"]["MainStatus"]][status[elem["Feedback"]["Status"]]]+=1
 
 
     for elem in categories:
@@ -107,35 +130,36 @@ def generate(dict_list=None, output_pdf="./", inputFileName = "standart_format.d
         active = stat['Действует'] if stat['Действует'] else "Нет"
         inactive = stat['Не действует'] if stat['Не действует'] else "Нет"
         unknown = stat['Не определен'] if stat['Не определен'] else "Нет"
+        if active == inactive == unknown == "Нет":
+            continue
         row = {"type":elem, "active":"{}".format(active), "inactive":"{}".format(inactive), "unknown":"{}".format(unknown)}
         context['statistics'].append(row)
     #&--------------------------------------------------------
         
     buf = {
-        "Unknown": [context['others'], 0],
-        "FZ": [context['fed_npa'], 0],
-        "Moscow": [context['moscow_npa'], 0],
-        "Decree": [context['fed_npa'], 0],
-        "NpaSnip": [context['SNiP'], 0],
-        "Gost": [context['gost'], 0],
-        "SanPin": [context['SanPin'], 0]
+        "Unknown": [context['tables'][5], 0],
+        "FZ": [context['tables'][0], 0],
+        "Moscow": [context['tables'][1], 0],
+        "NpaSnip": [context['tables'][4], 0],
+        "Gost": [context['tables'][2], 0],
+        "SanPin": [context['tables'][3], 0]
     }
     
     #! Create docx file
     res = list(map(lambda x: x['Entities'], list(filter(lambda x: x['Entities'] is not None, dict_list))))
     for i in range(len(res)): 
-        tytle = buf[res[i][0]["document_type"]][0]
-        buf[res[i][0]["document_type"]][1] += 1
-        fed_npa= {'num': buf[res[i][0]["document_type"]][1], 'doc': res[i][0]["document_text"],'status': status[res[i][0]["status"]],'link': "" if res[i][0]["catalog_reference"] is None else res[i][0]["catalog_reference"]}
+        tytle = buf[res[i]["MainStatus"]][0]['info']
+        buf[res[i]["MainStatus"]][0]['full']+=1
+        fed_npa= {'num': buf[res[i]["MainStatus"]][1], 'doc': res[i]["Text"],'status': status[res[i]["Status"]],'link': "" if res[i]["CatalogLink"] is None else res[i]["CatalogLink"]}
         tytle.append(fed_npa)
     template.render(context)
     template.save(output_docx)
     #!--------------------------------------------------------
     #^ Save PDF
-    os.system("libreoffice \
+    os.system("{} \
             --convert-to {} \
             --outdir {} \
-            {}".format('pdf', output_pdf, output_docx))
+            {}".format(libre_path, 'pdf', output_pdf, output_docx))
     if not save_doc:
         os.remove(output_docx)
     #^------------------------

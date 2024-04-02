@@ -1,57 +1,162 @@
+import sys
+global_path = __file__
+global_path = global_path.replace("/check.py", "")
+sys.path.append(global_path)
 from parser_part import *
 from tree import *
 from feedback import *
 from modification.abb import *
 import os
 import json
+import codecs
 from modification.sentence_compare import *
 from modification.report import *
 
-def check_file(excel_path=None, json_path=None, report_output=None, output_path=None, text=False, test=False, visualize=False):  
-    """
-    excel_path - json file with data
-    json_path - json file with configuration
-    report_output - path where to store the report
-    output_path - path where to store new json with new fields (error and feedback)
-    """  
-    if json_path:
-        F = open(json_path, encoding='utf-8')
-        j = json.load(F)
-        paragraph_check = j["Settings"]["CheckNumberList"]
-        abb_check = j["Settings"]["CheckAbbreviations"]
-        dict_check = j["Settings"]["DetectReference"]
+def check_file(excel_path=None, config_path=None, report_output=None, json_output=None, global_log_path=None, libre_path='libreoffice', text=False, test=False, visualize=False): 
+    log_path = '/'.join(global_log_path.split('/')[:-1]) + '/myapp.log'
+    if log_path=='myapp.log':
+        log_path = global_path + '/' + log_path
+
+    if os.path.exists(log_path):
+        os.remove(log_path)
+    else:
+        out_error = '/'.join(log_path.split('/')[:-1])
+        if not os.path.exists(out_error):
+            log_path = global_path + '/myapp.log'
+
+    if os.path.exists(global_log_path):
+        os.remove(global_log_path)
+    else:
+        out_error = '/'.join(global_log_path.split('/')[:-1])
+        if not os.path.exists(out_error):
+            sys.exit("Error while creating log file")
+    #? CHECKING INPUT CONFIGURATION DIRECTORY      
+    if config_path:
         try:
-            add_info = j["Dictionaries"]
-        except:
-            add_info = None
+            F = open(config_path, encoding='utf-8')
+            j = json.load(F)
+            paragraph_check = j["Settings"]["CheckNumberList"]
+            abb_check = j["Settings"]["CheckAbbreviations"]
+            dict_check = j["Settings"]["DetectReference"]
+            try:
+                add_info = j["Dictionaries"]
+            except:
+                add_info = None
+        except Exception as err:
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s %(levelname)s module: check.py\n%(message)s\nIncorrect Configuration file directory\nConfiguration path: {config_path}\n')
+            logger=logging.getLogger(__name__)
+            logger.error(err)
+            sys.exit("Wrong config directory!")
     else:
         paragraph_check = abb_check = dict_check = True
     if excel_path:
-        F = open(excel_path, encoding='utf-8')
-        t = json.load(F)
+        try:
+            F = codecs.open(excel_path, "r", "utf_8_sig")
+            t = json.load(F)
+            F.close()
+        except Exception as err:
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s %(levelname)s module: check.py\n%(message)s\nIncorrect text-json file directory\nText path: {excel_path}\n')
+            logger=logging.getLogger(__name__)
+            logger.error(err)
+            sys.exit("Wrong input-json directory!")
     else:
-        return 
+        logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+        format=f'%(asctime)s %(levelname)s module: check.py\nNo text-json file')
+        logger=logging.getLogger(__name__)
+        # logger.error(err)
+        sys.exit("Missing a directory!") 
     content = None
+
+    #! CHECKING OUTPUT-PDF DIRECTORY---------------------------------------------------------------------------------------------------------------
+    if report_output:
+        report_dir = '/'.join(report_output.split('/')[:-1])
+        if not os.path.exists(report_dir):
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s module: check.py\n%(message)s\nOutput directory for pdf-report: {report_output}\n')
+            logger=logging.getLogger(__name__)
+            logger.error("Incorrect pdf-report file output directory")
+            sys.exit("Wrong output-pdf directory!")
+    else:
+        logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+        format=f'%(asctime)s module: check.py\n(message)s\next path: {excel_path}\n')
+        logger=logging.getLogger(__name__)
+        logger.error("Incorrect pdf-report file output directory")
+        sys.exit("Missing a pdf-report directory!")
+    #! CHECKING OUTPUT-JSON DIRECTORY--------------------------------------------------------------------------------------------------------------
+    if json_output:
+        report_dir = '/'.join(json_output.split('/')[:-1])
+        if not os.path.exists(report_dir):
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s module: check.py\n%(message)s\nOutput directory for json-report: {json_output}\n')
+            logger=logging.getLogger(__name__)
+            logger.error("Incorrect pdf-report file output directory")
+            sys.exit("Wrong output-json directory!")
+    else:
+        logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+        format=f'%(asctime)s module: check.py\n%(message)s\nText path: {excel_path}\n')
+        logger=logging.getLogger(__name__)
+        logger.error("Incorrect pdf-report file output directory")
+        sys.exit("Missing a pdf-report directory!")
+    #!----------------------------------------------------------------------------------------------------------------------------------------------
     if paragraph_check:
-        dcts = []
-        data = parse(t, excel_path)
-        for lst in data.values():
-            tree = Make_tree()
-            dcts.extend(tree.walk(lst, excel_path))
-            dcts
-            if text:
-                print(lst)
-            if visualize:
-                tree.show()
+        try:
+            txt = parse(t, excel_path, log_path)
+        except Exception as err:
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s %(levelname)s module: parser.py \nText path: {excel_path}\n')
+            logger=logging.getLogger(__name__)
+            logger.error(err)
+            sys.exit("Error while parsing data!")
+        try:
+            # tree = Make_tree()
+            # dcts = tree.walk(txt, excel_path, log_path)
+            dcts = []
+            data = parse(t, excel_path)
+            for lst in data.values():
+                tree = Make_tree()
+                dcts.extend(tree.walk(lst, excel_path, log_path))
+                if text:
+                    print(lst)
+                if visualize:
+                    tree.show()
+        except Exception as err:
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s %(levelname)s module: tree.py \nText path: {excel_path}\n')
+            logger=logging.getLogger(__name__)
+            logger.error(err)
+            sys.exit("Error while working with paragraphs!")
+        if text:
+            print(txt)
+        if visualize:
+            tree.show()
+        content = tree.content_set
     else:
        dcts = {} 
     if test:
         return dcts
     else:
-        feedback2 = abb_finder(json_text=t, abbs=abb_check, dicts=dict_check,  add_info=add_info, content_strings=content, excel_path=excel_path)
-        feedback = fb(text=t, dictonaries=dcts)
+        try:
+            feedback = fb(dictonaries=dcts)
+        except Exception as err:
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s %(levelname)s module: fedback.py \nText path: {excel_path}\n')
+            logger=logging.getLogger(__name__)
+            logger.error(err)
+            sys.exit("Error while printing result!")
+        try:
+            feedback2 = abb_finder(json_text=t, abbs=abb_check, dicts=dict_check,  add_info=add_info, content_strings=content, excel_path=excel_path, log_path=log_path)
+        except:
+            logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+            format=f'%(asctime)s %(levelname)s module: abb.py \nText path: {excel_path}\n')
+            logger=logging.getLogger(__name__)
+            logger.error(err)
+            sys.exit("Error with abbriviations!")
         feedback += feedback2
         feedback = dict(zip([feedback[i][2] for i in range(len(feedback))], [feedback[i][:2] for i in range(len(feedback))]))
+
+        file_name = t["Name"]
 
         if paragraph_check:
             F = open(excel_path, encoding='utf-8')
@@ -69,22 +174,36 @@ def check_file(excel_path=None, json_path=None, report_output=None, output_path=
                             cl['Error'] = None
                             cl['Feedback'] = None
                         if cl['Entities']:
-                            ok = compare_single_text(cl['Entities'][0]["document_text"], cl['Entities'][0]["catalog_title"])
-                            if ok != True:
-                                cl['Error'] = "Неверные сущности"
-                                cl['Feedback'] = ok
-                                res.append(cl)
+                            for j in range(len(cl['Entities'])):
+                                ok = compare_single_text(cl['Entities'][j], log_path=report_output, txt_path=excel_path)
+                                if ok != True:
+                                    cl['Error'] = "Неверные сущности"
+                                    cl['Feedback'] = ok
+                                    res.append(cl)
 
-            generate(dict_list=res, output_pdf=report_output)
+            try:
+                buf = res.copy()
+                generate(dict_list=buf, output_pdf=report_output, originalfilename=file_name, libre_path=libre_path)
+            except Exception as err:
+                logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+                format=f'%(asctime)s %(levelname)s module: report.py\nError while generating the pdf-report\nText path: {excel_path}\n')
+                logger=logging.getLogger(__name__)
+                logger.error(err)
+                sys.exit("Error while generating the report!")
 
-            save_path = "out.json"
-            if output_path:
-                out = re.sub("[/\\]\w*[.]json", "", output_path)
-                if os.path.exists(out):
-                    save_path = output_path
-
-            with open(save_path, 'w', encoding='utf-8') as f:
-                json.dump(t, f, ensure_ascii=False, indent=4)
             
-            return save_path
+            try:
+                json_object = json.dumps(t, indent=4, ensure_ascii=False)
+                with codecs.open(json_output, "w", encoding='utf-8') as outfile: 
+                    outfile.write(json_object)
+                outfile.close()
+            except Exception as err:
+                logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+                format=f'%(asctime)s %(levelname)s module: report.py\nError while generating the json-report\nText path: {excel_path}\n')
+                logger=logging.getLogger(__name__)
+                logger.error(err)
+                sys.exit("Error while generating the report!")
+
+            if os.path.getsize(log_path) == 0:
+                os.remove(log_path)
 

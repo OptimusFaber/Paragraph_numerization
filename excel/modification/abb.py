@@ -20,16 +20,36 @@ def levenstein(str_1, str_2):
     return current_row[n]
 #!--------------------------------------------------------------------------------------------------------------------
 
-def abb_finder(json_text, abbs=True, dicts=True, add_info=None, content_strings = None, excel_path=None):
-    logging.basicConfig(filename='myapp.log', level=logging.DEBUG, 
+def compare(s1, s2):
+    n = len(s1)
+    if n>=5:
+        for i in range(1, min(n, 3)):
+            if levenstein(s1[:-i], s2) <= 1:
+                return True
+    if levenstein(s1, s2) <= 1:
+        return True
+    else:
+        return False
+    
+def letter_extractor(string, ind):
+    line = []
+    for st in string:
+        if len(st) > 1 or st == 'и':
+            for s in range(len(st)-1, -1, -1):
+                if st[s].isupper() or s == ind:
+                    line.append(st[s].upper())
+    return line
+
+
+def abb_finder(json_text, abbs=True, dicts=True, add_info=None, content_strings = None, excel_path=None, log_path='myapp.log'):
+    logging.basicConfig(filename=log_path, level=logging.DEBUG, 
         format=f'%(asctime)s %(levelname)s module: %(name)s line num: %(lineno)s func: %(funcName)s %(message)s \nText path: {excel_path}\n')
     logger=logging.getLogger(__name__)
     if not abbs and not dicts:
         return []
-    res_dct = dict(zip([i['Name'] for i in json_text['Worksheets']], [[] for _ in range(len(json_text['Worksheets']))]))
     #& Маски для поиска нужных нам сокращений
-    abb_mask1 = re.compile(r"(?<!-)((«?([А-Я]+и)»?\s?){2,}|(«?([А-Я]{2,})»?\s?)+|(«?[A-Z]{2,}»?\s?)+)([^А-Яа-яA-Za-z0-9-—–]|$)")
-    abb_mask2 = re.compile(r"(?<!-)(((([А-Я]+[а-я]*){2,})\s?)+|((([A-Z]+[a-z]*){2,})\s?)+)([^А-Яа-яA-Za-z0-9-—–]|$)")
+    abb_mask1 = re.compile(r"(?<![a-zA-Zа-яА-Я0-9-—–])((«?([А-Я]+и)»?\s?){2,}|(«?([А-Я]{2,})»?\s?)+|(«?[A-Z]{2,}»?\s?)+)([^А-Яа-яA-Za-z0-9-—–]|$)")
+    abb_mask2 = re.compile(r"(?<![a-zA-Zа-яА-Я0-9-—–])(?<!-)(((([А-Я]+[а-я]*){2,})\s?)+|((([A-Z]+[a-z]*){2,})\s?)+)([^А-Яа-яA-Za-z0-9-—–]|$)")
     #&--------------------------------------------------------------------------------------------------------------------
     feedback_list = []
     for sheet in json_text['Worksheets']:
