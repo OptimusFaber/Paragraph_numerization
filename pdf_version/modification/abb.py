@@ -78,6 +78,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
     corruption_factor_set = set()
     no_connection_with_npa_set = set()
     incorrect_formulation_set = set()
+    costil = []
     #&--------------------------------------------------------------------------------------------------------------------
     spec_param = False
     flag = True
@@ -92,6 +93,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                 paragraph = p[0]
                 c, st = 0, 0
                 buf1, buf2 = '', ''
+                spec = 0
             else:
                 ix+=1
                 block = text['Paragraphs'][p[0]+ix]["Text"].split("\n")
@@ -99,6 +101,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                 paragraph = p[0]+ix
                 c, st = 0, 0
                 buf1, buf2 = '', ''
+                spec = 1
             for i in block:
                 spec_param = True
                 if i == '':
@@ -136,7 +139,10 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                     buf1 = buf1[1:]
                                 if not buf1[-1].isalpha() and buf1[-1] != "»": buf1=buf1[:-1]
                                 if not abb_set.get(buf1):
-                                    abb_set[buf1] = (paragraph, st)
+                                    # abb_set[buf1] = (paragraph, st)
+                                    strn = text['Paragraphs'][p[0]+ix]["Text"][:st].count('\n')+spec
+                                    abb_set[buf1] = (paragraph, strn)
+                                    # costil.append([paragraph, strn])
                             c = 0
                             st = idx
                             buf1 = f.group()
@@ -147,7 +153,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                     if buf1 != '':
                         buf2 += i
                     c += 1
-                idx+=1
+                idx+=len(i)+1
             if buf1:
                 if not buf1[-1].isalpha() and buf1[-1] != "»": buf1=buf1[:-1]
                 buf1 = re.sub("[\t\n\r]", "", buf1)
@@ -192,12 +198,11 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
     for i in range(len(js)):
         strings = js[i]['Text'].split('\n')
         counter = 0
+        element_n = 0
         for j in range(len(strings)):
             try:
                 buf = []
                 if (i, j) not in forbidden_list:
-                    if (i, j) == (38, 17):
-                        print()
                     f = [re.finditer(abb_mask1, strings[j]), re.finditer(abb_mask2, strings[j])]
                     #^------------------------------------------------------------------------------------
                     list_of_added_elems = []
