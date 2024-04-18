@@ -2,6 +2,8 @@ from docxtpl import DocxTemplate
 import os,sys
 from datetime import datetime  
 import time 
+global_path = __file__
+global_path = global_path.replace("report.py", "")
 
 
 def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, originalfilename = None, save_doc=False, libre_path=None): 
@@ -158,6 +160,13 @@ def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, or
     template.save(output_docx)
     #!--------------------------------------------------------
     #^ Save PDF
+    tic = time.time()
+    while os.path.isfile(f"{global_path}libre_status.log"):
+        time.sleep(0.5)
+        if time.time()-tic>10:
+            os.remove(f"{global_path}libre_status.log")
+    with open(f"{global_path}libre_status.log", 'w') as fp:
+        pass
     while res:
         res = os.system("{} \
                 --convert-to {} \
@@ -167,4 +176,5 @@ def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, or
             time.sleep(2)
     if not save_doc:
         os.remove(output_docx)
+    os.remove(f"{global_path}libre_status.log")
     #^------------------------

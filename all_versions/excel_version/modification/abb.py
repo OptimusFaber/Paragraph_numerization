@@ -207,26 +207,14 @@ def abb_finder(json_text, abbs=True, dicts=True, add_info=None, content_strings 
             forbidden_list = list(abb_set.values()) + list(range(con, con_end+1))
         else:
             forbidden_list = list(abb_set.values())
-        ## ВВЕДЕНИЕ начинается в строке content_begin_pos и кончается в content_end_pos
-        # if content_strings is not None:
-        #     for c in content_strings:
-        #         try:
-        #             key = re.sub("[.\d\t\n\r\f\v]", "", devided_text[c-1])
-        #             key = " ".join(list(filter(lambda x: x, key.split(" ")))).upper()
-        #             abb_set[key] = 0
-        #             if " И " in key:
-        #                 new_key = key.split(" И ")
-        #                 for k in new_key:
-        #                     if k[-1] == " ":
-        #                         k = k[:-1]
-        #                     abb_set[k] = 0
-        #         except:
-        #             pass
 
         #^ Поиск сокращений в нашем тексте
         for i in list(devided_text.keys()):
             try:
                 buf = []
+                devided_text[i][0] = devided_text[i][0].replace(u'\xa0', u' ')
+                devided_text[i][0] = re.sub(r'[\u2013\u2014]', '-', devided_text[i][0])
+                devided_text[i][0] = re.sub(r'\u00A0', ' ', devided_text[i][0])
                 if i not in forbidden_list:
                     f = [re.finditer(abb_mask1, devided_text[i][0]), re.finditer(abb_mask2, devided_text[i][0])]
                     #^------------------------------------------------------------------------------------
@@ -271,7 +259,7 @@ def abb_finder(json_text, abbs=True, dicts=True, add_info=None, content_strings 
                                         list_of_added_elems.extend(range(element.span()[0], element.span()[1]+1))
                                         continue
                                 #! -------------------------------------------
-                                elif all(list(map(lambda x: 1<len(x)<9, elem.split(" ")))):
+                                elif all(list(map(lambda x: 1<len(x)<11, elem.split(" ")))):
                                     #?Убираем параграф если он весь написан большими буквами
                                     if devided_text[i][0].isupper():
                                         continue
@@ -279,7 +267,7 @@ def abb_finder(json_text, abbs=True, dicts=True, add_info=None, content_strings 
                                     st = False
                                     exp = elem.split(" ")
                                     for j in range(len(exp)):
-                                        if len(exp[j])>=9:
+                                        if len(exp[j])>=9 and not any(k.islower() for k in exp[i]):
                                             st = True
                                             break
                                         # if exp[i].lower() in text:
@@ -298,13 +286,13 @@ def abb_finder(json_text, abbs=True, dicts=True, add_info=None, content_strings 
                                         # right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
                                         line = ""
                                         st = False
-                                        elem = elem.upper()
+                                        elemx = elem.upper().replace(' ')
                                         for rig in right_side:
                                             line += rig
-                                            if levenstein(line, elem) <= 1:
+                                            if levenstein(line, elemx) <= 1:
                                                 st = True
                                                 break
-                                            if len(line) - len(elem) > 4:
+                                            if len(line) - len(elemx) > 4:
                                                 break
                                         if st:
                                             abb_set[elem] = i+1
@@ -317,36 +305,44 @@ def abb_finder(json_text, abbs=True, dicts=True, add_info=None, content_strings 
                                         # left_side.reverse()
                                         line = ""
                                         st = False
-                                        elem = elem.upper()
+                                        elem = elem.upper().replace(' ')
                                         for lef in left_side:
                                             line = lef + line
-                                            if levenstein(line, elem) <= 1:
+                                            if levenstein(line, elemx) <= 1:
                                                 st = True
                                                 break
-                                            if len(line) - len(elem) > 4:
+                                            if len(line) - len(elemx) > 4:
                                                 break
                                         if st:
                                             abb_set[elem] = i+1
                                             continue
 
-                                    if devided_text[i][0][element.span()[1]-1] == ")":
+                                    if ")" in devided_text[i][0][element.span()[1]:min(element.span()[1]+10, len(devided_text[i][0]))] or "(" in devided_text[i][0][max(element.span()[0]-10, 0):element.span()[0]]:
                                         ## Единая система конструкторской документации (ЕСКД) тут лишь слева
                                         left_side_ind = len(devided_text[i][0][element.span()[1]-2::-1]) - re.search("[(]", devided_text[i][0][element.span()[1]-2::-1]).span()[0]
-                                        bracket_info = devided_text[i][0][left_side_ind:element.span()[1]-1].split(' ')
-                                        bracket_info = list((filter(lambda x: len(x)>1 and all(xs.isalpha() for xs in x), bracket_info)))
+                                        bracket_info = devided_text[i][0][left_side_ind:element.span()[1]-1]
                                         ## Смотрим есть ли перед аббревиатурой спец слово
-                                        for word in bracket_info:
-                                            if word in special_words:
-                                                ## Если оно есть, то проверяем расшифровку
-                                                left_side = devided_text[i][0][left_side_ind-1::-1]
-                                                left_side = list(map(lambda x: x[-1], list(filter(lambda x: len(x)>1, left_side))))
-                                                ## Типа провекрка, left_side содержит первые юуквы слов, стоящих перед скобками
+                                        for word in special_words:
+                                            if word in bracket_info:
                                                 st = True
                                                 break
                                         if st:
-                                            abb_set[elem] = i+1
+                                            if not abb_set.get(elem):
+                                                abb_set[elem] = i+1
+                                            else:
+                                                if i+1 < abb_set[elem]:
+                                                    abb_set[elem] = i+1
                                             continue
-                                        ## тут лишь справа (ЕСКД) Единая система конструкторской документации
+                                        ## Единая система конструкторской документации (ЕСКД) тут лишь слева
+                                        if re.search(f"[(]\t**{elem}\t*[)]", devided_text[i][0]):
+                                            if not abb_set.get(elem):
+                                                abb_set[elem] = i+1
+                                            else:
+                                                if i+1 < abb_set[elem]:
+                                                    abb_set[elem] = i+1
+                                            continue
+                                        else:
+                                            print(devided_text[i][0])
                                     flag = False
                                     if len(elem.split(" ")) > 1:
                                         elem1 = elem.split(' ')
@@ -355,15 +351,22 @@ def abb_finder(json_text, abbs=True, dicts=True, add_info=None, content_strings 
                                         for e in range(len(elem1)):
                                             a += elem1[e] + ' '
                                             if a[:-1] in list(abb_set.keys()):
-                                                flag = True
+                                                if abb_set[a[:-1]] <= i+1:
+                                                    flag = True
+                                                else:
+                                                    elem.append(elem1[e])
                                             elif elem1[e] in list(abb_set.keys()):
-                                                a = elem1[e] + ' '
-                                                flag = True
+                                                if abb_set[elem1[e]] <= i+1:
+                                                    a = elem1[e] + ' '
+                                                    flag = True
+                                                    elem = []
+                                                else:
+                                                    elem.append(elem1[e])
                                             else:
                                                 elem.append(elem1[e])
                                         if elem:
                                             elem = ' '.join(elem)
-                                    if not flag:
+                                    if not flag or elem:
                                         buf.append((elem, element.span()))
                                         st = True
                                     else:

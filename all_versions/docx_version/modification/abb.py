@@ -172,8 +172,8 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
         for string in part:
             try:
                 buf = []
-                if string['Index'] == 15:
-                    print()
+                # if string['Index'] == 15:
+                #     print()
                 string['Text'] = string['Text'].replace(u'\xa0', u' ')
                 string['Text'] = re.sub(r'[\u2013\u2014]', '-', string['Text'])
                 string['Text'] = re.sub(r'\u00A0', ' ', string['Text'])
@@ -218,8 +218,8 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                 #! Проверяем нет ли нашего элемента в словаре
                                 if elem in list(abb_set.keys()):
                                     if abb_set[elem] <= string['Index']:
-                                        pos = re.search(elem, string['Text']).span()
-                                        list_of_added_elems.extend(range(pos[0], pos[1]))
+                                        # pos = re.search(elem, string['Text']).span()
+                                        # list_of_added_elems.extend(range(pos[0], pos[1]))
                                         list_of_added_elems.extend(range(element.span()[0], element.span()[1]+1))
                                         continue
                                 #! -------------------------------------------
@@ -298,40 +298,15 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                                     abb_set[elem] = string['Index']
                                             continue
                                         ## Единая система конструкторской документации (ЕСКД) тут лишь слева
-                                        left_side = string['Text'][:element.span()[0]][::-1].replace('(', '').replace(')', '').replace('«', '').replace('»', '').split(" ")
-                                        left_side = list(map(lambda x: x[::-1], left_side))
-                                        left_side = letter_extractor(left_side, 0)
-                                        # left_side = list(map(lambda x: x[-1], list(filter(lambda x: len(x)>1, left_side))))
-                                        line = ""
-                                        st = False
-                                        elemx = elem.upper()
-                                        for lef in left_side:
-                                            line = lef.upper() + line
-                                            if compare(line, elemx):
-                                                st = True
-                                                break
-                                            if len(line) - len(elemx) > 4:
-                                                break
-                                        if st:
-                                            abb_set[elem] = string['Index']
+                                        if re.search(f"[(]\t**{elem}\t*[)]", string['Text']):
+                                            if not abb_set.get(elem):
+                                                abb_set[elem] = string['Index']
+                                            else:
+                                                if string['Index'] < abb_set[elem]:
+                                                    abb_set[elem] = string['Index']
                                             continue
-                                        ## тут лишь справа (ЕСКД) Единая система конструкторской документации
-                                        right_side = string['Text'][element.span()[1]-1:].split(" ")
-                                        right_side = letter_extractor(right_side, 0)
-                                        # right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
-                                        line = ""
-                                        st = False
-                                        elemx = elem.upper()
-                                        for rig in right_side:
-                                            line += rig.upper()
-                                            if levenstein(line, elemx) <= 1:
-                                                st = True
-                                                break
-                                            if len(line) - len(elemx) > 4:
-                                                break
-                                        if st:
-                                            abb_set[elem] = string['Index']
-                                            continue
+                                        else:
+                                            print(string['Text'])
                                     flag = False
                                     if len(elem.split(" ")) > 1:
                                         elem1 = elem.split(' ')
