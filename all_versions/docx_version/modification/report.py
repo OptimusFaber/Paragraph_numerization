@@ -6,7 +6,7 @@ global_path = __file__
 global_path = global_path.replace("report.py", "")
 
 
-def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, originalfilename = None, save_doc=False, libre_path=None): 
+def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, originalfilename = None, save_doc=False, libre_path=None, status_path=None): 
     """
     json_path (string) -> path to .json file with statistics,
     output_pdf (string) -> folder where to place pdf file,
@@ -147,6 +147,12 @@ def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, or
         "Gost": [context['tables'][2], 0],
         "SanPin": [context['tables'][3], 0]
     }
+    tic = time.time()
+    while os.path.isfile(f"{status_path}libre_status.log"):
+        time.sleep(0.5)
+        if time.time()-tic>90:
+            os.remove(f"{status_path}libre_status.log")
+        print('Waiting')
     
     #! Create docx file
     res = list(map(lambda x: x['Feedback'],list(filter(lambda x: x['Error'] == 'Неверные сущности', dict_list))))
@@ -160,12 +166,7 @@ def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, or
     template.save(output_docx)
     #!--------------------------------------------------------
     #^ Save PDF
-    tic = time.time()
-    while os.path.isfile(f"{global_path}libre_status.log"):
-        time.sleep(0.5)
-        if time.time()-tic>10:
-            os.remove(f"{global_path}libre_status.log")
-    with open(f"{global_path}libre_status.log", 'w') as fp:
+    with open(f"{status_path}libre_status.log", 'w') as fp:
         pass
     while res:
         res = os.system("{} \
@@ -176,5 +177,5 @@ def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, or
             time.sleep(2)
     if not save_doc:
         os.remove(output_docx)
-    os.remove(f"{global_path}libre_status.log")
+    os.remove(f"{status_path}libre_status.log")
     #^------------------------

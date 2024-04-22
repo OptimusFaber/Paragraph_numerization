@@ -15,6 +15,7 @@ from copy import deepcopy
 
 def check_file(json_path=None, config_path=None, report_output=None, json_output=None, global_log_path=None, libre_path='libreoffice', text=False, test=False, visualize=False):    
     log_path = '/'.join(global_log_path.split('/')[:-1]) + '/myapp.log'
+    print('VERSION 1.3')
     if log_path=='myapp.log':
         log_path = global_path + '/' + log_path
 
@@ -209,7 +210,7 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
 
         try:
             buf = deepcopy(report)
-            generate(dict_list=buf, output_pdf=report_output, originalfilename=file_name, libre_path=libre_path)
+            generate(dict_list=buf, output_pdf=report_output, originalfilename=file_name, libre_path=libre_path, status_path='/'.join(global_log_path.split('/')[:-1]))
         except Exception as err:
             logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
             format=f'%(asctime)s %(levelname)s module: report.py\nError while generating the pdf-report\nText path: {json_path}\n')

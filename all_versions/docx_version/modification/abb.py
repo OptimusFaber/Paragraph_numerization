@@ -172,14 +172,15 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
         for string in part:
             try:
                 buf = []
-                # if string['Index'] == 15:
-                #     print()
+                orig_text = string['Text']
                 string['Text'] = string['Text'].replace(u'\xa0', u' ')
                 string['Text'] = re.sub(r'[\u2013\u2014]', '-', string['Text'])
                 string['Text'] = re.sub(r'\u00A0', ' ', string['Text'])
                 if string['Index'] not in forbidden_list:
                     f = [re.finditer(abb_mask1, string['Text']), re.finditer(abb_mask2, string['Text'])]
                     #^------------------------------------------------------------------------------------
+                    if string['Index'] == 136:
+                        print()
                     list_of_added_elems = []
                     for itter in f:       
                         for element in itter:
@@ -218,8 +219,6 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                 #! Проверяем нет ли нашего элемента в словаре
                                 if elem in list(abb_set.keys()):
                                     if abb_set[elem] <= string['Index']:
-                                        # pos = re.search(elem, string['Text']).span()
-                                        # list_of_added_elems.extend(range(pos[0], pos[1]))
                                         list_of_added_elems.extend(range(element.span()[0], element.span()[1]+1))
                                         continue
                                 #! -------------------------------------------
@@ -247,10 +246,9 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                     if f1:
                                         right_side = string['Text'][element.span()[1]:][f1.span()[0]:].replace(')', '').replace('(', '').split(" ")
                                         right_side = letter_extractor(right_side, 0)
-                                        # right_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, right_side))))
                                         line = ""
                                         st = False
-                                        elemx = elem.upper().replace(' ')
+                                        elemx = elem.upper().replace(' ', '')
                                         for rig in right_side:
                                             line += rig
                                             if levenstein(line, elemx) <= 1:
@@ -265,11 +263,9 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                         left_side = string['Text'][element.span()[0]-1::-1][f2.span()[0]:].replace(')', '').replace('(', '').split(" ")
                                         left_side = list(map(lambda x: x[::-1], left_side))
                                         left_side = letter_extractor(left_side, 0)
-                                        # left_side = list(map(lambda x: x[0], list(filter(lambda x: len(x)>1, left_side))))
-                                        # left_side.reverse()
                                         line = ""
                                         st = False
-                                        elemx = elem.upper().replace(' ')
+                                        elemx = elem.upper().replace(' ', '')
                                         for lef in left_side:
                                             line = lef + line
                                             if levenstein(line, elemx) <= 1:
@@ -281,7 +277,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                             abb_set[elem] = string['Index']
                                             continue
 
-                                    if ")" in string['Text'][element.span()[1]:min(element.span()[1]+10, len(string['Text']))] or "(" in string['Text'][max(element.span()[0]-10, 0):element.span()[0]]:
+                                    if ")" in string['Text'][element.span()[1]-1:min(element.span()[1]+20, len(string['Text']))] and "(" in string['Text'][max(element.span()[0]-20, 0):element.span()[0]]:
                                         ## Единая система конструкторской документации (ЕСКД) тут лишь слева
                                         left_side_ind = len(string['Text'][element.span()[1]-2::-1]) - re.search("[(]", string['Text'][element.span()[1]-2::-1]).span()[0]
                                         bracket_info = string['Text'][left_side_ind:element.span()[1]-1]
@@ -297,16 +293,55 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                                 if string['Index'] < abb_set[elem]:
                                                     abb_set[elem] = string['Index']
                                             continue
-                                        ## Единая система конструкторской документации (ЕСКД) тут лишь слева
-                                        if re.search(f"[(]\t**{elem}\t*[)]", string['Text']):
+                                        ## (ЕСКД)
+                                        if re.search(f"[(]\t*{elem}\t*[)]", string['Text']):
                                             if not abb_set.get(elem):
                                                 abb_set[elem] = string['Index']
                                             else:
                                                 if string['Index'] < abb_set[elem]:
                                                     abb_set[elem] = string['Index']
                                             continue
-                                        else:
-                                            print(string['Text'])
+
+                                        bracket_info = re.search(f"[(].*{elem}.*[)]", string['Text'])
+                                        if bracket_info:
+                                            pos = bracket_info.span()
+                                            bracket_info = bracket_info.group().replace('(', '').replace(')', '').replace(elem, '')
+                                            bracket_info = bracket_info.split(' ')
+                                            bracket_info = list(filter(lambda x: len(x)>1, bracket_info))
+                                            bracket_info = list(map(lambda x: x.upper(), list(map(lambda x: x[0], bracket_info))))
+                                            elemx = elem + ''.join(bracket_info)
+                                            left_side = string['Text'][:pos[0]][::-1].replace('(', '').replace(')', '').replace('«', '').replace('»', '').split(" ")
+                                            left_side = list(map(lambda x: x[::-1], left_side))
+                                            left_side = letter_extractor(left_side, 0)
+                                            line = ""
+                                            st = False
+                                            elemx = elemx.upper()
+                                            for lef in left_side:
+                                                line = lef.upper() + line
+                                                if compare(line, elemx):
+                                                    st = True
+                                                    break
+                                                if len(line) - len(elemx) > 4:
+                                                    break
+                                            if st:
+                                                abb_set[elem] = string['Index']
+                                                continue
+
+                                            right_side = string['Text'][pos[1]:].split(" ")
+                                            right_side = letter_extractor(right_side, 0)
+                                            line = ""
+                                            st = False
+                                            for rig in right_side:
+                                                line += rig.upper()
+                                                if levenstein(line, elemx) <= 1:
+                                                    st = True
+                                                    break
+                                                if len(line) - len(elemx) > 4:
+                                                    break
+                                            if st:
+                                                abb_set[elem] = string['Index']
+                                                continue
+
                                     flag = False
                                     if len(elem.split(" ")) > 1:
                                         elem1 = elem.split(' ')
@@ -337,9 +372,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                         for e in elem:
                                             buf.append((elem, element.span()))
                                             st = True
-
                     #^------------------------------------------------------------------------------------
-
                 #? Поиск элементов из наших 3 словарей
                 if dicts:
                     corr_fac = list(filter(lambda x: x[0] , zip([re.search("\W"+word+"\W", string['Text'].lower()) for word in corruption_factor_set], corruption_factor_set)))
@@ -367,7 +400,13 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                         res.add(max(buf_y[0][0], buf_f[0][0], key=lambda x: len(x)))
                     #! ErrorType, LineText, LineNumber, ОШИБКА, PrevLineText, NextLine
                     for r in res:
-                        sentence = "Неизвестная аббревиатура «{}»".format(r)
+                        sentence = f"Неизвестная аббревиатура «{r}»"
+                        if len(r.split(' ')) > 1:
+                            if r not in orig_text:
+                                mask=''
+                                mask = r.split(' ')
+                                mask='.'.join(mask)
+                                r = re.search(mask, orig_text).group()
                         feedback_list.append(["Abbreviation", sentence, string['Index'], r])
             except Exception as err:
                 logger.error(err)

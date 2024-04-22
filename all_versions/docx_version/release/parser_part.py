@@ -45,8 +45,6 @@ def parse(text, txt_path, log_path='myapp.log'):
                continue
          if string["Numbering"]:
             txt = string["Numbering"] + ' ' + txt
-         if string["Index"] == 91:
-            print()
          try:
             f_elem = True
             begin = True
@@ -54,6 +52,10 @@ def parse(text, txt_path, log_path='myapp.log'):
                txt = re.sub(r'\u00A0', ' ', txt)
                while not (txt[0].isdigit() or txt[0].isalpha()):
                   txt = txt[1:]
+                  if txt == '':
+                     break
+               if txt == '':
+                  break
                list_findings = [[re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|((([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[.]))", re.ASCII), txt), ".", None, None],
                               [re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt), ")", None, None],
                               [re.search(re.compile(r"(^|(?<=^\s)\s*)[Тт]аблица [№]?\d+([.]\d+)?", re.ASCII), txt) if begin else None, "таблица", None, None],
