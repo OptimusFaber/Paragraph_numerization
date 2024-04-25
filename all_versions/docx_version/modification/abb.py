@@ -1,35 +1,8 @@
 import re
 import logging
+from fuzzywuzzy import fuzz
 
-#! Алгоритм Левинштейна
-def levenstein(str_1, str_2):
-    n, m = len(str_1), len(str_2)
-    if n > m:
-        str_1, str_2 = str_2, str_1
-        n, m = m, n
-
-    current_row = range(n + 1)
-    for i in range(1, m + 1):
-        previous_row, current_row = current_row, [i] + [0] * n
-        for j in range(1, n + 1):
-            add, delete, change = previous_row[j] + 1, current_row[j - 1] + 1, previous_row[j - 1]
-            if str_1[j - 1] != str_2[i - 1]:
-                change += 1
-            current_row[j] = min(add, delete, change)
-
-    return current_row[n]
-#!--------------------------------------------------------------------------------------------------------------------
-
-def compare(s1, s2):
-    n = len(s1)
-    if n>=5:
-        for i in range(1, min(n, 3)):
-            if levenstein(s1[:-i], s2) <= 1:
-                return True
-    if levenstein(s1, s2) <= 1:
-        return True
-    else:
-        return False
+#! Алгоритм Левинштейна (вместо него теперь fuzzywuzzy)
     
 def letter_extractor(string, ind):
     line = []
@@ -251,7 +224,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                         elemx = elem.upper().replace(' ', '')
                                         for rig in right_side:
                                             line += rig
-                                            if levenstein(line, elemx) <= 1:
+                                            if fuzz.token_sort_ratio(line, elemx) > 75:
                                                 st = True
                                                 break
                                             if len(line) - len(elemx) > 4:
@@ -268,7 +241,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                         elemx = elem.upper().replace(' ', '')
                                         for lef in left_side:
                                             line = lef + line
-                                            if levenstein(line, elemx) <= 1:
+                                            if fuzz.token_sort_ratio(line, elemx) > 75:
                                                 st = True
                                                 break
                                             if len(line) - len(elemx) > 4:
@@ -302,7 +275,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                                     abb_set[elem] = string['Index']
                                             continue
 
-                                        bracket_info = re.search(f"[(].*{elem}.*[)]", string['Text'])
+                                        bracket_info = re.search(f"[(][^()]*{elem}[^()]*[)]", string['Text'])
                                         if bracket_info:
                                             pos = bracket_info.span()
                                             bracket_info = bracket_info.group().replace('(', '').replace(')', '').replace(elem, '')
@@ -318,7 +291,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                             elemx = elemx.upper()
                                             for lef in left_side:
                                                 line = lef.upper() + line
-                                                if compare(line, elemx):
+                                                if fuzz.token_sort_ratio(line, elemx) > 75:
                                                     st = True
                                                     break
                                                 if len(line) - len(elemx) > 4:
@@ -333,7 +306,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                                             st = False
                                             for rig in right_side:
                                                 line += rig.upper()
-                                                if levenstein(line, elemx) <= 1:
+                                                if fuzz.token_sort_ratio(line, elemx) > 75:
                                                     st = True
                                                     break
                                                 if len(line) - len(elemx) > 4:
