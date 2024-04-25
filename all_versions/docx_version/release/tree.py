@@ -139,33 +139,47 @@ class Make_tree:
         parent = self.root
         if elem[0] in self.non_txt_dct[elem[1]]:
             self.tree.append(Node(" " + elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', 
-                                    status='DUPLICATE', delimetr = None, sup=elem[1] + " " + elem[0], elem_name=elem[5]))
+                                    status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=elem[5]))
             return
         filtered_list = list(filter(lambda x: x.sign == elem[1], self.tree))
         for i in range(-1, -len(filtered_list)-1, -1):
                 prev = filtered_list[i].node_name.split(" ")[-1]
                 if self.numeral_check(prev, elem):
                     if elem[3] == 'numbers':
-                        rel = filtered_list[i].node_name.split(' ')[-1].split('.')
-                        cur = elem[0].split('.')
-                        wtf = []
-                        k = 0
-                        for k in range(len(min(rel, cur, key=len))):
-                            wtf.append(cur[k])
-                            p = 0
-                            for j in range(int(rel[k])+1, int(cur[k])):
-                                wtf[-1] = str(j)
-                                self.tree.append(Node(elem[1] + " " + ".".join(wtf), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                  status='MISSING', delimetr = elem[4], sup=elem[1] + " " + elem[0], elem_name=elem[5]))
-                                self.non_txt_dct[elem[1]].append(".".join(wtf))
-                                p = 1
-                            if not p:
+                        rel = list(map(int, filtered_list[i].node_name.split(' ')[-1].split('.')))
+                        cur = list(map(int, elem[0].split('.')))
+                        adress = []
+                        k1 = k2 = True
+                        dif = len(cur) - len(rel)
+                        if len(cur) > len(rel):
+                            if dif > 1 and rel.count('.') == 0: f = False
+                            for _ in range(dif):rel.append(0)
+                        for e in range(min(len(rel), len(cur))):
+                            if rel[e] == cur[e] and k1:
+                                adress.append(cur[e])
                                 continue
-                        for j in range(k+1, len(cur)):
-                            for n in range(1, int(cur[j])):
-                                self.tree.append(Node(elem[1] + " " + ".".join(wtf)+"."+str(n), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                status='MISSING', delimetr = elem[4], sup=elem[1] + " " + elem[0], elem_name=elem[5]))
-                                self.non_txt_dct[elem[1]].append(".".join(wtf))
+                            elif k2:
+                                k1 = k2 = False
+                                if e==0:
+                                    for j in range(rel[e]+1, cur[e]):
+                                        try:
+                                            self.tree.append(Node(elem[1] + " " + '{}.1'.format(j), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
+                                                                  status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))  
+                                        except:
+                                            continue     
+                                else:
+                                    for j in range(rel[e]+1, cur[e]):  
+                                        self.tree.append(Node(elem[1] + " " + '.'.join(list(map(str, adress+[j]))), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
+                                                              status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
+                                    if len(cur) > e+1:
+                                        self.tree.append(Node(elem[1] + " " + '.'.join(list(map(str, adress+[cur[e]]))), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
+                                                              status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
+                                adress.append(cur[e])
+                            else:
+                                for j in range(1, cur[e]):  
+                                    self.tree.append(Node(elem[1] + " " + '.'.join(list(map(str, adress+[j]))), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
+                                                          status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
+                                adress.append(cur[e])
                         self.tree.append(Node(elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
                                               status='EXISTING', delimetr = elem[4]))
                         self.non_txt_dct[elem[1]].append(elem[0])
@@ -182,13 +196,10 @@ class Make_tree:
                                 continue
                             try:
                                 self.tree.append(Node(elem[1] + " " + self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                    status='MISSING', delimetr = elem[4], sup=elem[1] + " " + elem[0], elem_name=elem[5]))
+                                                    status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=elem[5]))
                                 self.non_txt_dct[elem[1]].append(self.revfunc(i))
                             except:
-                                if filtered_list[-1].name == elem[1] and elem[2] - filtered_list[-1].pos < 10:
-                                    return
-                                self.tree.append(Node(" " + elem[1] + " " + self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type='None', 
-                                                    status='DUPLICATE', delimetr = None, sup=elem[1] + " " + self.revfunc(i), elem_name=elem[5]))
+                                return
                         try:
                             self.tree.append(Node(elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
                                                 status='EXISTING', delimetr = elem[4]))
@@ -197,28 +208,22 @@ class Make_tree:
                             if filtered_list[-1].name == elem[1] and elem[2] - filtered_list[-1].pos < 10:
                                 return
                             self.tree.append(Node(" " + elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', 
-                                                status='DUPLICATE', delimetr = None, sup=elem[1] + " " + elem[0], elem_name=elem[5]))
+                                                status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=elem[5]))
                         return
                 else:
                     break
         else:
-            if not elem[3] == 'number':
+            if not 'number' in elem[3]:
                 if self.func(elem[0]) - self.func(self.n) <= 2:
                     for i in range(self.func(self.n), self.func(elem[0])):
                         if self.revfunc(i) in self.non_txt_dct[elem[1]]:
                             continue
                         try:
                             self.tree.append(Node(elem[1] + " " + self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                status='MISSING', delimetr = elem[4], sup=elem[1] + " " + elem[0], elem_name=elem[5]))
+                                                status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=elem[5]))
                             self.non_txt_dct[elem[1]].append(self.revfunc(i))
                         except:
-                            try:
-                                if self.tree[-1].name == elem[1] and elem[2] - self.tree[-1].pos < 10:
-                                    return
-                                self.tree.append(Node(" " + elem[1] + " " + self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, 
-                                                    data_type='None', status='DUPLICATE', delimetr = None, sup=elem[1] + " " + self.revfunc(i), elem_name=elem[5]))
-                            except:
-                                return                        
+                            return                       
                 try:
                     self.tree.append(Node(elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
                                         status='EXISTING', delimetr = elem[4]))
@@ -228,39 +233,45 @@ class Make_tree:
                         if self.tree[-1].name == elem[1] and elem[2] - self.tree[-1].pos < 10:
                             return
                         self.tree.append(Node(" " + elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', 
-                                            status='DUPLICATE', delimetr = None, sup=elem[1] + " " + elem[0], elem_name=elem[5]))
+                                            status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=elem[5]))
                     except:
                         return
             else:
                 if self.numeral_check("1", elem[0]):
-                    rel = ['1']
-                    cur = elem[0].split('.')
-                    wtf = []
-                    k = 0
-                    for k in range(len(min(rel, cur, key=len))):
-                        wtf.append(cur[k])
-                        p = 0
-                        for j in range(int(rel[k])+1, int(cur[k])):
-                            wtf[-1] = str(j)
-                            self.tree.append(Node(elem[1] + " " + ".".join(wtf), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                status='MISSING', delimetr = elem[4], sup=elem[1] + " " + elem[0], elem_name=elem[5]))
-                            self.non_txt_dct[elem[1]].append(".".join(wtf))
-                            p = 1
-                        if not p:
+                    rel = [1]
+                    cur = list(map(int, elem[0].split('.')))
+                    adress = []
+                    k1 = k2 = True
+                    dif = len(cur) - len(rel)
+                    if len(cur) > len(rel):
+                        if dif > 1 and rel.count('.') == 0: f = False
+                        for _ in range(dif):rel.append(0)
+                    for e in range(min(len(rel), len(cur))):
+                        if rel[e] == cur[e] and k1:
+                            adress.append(cur[e])
                             continue
-                    for j in range(k+1, len(cur)):
-                        for n in range(1, int(cur[j])):
-                            self.tree.append(Node(elem[1] + " " + ".".join(wtf)+"."+str(n), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                            status='MISSING', delimetr = elem[4], sup=elem[1] + " " + elem[0], elem_name=elem[5]))
-                            self.non_txt_dct[elem[1]].append(".".join(wtf))
-                    # if len(rel) < len(cur):
-                    #     for k in range(len(rel), len(cur)):
-                    #         wtf.append('1')
-                    #         for j in range(1, int(cur[k])):
-                    #             wtf[-1] = str(j)
-                    #             self.tree.append(Node(elem[1] + " " + ".".join(wtf), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                    #                                 status='MISSING', delimetr = elem[4], sup=elem[1] + " " + elem[0], elem_name=elem[5]))
-                    #             self.non_txt_dct[elem[1]].append(".".join(wtf))
+                        elif k2:
+                            k1 = k2 = False
+                            if e==0:
+                                for j in range(rel[e]+1, cur[e]):
+                                    try:
+                                        self.tree.append(Node(elem[1] + " " + '{}.1'.format(j), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
+                                                                status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))  
+                                    except:
+                                        continue     
+                            else:
+                                for j in range(rel[e]+1, cur[e]):  
+                                    self.tree.append(Node(elem[1] + " " + '.'.join(list(map(str, adress+[j]))), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
+                                                            status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
+                                if len(cur) > e+1:
+                                    self.tree.append(Node(elem[1] + " " + '.'.join(list(map(str, adress+[cur[e]]))), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
+                                                            status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
+                            adress.append(cur[e])
+                        else:
+                            for j in range(1, cur[e]):  
+                                self.tree.append(Node(elem[1] + " " + '.'.join(list(map(str, adress+[j]))), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
+                                                        status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
+                            adress.append(cur[e])
 
                     self.tree.append(Node(elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
                                             status='EXISTING', delimetr = elem[4]))
@@ -277,7 +288,7 @@ class Make_tree:
                     if self.similarity_check(self.tree[i], elem):
                         if self.tree[i].node_name == elem[0]:
                             self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', 
-                                                  status='DUPLICATE', delimetr = None, sup=elem[0], elem_name=elem[5]))
+                                                  status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=elem[5]))
                             self.last_alpha = self.tree[-1]
                             return
                         break
@@ -305,7 +316,7 @@ class Make_tree:
                             if chr(i) == 'й' or chr(i) == 'Й':
                                 continue
                             self.tree.append(Node(self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                  status='MISSING', delimetr = elem[4], sup=elem[0], elem_name=self.revfunc(i)))
+                                                  status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=self.revfunc(i)))
                         self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
                                               status='EXISTING', delimetr = elem[4]))
                         self.last_alpha = self.tree[-1]
@@ -317,14 +328,14 @@ class Make_tree:
                     if self.similarity_check(self.tree[i], elem):
                         if self.tree[i].node_name == elem[0]:
                             self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[i].parent, data_type='None', 
-                                                  status='DUPLICATE', delimetr = None,sup=elem[0], elem_name=elem[5]))
+                                                  status='DUPLICATE', delimetr = None,sup=elem[5], elem_name=elem[5]))
                             self.last_alpha = self.tree[-1]
                             return
                         break
                 if self.func(elem[0]) - self.func(self.n) == 1:
                     parent=self.tree[-1]
                     self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                          status='MISSING', delimetr = elem[4], sup=elem[0], elem_name=self.n))
+                                          status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=self.n))
                     self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
                                           status='EXISTING', delimetr = elem[4]))
                     self.last_alpha = self.tree[-1]
@@ -348,7 +359,7 @@ class Make_tree:
                             #! СЛАБОЕ МЕСТО-----------------------------------------------------------------------------
                             if duplic:
                                 self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=duplic.parent, data_type='None', 
-                                                      status='DUPLICATE', delimetr = None, sup=elem[0], elem_name=elem[5]))
+                                                      status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=elem[5]))
                                 return
                             #! -----------------------------------------------------------------------------------------
                 prev = alpha_list[i]
@@ -360,7 +371,7 @@ class Make_tree:
             if st:
                 if self.func(elem[0]) == 2:
                     self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                          status='MISSING', delimetr = elem[4], sup=elem[0], elem_name=self.n))
+                                          status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=self.n))
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
                                       status='EXISTING', delimetr = elem[4]))
                 self.last_alpha = self.tree[-1]
@@ -368,7 +379,7 @@ class Make_tree:
             #* ---------------------------------------------------------------------------------------------------------------------------------------------------------------
             if duplic:
                 self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=duplic.parent, data_type='None', 
-                                      status='DUPLICATE', delimetr = None, sup=elem[0], elem_name=elem[5]))
+                                      status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=elem[5]))
                 self.last_alpha = self.tree[-1]
                 return
         
@@ -431,7 +442,7 @@ class Make_tree:
             if st:
                 if self.func(elem[0]) == 2:
                     self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                          status='MISSING', delimetr = elem[4], sup=elem[0], elem_name=self.n))
+                                          status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=self.n))
                     if elem[1] in self.p:
                         if elem[0] == '2':
                             self.p.remove(elem[1])
@@ -517,7 +528,7 @@ class Make_tree:
             n1, n2 = self.func(elem[0]), self.func(rel.node_name.split('.')[0])
             for i in range(n2+1, n1):
                 self.tree.append(Node(self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                      status='MISSING', delimetr = elem[4], sup=elem[0], elem_name=self.revfunc(i)))
+                                      status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=self.revfunc(i)))
             self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
                                   status='EXISTING', delimetr = elem[4]))
             if elem[0] == '2':
@@ -537,7 +548,7 @@ class Make_tree:
                     parent = self.tree[-1]
                     if self.func(elem[0]) == 2:
                         self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                              status='MISSING', delimetr = elem[4], sup=elem[0], elem_name=self.n))
+                                              status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=self.n))
                     self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
                                           status='EXISTING', delimetr = elem[4]))
                     return
@@ -555,7 +566,7 @@ class Make_tree:
                 parent, st = self.root, True
                 if self.func(elem[0]) == 2:
                     self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                          status='MISSING', delimetr = elem[4], sup=elem[0], elem_name=self.n))
+                                          status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=self.n))
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
                                       status='EXISTING', delimetr = elem[4]))
                 return
@@ -565,7 +576,7 @@ class Make_tree:
                 if self.tree[i].node_name == elem[0]:
                     try:
                         self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[i].parent, data_type='None', 
-                                              status='DUPLICATE', delimetr = None, sup=elem[0], elem_name=elem[5]))
+                                              status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=elem[5]))
                         if elem[0] == '2':
                             self.p.remove(elem[1])
                         if self.content:
@@ -576,7 +587,7 @@ class Make_tree:
                 break
         if duplic:
             self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=duplic.parent, data_type='None', 
-                                  status='DUPLICATE', delimetr = None, sup=elem[0], elem_name=elem[5]))
+                                  status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=elem[5]))
             if elem[0] == '2':
                 self.p.remove(elem[1])
         return False
@@ -589,16 +600,16 @@ class Make_tree:
         buf = list(map(int, elem[0].split('.')))
         if buf[-1] == 0:
             self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=self.tree[-1], data_type='numbers', 
-                                  status='INCORRECT', delimetr = elem[4], sup=elem[0], elem_name=elem[5]))
+                                  status='INCORRECT', delimetr = elem[4], sup=elem[5], elem_name=elem[5]))
             return
         if len(buf) == 2 and buf[0] in [1, 2] and buf[1] in [1, 2, 3]:
             if not self.tree:
                 if buf[0] == 2:
                     self.tree.append(Node('1', sign='.', pos=elem[2], parent=self.root, data_type='number', 
-                                          status='MISSING', delimetr = elem[4], sup=elem[0], elem_name='1')) 
+                                          status='MISSING', delimetr = elem[4], sup=elem[5], elem_name='1')) 
                 for i in range(1, buf[1]):
                     self.tree.append(Node('{}.{}'.format(buf[0], j), sign='.', pos=elem[2], parent=self.root, data_type='numbers', 
-                                          status='MISSING', delimetr = elem[4], sup=elem[0], elem_name='{}.{}'.format(buf[0], j)))
+                                          status='MISSING', delimetr = elem[4], sup=elem[5], elem_name='{}.{}'.format(buf[0], j)))
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=self.root, data_type=elem[3], 
                                       status='EXISTING', delimetr = elem[4]))
                 return
@@ -656,8 +667,8 @@ class Make_tree:
                             buf_parent = parent
                             for j in range(rel[e]+1, sp[e]):
                                 try:
-                                    self.tree.append(Node('{}.1'.format(j), sign='.', pos=elem[2], parent=buf_parent, data_type='numbers', 
-                                                        status='MISSING', delimetr = delimetr, sup=elem[0], elem_name='{}.1'.format(j)))  
+                                    self.tree.append(Node('{}.1'.format(j), sign=elem[1], pos=elem[2], parent=buf_parent, data_type='numbers', 
+                                                        status='MISSING', delimetr = delimetr, sup=elem[5], elem_name='{}.1'.format(j)))  
                                     param = True
                                 except:
                                     continue     
@@ -671,14 +682,14 @@ class Make_tree:
                                 if len(buf_parent.name.split('.')) == len(adress)+1:
                                     buf_parent = parent.parent
                             for j in range(rel[e]+1, sp[e]):  
-                                self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign='.', pos=elem[2], parent=buf_parent, data_type='numbers', 
-                                                    status='MISSING', delimetr = delimetr, sup=elem[0], elem_name='.'.join(list(map(str, adress+[j])))))
+                                self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign=elem[0], pos=elem[2], parent=buf_parent, data_type='numbers', 
+                                                    status='MISSING', delimetr = delimetr, sup=elem[5], elem_name='.'.join(list(map(str, adress+[j])))))
                                 if not f: parent = self.tree[-1]
                                 param = True
                             if len(sp) > e+1:
                                 # buf_parent = parent.parent
-                                self.tree.append(Node('.'.join(list(map(str, adress+[sp[e]]))), sign='.', pos=elem[2], parent=buf_parent, data_type='numbers', 
-                                                    status='MISSING', delimetr = delimetr, sup=elem[0], elem_name='.'.join(list(map(str, adress+[sp[e]])))))
+                                self.tree.append(Node('.'.join(list(map(str, adress+[sp[e]]))), sign=elem[1], pos=elem[2], parent=buf_parent, data_type='numbers', 
+                                                    status='MISSING', delimetr = delimetr, sup=elem[5], elem_name='.'.join(list(map(str, adress+[sp[e]])))))
                                 if not f: parent = self.tree[-1]
                                 param = True
                         adress.append(sp[e])
@@ -686,8 +697,8 @@ class Make_tree:
                         if param:
                             parent = self.tree[-1]
                         for j in range(1, sp[e]):  
-                            self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign='.', pos=elem[2], parent=parent, data_type='numbers', 
-                                                status='MISSING', delimetr = delimetr, sup=elem[0], elem_name='.'.join(list(map(str, adress+[j])))))
+                            self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign=elem[1], pos=elem[2], parent=parent, data_type='numbers', 
+                                                status='MISSING', delimetr = delimetr, sup=elem[5], elem_name='.'.join(list(map(str, adress+[j])))))
                             if not f: parent = self.tree[-1]
                             param = True
                         adress.append(sp[e])
@@ -717,7 +728,7 @@ class Make_tree:
                 if sp[0] > 2 or sp[1] > 3: 
                     if duplic:
                         self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=duplic.parent, data_type='numbers', 
-                                              status='DUPLICATE', delimetr = None, sup=elem[0], elem_name=elem[5]))
+                                              status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=elem[5]))
                     return
                 st = 0
                 if find(self.root, lambda node: node.path_name == "/txt/{}.{}".format(*sp)):
@@ -771,17 +782,17 @@ class Make_tree:
                     for i in range(1, sp[0]):
                         try:
                             self.tree.append(Node("{}.1".format(i), sign='.', pos=elem[2], parent=parent, data_type='numbers', 
-                                                  status='MISSING', delimetr = elem[4], sup=elem[0], elem_name="{}.1".format(i)))
+                                                  status='MISSING', delimetr = elem[4], sup=elem[5], elem_name="{}.1".format(i)))
                         except:
                             self.tree.append(Node(" " + "{}.1".format(i), sign=elem[1], pos=elem[2], parent=parent, data_type='numbers', 
-                                                  status='DUPLICATE', delimetr = None, sup=elem[0], elem_name=" " + "{}.1".format(i)))
+                                                  status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=" " + "{}.1".format(i)))
                     for i in range(1, sp[1]):
                         try:
                             self.tree.append(Node("{}.{}".format(sp[0], i), sign='.', pos=elem[2], parent=parent, data_type='numbers', 
-                                                  status='MISSING', delimetr = elem[4], sup=elem[0], elem_name="{}.{}".format(sp[0], i)))
+                                                  status='MISSING', delimetr = elem[4], sup=elem[5], elem_name="{}.{}".format(sp[0], i)))
                         except:
                             self.tree.append(Node(" " + "{}.{}".format(sp[0], i), sign=elem[1], pos=elem[2], parent=parent, data_type='numbers', 
-                                                  status='DUPLICATE', delimetr = None, sup=elem[0], elem_name=" " + "{}.{}".format(sp[0], i)))
+                                                  status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=" " + "{}.{}".format(sp[0], i)))
                     self.tree.append(Node(elem[0], sign='.', pos=elem[2], parent=parent, data_type='numbers', 
                                           status='EXISTING', delimetr = elem[4]))
                     if self.content:
@@ -791,7 +802,7 @@ class Make_tree:
             else:
                 if forbiden_list:
                     self.tree.append(Node(" {}".format(elem[0]), sign=elem[1], pos=elem[2], parent=forbiden_list[0], data_type='numbers', 
-                                          status='DUPLICATE', delimetr = None, sup=elem[0], elem_name=elem[5]))
+                                          status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=elem[5]))
                     if self.content:
                         self.content_set.add(elem[2])
 
@@ -808,16 +819,15 @@ class Make_tree:
         for lst in lsts:
             self.lst = lst
             for elem, self.k in zip(self.lst, range(len(self.lst))):
-                if elem[2] == 2742:
-                    print()
+                # if elem[2] == 42:
+                #     print()
                 if elem[1] in ["таблица", "рисунок", "рис", "схема", "приложение"]:
-                    if elem[3] == 'number':
+                    if elem[3] == 'numbers':
+                        self.func, self.revfunc = functions['number']
+                        self.n = first_elements['number']
+                    else:
                         self.func, self.revfunc = functions[elem[3]]
                         self.n = first_elements[elem[3]]
-                    else:
-                        self.func = self.revfunc = self.n = None
-                    if elem[2] == 811:
-                        print()
                     try: self.non_text(elem)
                     except Exception as err: logger.error(err)
                     continue

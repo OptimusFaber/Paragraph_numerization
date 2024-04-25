@@ -148,12 +148,13 @@ def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, or
         "SanPin": [context['tables'][3], 0]
     }
     tic = time.time()
-    while os.path.isfile(f"{status_path}libre_status.log"):
+    while os.path.isfile(f"{status_path}/libre_status.log"):
         time.sleep(0.5)
         if time.time()-tic>90:
-            os.remove(f"{status_path}libre_status.log")
+            os.remove(f"{status_path}/libre_status.log")
         print('Waiting')
-    
+    with open(f"{status_path}/libre_status.log", 'w') as fp:
+        pass
     #! Create docx file
     res = list(map(lambda x: x['Feedback'],list(filter(lambda x: x['Error'] == 'Неверные сущности', dict_list))))
     for i in range(len(res)): 
@@ -166,8 +167,7 @@ def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, or
     template.save(output_docx)
     #!--------------------------------------------------------
     #^ Save PDF
-    with open(f"{status_path}libre_status.log", 'w') as fp:
-        pass
+    res = True
     while res:
         res = os.system("{} \
                 --convert-to {} \
@@ -177,5 +177,5 @@ def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, or
             time.sleep(2)
     if not save_doc:
         os.remove(output_docx)
-    os.remove(f"{status_path}libre_status.log")
+    os.remove(f"{status_path}/libre_status.log")
     #^------------------------

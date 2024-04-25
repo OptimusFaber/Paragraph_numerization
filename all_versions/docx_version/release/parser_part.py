@@ -58,11 +58,11 @@ def parse(text, txt_path, log_path='myapp.log'):
                   break
                list_findings = [[re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|((([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[.]))", re.ASCII), txt), ".", None, None],
                               [re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt), ")", None, None],
-                              [re.search(re.compile(r"(^|(?<=^\s)\s*)[Тт]аблица [№]?\d+([.]\d+)?", re.ASCII), txt) if begin else None, "таблица", None, None],
-                              [re.search(re.compile(r"(^|(?<=^\s)\s*)[Рр]исунок [№]?\d+([.]\d+)?", re.ASCII), txt) if begin else None, "рисунок", None, None],
-                              [re.search(re.compile(r"(^|(?<=^\s)\s*)[Рр]ис[.]? [№]?\d+([.]\d+)?", re.ASCII), txt) if begin else None, "рис", None, None],
-                              [re.search(re.compile(r"(^|(?<=^\s)\s*)[Сс]хема [№]?\d+([.]\d+)?", re.ASCII), txt) if begin else None, "схема", None, None],
-                              [re.search(re.compile(r"(^|(?<=^\s)\s*)[Пп]риложение [№]?(\d+([.]\d+)?|[А-Яа-яA-Za-z]((?=\s)|(?=\w)))", re.ASCII), txt) if begin else None, "приложение", None, None],
+                              [re.search(re.compile(r"(^|(?<=^\s)\s*)[Тт]аблица [№]?\d+([.]\d+)*", re.ASCII), txt) if begin else None, "таблица", None, None],
+                              [re.search(re.compile(r"(^|(?<=^\s)\s*)[Рр]исунок [№]?\d+([.]\d+)*", re.ASCII), txt) if begin else None, "рисунок", None, None],
+                              [re.search(re.compile(r"(^|(?<=^\s)\s*)[Рр]ис[.]? [№]?\d+([.]\d+)*", re.ASCII), txt) if begin else None, "рис", None, None],
+                              [re.search(re.compile(r"(^|(?<=^\s)\s*)[Сс]хема [№]?\d+([.]\d+)*", re.ASCII), txt) if begin else None, "схема", None, None],
+                              [re.search(re.compile(r"(^|(?<=^\s)\s*)[Пп]риложение [№]?(\d+([.]\d+)*|[А-Яа-яA-Za-z]((?=\s)|(?=\w)))", re.ASCII), txt) if begin else None, "приложение", None, None],
                               [re.search(re.compile(r"((?<=\s)|(?<=^))[(]((\d+[.]?)+|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt), "()", None, None],
                               [re.search(re.compile(r"(^\d+)|((?<=^\s)\s*\d+)", re.ASCII), txt) if begin else None, "NaN", None, None],
                               [re.search(re.compile(r"((?<=\s)|(?<=^))[A-Za-zА-Яа-я][.](((\d+[.])+\d+)|(\d+))[.]*", re.ASCII), txt), ".", None, None]]
@@ -84,6 +84,12 @@ def parse(text, txt_path, log_path='myapp.log'):
                   break
 
                name = list_findings[0][0].group()
+               while re.search('\s', name[0]):
+                  name = name[1:]
+               while re.search('\s', name[-1]):
+                  name = name[:-1]
+               if re.search(f'{name}[.]', txt) and name[0].isdigit():
+                  name+='.'
 
                paragraph = list_findings[0][0].group()
                if re.search("\D.\d", paragraph):

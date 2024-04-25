@@ -13,17 +13,29 @@ def fb(dictonaries):
         text = "Отсутствует " if feedback_list[i][5] == "MISSING" else "Дублирующаяся " if feedback_list[i][1] == "таблица" or feedback_list[i][1] == "схема" else "Неверный " if feedback_list[i][5] == "INCORRECT" else "Дублирующийся "
         
         if feedback_list[i][1] == "()":
-            elem = "(" + feedback_list[i][0]  + ")"
-            feedback_list[i][3] = "(" + feedback_list[i][6]  + ")"
+            elem = feedback_list[i][0]
+            if feedback_list[i][0][0] != "(" and feedback_list[i][0][-1] != ")":
+                elem = "(" + elem  + ")"
+            feedback_list[i][3] = feedback_list[i][6]
+            if feedback_list[i][6][0] != "(" and feedback_list[i][6][-1] != ")":
+                feedback_list[i][3] = "(" + feedback_list[i][3]  + ")"
         elif feedback_list[i][1] == ")":
-            elem = feedback_list[i][0]  + ")"
-            feedback_list[i][3] = feedback_list[i][6]  + ")"
+            elem = feedback_list[i][0]
+            if feedback_list[i][0][-1] != ")":
+                elem += ")"
+            feedback_list[i][3] = feedback_list[i][6]
+            if feedback_list[i][6][-1] != ")":
+                feedback_list[i][3] += ")"
         elif feedback_list[i][1] == "." and feedback_list[i][4] != "numbers":
-            elem = feedback_list[i][0]  + "."
-            feedback_list[i][3] = feedback_list[i][6]  + "."
+            elem = feedback_list[i][0]
+            if feedback_list[i][0][-1] != ".":
+                elem += "."
+            feedback_list[i][3] = feedback_list[i][6]
+            if feedback_list[i][6][-1] != ".":
+                feedback_list[i][3] += "."
         else:
             elem = feedback_list[i][0]
-            feedback_list[i][3] = feedback_list[i][7]
+            feedback_list[i][3] = feedback_list[i][6]
 
         if feedback_list[i][1] == "таблица" or feedback_list[i][1] == "схема" or feedback_list[i][1] == "приложение":
             feedback_list[i][0] = "Numbering"

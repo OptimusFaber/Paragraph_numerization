@@ -1,9 +1,9 @@
 from docxtpl import DocxTemplate
-import os,sys
+import os,sys,time
 from datetime import datetime   
 
 
-def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, originalfilename = None, save_doc=False, libre_path=None): 
+def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, originalfilename = None, save_doc=False, libre_path=None, status_path=None): 
     """
     json_path (string) -> path to .json file with statistics,
     output_pdf (string) -> folder where to place pdf file,
@@ -144,7 +144,14 @@ def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, or
         "Gost": [context['tables'][2], 0],
         "SanPin": [context['tables'][3], 0]
     }
-    
+    tic = time.time()
+    while os.path.isfile(f"{status_path}/libre_status.log"):
+        time.sleep(0.5)
+        if time.time()-tic>90:
+            os.remove(f"{status_path}/libre_status.log")
+        print('Waiting')
+    with open(f"{status_path}/libre_status.log", 'w') as fp:
+        pass
     #! Create docx file
     res = list(map(lambda x: x['Feedback'],list(filter(lambda x: x['Error'] == 'Неверные сущности', dict_list))))
     for i in range(len(res)): 
@@ -163,4 +170,5 @@ def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, or
             {}".format(libre_path, 'pdf', output_pdf, output_docx))
     if not save_doc:
         os.remove(output_docx)
+    os.remove(f"{status_path}/libre_status.log")
     #^------------------------

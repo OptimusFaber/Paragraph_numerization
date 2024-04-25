@@ -59,7 +59,7 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
         if elem == 'Paragraphs':
             js.append(text[elem])
             for e in text[elem]:
-                all_words += e["Text"] + " "
+                all_words += re.sub("[^A-Za-zА-Яа-яЁё\s]", "", e["Text"]) + " "
                 match = re.search(re.compile(r"(С|с)окращени(я|й)|(Т|т)ермин(ы|ов)", flags=re.IGNORECASE), e['Text'])
                 if match is not None:
                     pos.append(e['Index'])
@@ -87,14 +87,16 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                     for n in range(len(cell['Cells'])):
                         for m in range(len(cell['Cells'][n]["Paragraphs"])):
                             buf.append(cell['Cells'][n]["Paragraphs"][m])
-                            all_words += cell['Cells'][n]["Paragraphs"][m]["Text"] + " "
+                            all_words += re.sub("[^A-Za-zА-Яа-яЁё\s]", "", cell['Cells'][n]["Paragraphs"][m]["Text"]) + " "
 
                 js.append(buf)
                 num = table['Index']
                 for p in pos:
                     if 0 < num - p < 5:
                         tables.append(table)
-    all_words = all_words.split(" ")
+    all_words = list(filter(lambda x: len(x)>1, all_words.split(" ")))
+    all_words = list(map(lambda x: x.replace(x[0], x[0].lower()), all_words))
+    all_words = set(list(filter(lambda x: all([not i.isupper() for i in x]), all_words)))
     #& Объявление наши справочников и словарей
     abb_set = dict()
     special_words = {"далее", "условное обозначение", "условные обозначения", 
@@ -179,8 +181,6 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                 if string['Index'] not in forbidden_list:
                     f = [re.finditer(abb_mask1, string['Text']), re.finditer(abb_mask2, string['Text'])]
                     #^------------------------------------------------------------------------------------
-                    if string['Index'] == 136:
-                        print()
                     list_of_added_elems = []
                     for itter in f:       
                         for element in itter:
@@ -393,9 +393,9 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                     buf = list(filter(lambda x: (x[1][0] not in list_of_added_elems) and (x[1][1] not in list_of_added_elems), buf))
                     res = set()
                     for b in buf:
-                        buf_f = list(filter(lambda x: x[1][0]==b[1][0], buf))
+                        buf_f = list(filter(lambda x: x[1][0]==b[1][0] or x[1][0]==b[1][0]+1 or x[1][0]==b[1][0]-1, buf))
                         buf_f = sorted(buf_f, key=lambda x: len(x[0]), reverse=True)
-                        buf_y = list(filter(lambda x: x[1][1]==b[1][1], buf))
+                        buf_y = list(filter(lambda x: x[1][1]==b[1][1] or x[1][1]==b[1][1]-1 or x[1][1]==b[1][1]+1, buf))
                         buf_y = sorted(buf_y, key=lambda x: len(x[0]), reverse=True)
                         res.add(max(buf_y[0][0], buf_f[0][0], key=lambda x: len(x)))
                     #! ErrorType, LineText, LineNumber, ОШИБКА, PrevLineText, NextLine
@@ -410,5 +410,5 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                         feedback_list.append(["Abbreviation", sentence, string['Index'], r])
             except Exception as err:
                 logger.error(err)
-    #^--------------------------------------------------------------------------------------------------------------------           
+    #^--------------------------------------------------------------------------------------------------------------------
     return feedback_list
