@@ -15,7 +15,7 @@ from copy import deepcopy
 
 def check_file(json_path=None, config_path=None, report_output=None, json_output=None, global_log_path=None, libre_path='libreoffice', text=False, test=False, visualize=False):    
     log_path = '/'.join(global_log_path.split('/')[:-1]) + '/myapp.log'
-    print('VERSION 1.6')
+    print('VERSION 1.7')
     if log_path=='myapp.log':
         log_path = global_path + '/' + log_path
 
@@ -165,8 +165,9 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
                 for e in range(len(t[elem])):
                     if t[elem][e]['Index'] in dictionary.keys():
                         t[elem][e]['Errors'] = dictionary[t[elem][e]['Index']]
-                        report.append({"Error": dictionary[t[elem][e]['Index']][0]["Description"],
-                                               "Feedback": dictionary[t[elem][e]['Index']][0]["Type"]})
+                        for p in range(len(dictionary[t[elem][e]['Index']])):
+                            report.append({"Error": dictionary[t[elem][e]['Index']][p]["Description"],
+                                           "Feedback": dictionary[t[elem][e]['Index']][p]["Type"]})
                     else:
                         t[elem][e]['Errors'] = None
 
@@ -191,8 +192,9 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
                             for g in range(len(t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"])):
                                 if t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][g]['Index'] in dictionary.keys():
                                     t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][g]['Errors'] = dictionary[t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][g]['Index']]
-                                    report.append({"Error": dictionary[t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][g]['Index']][0]["Description"],
-                                                "Feedback": dictionary[t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][g]['Index']][0]["Type"]})
+                                    for p in range(len(dictionary[t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][g]['Index']])):
+                                        report.append({"Error": dictionary[t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][g]['Index']][p]["Description"],
+                                                       "Feedback": dictionary[t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][g]['Index']][p]["Type"]})
                                 else:
                                     t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][g]['Errors'] = None
                             

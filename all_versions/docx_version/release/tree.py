@@ -477,7 +477,7 @@ class Make_tree:
                 continue
             if "number" not in self.tree[i].data_type: continue
             if self.tree[i].name == elem[0]:
-                if not duplic and i > -20:
+                if not duplic and i > -25:
                     duplic = self.tree[i]
             if self.numeral_check(self.tree[i], elem):
                 if len(point) < len(list(self.tree[i].ancestors)): continue
@@ -497,9 +497,9 @@ class Make_tree:
                             num2 = int(str(self.tree[i].name).split('.')[0])
                             if num2 - num1 < 3:
                                 duplic = self.tree[i]
-                if go_back == 5:
-                    break
-                go_back += 1
+                # if go_back == 5:
+                #     break
+                # go_back += 1
             table = True
 
 
@@ -618,12 +618,11 @@ class Make_tree:
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
                                       status='EXISTING', delimetr = elem[4]))
                 return
-        duplic = False
         for i in range(-1, -len(self.tree)-1, -1):
             if 'number' in self.tree[i].data_type and (elem[1] == self.tree[i].sign or self.tree[i].sign == 'NaN'):
                 if self.tree[i].name == elem[0]: 
                     forbiden_list.append(self.tree[i].parent)
-                    if not duplic and i > -20:
+                    if not duplic and i > -25:
                         duplic = self.tree[i]
                     black_list.add(self.tree[i].parent)
                 if self.numeral_check(self.tree[i], elem) and all([ancestor not in black_list for ancestor in self.tree[i].ancestors]) and (self.tree[i] not in forbiden_list):
@@ -819,8 +818,8 @@ class Make_tree:
         for lst in lsts:
             self.lst = lst
             for elem, self.k in zip(self.lst, range(len(self.lst))):
-                # if elem[2] == 42:
-                #     print()
+                if elem[2] == 90:
+                    print()
                 if elem[1] in ["таблица", "рисунок", "рис", "схема", "приложение"]:
                     if elem[3] == 'numbers':
                         self.func, self.revfunc = functions['number']

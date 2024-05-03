@@ -5,7 +5,7 @@ def fb(dictonaries):
     for dct in dictonaries:
         keys = list(dct.keys())
         for i in range(1, len(keys)):
-            if dct[keys[i]]['status'] == 'MISSING' or dct[keys[i]]['status'] == 'DUPLICATE':
+            if dct[keys[i]]['status'] == 'MISSING' or dct[keys[i]]['status'] == 'DUPLICATE' or dct[keys[i]]['status'] == 'INCORRECT':
                 feedback_list.append([dct[keys[i]]['name'], dct[keys[i]]['sign'], dct[keys[i]]['pos'], dct[keys[i]]['delimetr'], dct[keys[i]]['data_type'], dct[keys[i]]['status'], dct[keys[i]]['sup'], dct[keys[i]]['elem_name']])
 
     for i in range(len(feedback_list)):

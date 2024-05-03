@@ -35,37 +35,69 @@ def parse(text, txt_path, log_path='myapp.log'):
    n = 0
    for entity in js:
       for string in entity:
+         if string['Index'] == 20:
+            print()
          txts = string["Text"]
+         if string["IsToc"] and not string["Numbering"]:
+            if not re.search(re.compile(r"(^|(?<=^\s)\s*)[Тт]аблица [№]?\d+", re.ASCII), txt):
+               counter += len(txt)+1
+               continue
+         if string.get('Vanish'):
+            if string["Vanish"]:
+               counter += len(txt)+1
+               continue
          if string["Numbering"]:
             txts = string["Numbering"] + ' ' + txts
          try:
-            f_elem = True
-            begin = True
-            counter = 0
-            for txt in txts.split('\n'):
+            counter = len(txts.split('\n')[0])+1
+            txts = txts.split('\n')[1:]
+            for txt in txts:
+               begin = True
+               f_elem = True
                while txt and sign:
+                  txt = re.sub(r'\u00A0', ' ', txt)
+                  while not (txt[0].isdigit() or txt[0].isalpha()):
+                     txt = txt[1:]
+                     counter+=1
+                     if txt == '':
+                        break
+                  if txt == '':
+                     counter+=1
+                     break
                   list_findings = [[re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|((([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[.]))", re.ASCII), txt), ".", None, None],
-                                 [re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt), ")", None, None],
-                                 [re.search(re.compile(r"(^|(?<=^\s)\s*)[Тт]аблица [№]?\d+", re.ASCII), txt) if begin else None, "таблица", None, None],
-                                 [re.search(re.compile(r"(^|(?<=^\s)\s*)[Рр]исунок [№]?\d+", re.ASCII), txt) if begin else None, "рисунок", None, None],
-                                 [re.search(re.compile(r"(^|(?<=^\s)\s*)[Рр]ис[.]? [№]?\d+", re.ASCII), txt) if begin else None, "рис", None, None],
-                                 [re.search(re.compile(r"(^|(?<=^\s)\s*)[Сс]хема [№]?\d+", re.ASCII), txt) if begin else None, "схема", None, None],
-                                 [re.search(re.compile(r"(^|(?<=^\s)\s*)[Пп]риложение [№]?(\d+|[А-Яа-яA-Za-z]((?=\s)|(?=\w)))", re.ASCII), txt) if begin else None, "приложение", None, None],
-                                 [re.search(re.compile(r"((?<=\s)|(?<=^))[(]((\d+[.]?)+|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt), "()", None, None],
-                                 [re.search(re.compile(r"(^\d+((?=\s)|$))|((?<=^\s)\s*\d+((?=\s)|$))", re.ASCII), txt) if begin else None, "NaN", None, None],
-                                 [re.search(re.compile(r"((?<=\s)|(?<=^))[A-Za-zА-Яа-я][.](((\d+[.])+\d+)|(\d+))[.]*", re.ASCII), txt), ".", None, None]]
+                              [re.search(re.compile(r"((?<=\s)|(?<=^))(((\d+[.])+\d+)|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt), ")", None, None],
+                              [re.search(re.compile(r"(^|(?<=^\s)\s*)[Тт]аблица [№]?\d+([.]\d+)*", re.ASCII), txt) if begin else None, "таблица", None, None],
+                              [re.search(re.compile(r"(^|(?<=^\s)\s*)[Рр]исунок [№]?\d+([.]\d+)*", re.ASCII), txt) if begin else None, "рисунок", None, None],
+                              [re.search(re.compile(r"(^|(?<=^\s)\s*)[Рр]ис[.]? [№]?\d+([.]\d+)*", re.ASCII), txt) if begin else None, "рис", None, None],
+                              [re.search(re.compile(r"(^|(?<=^\s)\s*)[Сс]хема [№]?\d+([.]\d+)*", re.ASCII), txt) if begin else None, "схема", None, None],
+                              [re.search(re.compile(r"((?<=\s)|(?<=^))[(]((\d+[.]?)+|([a-zA-Zа-яА-Я])|(\d)+|([IVXLCDM])+)[)]((?=\s)|(?=\w))", re.ASCII), txt), "()", None, None],
+                              [re.search(re.compile(r"(^\d+)|((?<=^\s)\s*\d+)", re.ASCII), txt) if begin else None, "NaN", None, None],
+                              [re.search(re.compile(r"((?<=\s)|(?<=^))[A-Za-zА-Яа-я][.](((\d+[.])+\d+)|(\d+))[.]*", re.ASCII), txt), ".", None, None]]
 
                   begin = False 
                   list_findings = list(filter(lambda x: x[0] is not None, list_findings))
                   if list_findings:
                      list_findings = sorted(list(map(lambda x: [x[0], x[1], x[0].span()[0], x[0].span()[1]], list_findings)), key = lambda x: x[2])         
                      posx = list_findings[0][2]
+                     posy = list_findings[0][3]
                      list_findings = sorted(list(filter(lambda x: x[2] == posx, list_findings)), key = lambda x: x[3], reverse=True)
                      sign = list_findings[0][1]
                      pos = list_findings[0][3]
+
+                     posx = list_findings[0][2]
+                     posy = list_findings[0][3]
                   else:
                      counter+=len(txt)+1
                      break
+
+                  name = list_findings[0][0].group()
+                  while re.search('\s', name[0]):
+                     name = name[1:]
+                  while re.search('\s', name[-1]):
+                     name = name[:-1]
+                  if re.search(f'{name}[.]', txt) and name[0].isdigit():
+                     name+='.'
+
                   paragraph = list_findings[0][0].group()
                   if re.search("\D.\d", paragraph):
                      paragraph = re.sub(re.compile(r"\D[.]", re.ASCII), "", paragraph)
@@ -199,7 +231,7 @@ def parse(text, txt_path, log_path='myapp.log'):
                         data_type = 'en_up_letter' if paragraph.isupper() else 'en_low_letter'
 
                      elem = first_elements[data_type][sign]
-                     if ord(paragraph) - ord(elem) > 7:
+                     if ord(paragraph) - ord(elem) > 5:
                         txt = txt[pos:]
                         counter+=(pos)
                         continue 
@@ -217,10 +249,10 @@ def parse(text, txt_path, log_path='myapp.log'):
                            first_elements[data_type][sign] = paragraph
 
                   txt = txt[pos:]
-                  res_pos = counter+posx
-                  counter+=(pos)
+                  # res_pos = counter+posx
                   paragraph = paragraph[:-1] if paragraph[-1] == '.' else paragraph
-                  lst[n].append((paragraph, sign, string["Index"], data_type, string["NumberingLevel"], res_pos))
+                  lst[n].append((paragraph, sign, string["Index"], data_type, (counter+posx, counter+posy), name))
+                  counter+=(pos)
                   if txt == "":
                      counter+=1
          except Exception as err:

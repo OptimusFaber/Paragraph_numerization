@@ -18,6 +18,8 @@ if __name__ == "__main__":
         from excel_version.release.check import check_file
     elif args.document_type == "word":
         from docx_version.release.check import check_file
+    elif args.document_type == "pdf":
+        from  pdf_version.release.check import check_file
     else:
         sys.exit("Unrecognized document_type occured")
 

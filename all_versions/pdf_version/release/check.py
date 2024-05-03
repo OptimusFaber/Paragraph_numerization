@@ -11,8 +11,10 @@ import json
 import codecs
 from modification.sentence_compare import *
 from modification.report import *
+from copy import deepcopy
 
-def check_file(json_path=None, config_path=None, report_output=None, json_output=None, global_log_path=None, text=False, test=False, visualize=False):    
+def check_file(json_path=None, config_path=None, report_output=None, json_output=None, global_log_path=None, libre_path='libreoffice', text=False, test=False, visualize=False):    
+    print('VERSION 1.7')
     log_path = '/'.join(global_log_path.split('/')[:-1]) + '/myapp.log'
     if log_path=='myapp.log':
         log_path = global_path + '/' + log_path
@@ -149,28 +151,30 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
         dictionary =  {}
         for i in range(len(feedback)):
             if not dictionary.get(feedback[i][2]):
-                dictionary[feedback[i][2]] = [{"Type": feedback[i][0],"Description": feedback[i][1], "Element": feedback[i][3], "TextIndex": feedback[i][4]}]
+                dictionary[feedback[i][2]] = [{"Type": feedback[i][0],"Description": feedback[i][1], "Element": feedback[i][4], "TextIndex": feedback[i][3]}]
             else:
-                dictionary[feedback[i][2]].append({"Type": feedback[i][0],"Description": feedback[i][1], "Element": feedback[i][3], "TextIndex": feedback[i][4]})
+                dictionary[feedback[i][2]].append({"Type": feedback[i][0],"Description": feedback[i][1], "Element": feedback[i][4], "TextIndex": feedback[i][3]})
 
 
         F = codecs.open(json_path, "r", "utf_8_sig")
         t = json.load(F)
+        file_name = t["Name"]
         report = []
         for elem in t.keys():
             if elem == 'Paragraphs':
                 for e in range(len(t[elem])):
                     if t[elem][e]['Index'] in dictionary.keys():
                         t[elem][e]['Errors'] = dictionary[t[elem][e]['Index']]
-                        report.append({"Error": dictionary[t[elem][e]['Index']][0]["Description"],
-                                               "Feedback": dictionary[t[elem][e]['Index']][0]["Type"]})
+                        for p in range(len(dictionary[t[elem][e]['Index']])):
+                            report.append({"Error": dictionary[t[elem][e]['Index']][p]["Description"],
+                                           "Feedback": dictionary[t[elem][e]['Index']][p]["Type"]})
                     else:
                         t[elem][e]['Errors'] = None
 
                     if t[elem][e]['Entities']:
                         for j in range(len(t[elem][e]['Entities'])):
                             mistake = compare_single_text(json=t[elem][e]['Entities'][j], log_path=report_output, txt_path=json_path)
-                            if mistake:
+                            if mistake and mistake is not None:
                                 if t[elem][e]['Entities'][j]['Errors']:
                                     t[elem][e]['Entities'][j]['Errors'].append(mistake)
                                 else:
@@ -179,34 +183,11 @@ def check_file(json_path=None, config_path=None, report_output=None, json_output
                                 continue
                             if not t[elem][e]['Entities'][j]["IsSkip"]:
                                 report.append({"Error": "Неверные сущности",
-                                                "Feedback": t[elem][e]['Entities'][j]})
-                        
-            elif elem == 'Tables':
-                for e in range(len(t[elem])):
-                    for cell in range(len(t[elem][e]['Rows'])):
-                        for c in range(len(t[elem][e]['Rows'][cell]['Cells'])):
-                            if t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Index'] in dictionary.keys():
-                                t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Errors'] = dictionary[t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Index']]
-                                report.append({"Error": dictionary[t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Index']][0]["Description"],
-                                               "Feedback": dictionary[t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Index']][0]["Type"]})
-                            else:
-                                t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Errors'] = None
-                            
-                            if t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities']:
-                                for j in range(len(t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'])):
-                                    mistake = compare_single_text(json=t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j], log_path=report_output, txt_path=json_path)
-                                    if mistake:
-                                        if t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]['Errors']:
-                                            t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]['Errors'].append(mistake)
-                                        else:
-                                            t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]['Errors'] = [mistake]
-                                    if not t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]["IsSkip"]:
-                                        report.append({"Error": "Неверные сущности",
-                                                        "Feedback": t[elem][e]['Rows'][cell]['Cells'][c]["Paragraphs"][0]['Entities'][j]})
+                                               "Feedback": t[elem][e]['Entities'][j]})
 
         try:
-            name = json_path.split('/')[-1]
-            generate(dict_list=report, output_pdf=report_output, txt_path=json_path, originalfilename=name)
+            buf = deepcopy(report)
+            generate(dict_list=buf, output_pdf=report_output, originalfilename=file_name, libre_path=libre_path, status_path='/'.join(global_log_path.split('/')[:-1]))
         except Exception as err:
             logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
             format=f'%(asctime)s %(levelname)s module: report.py\nError while generating the pdf-report\nText path: {json_path}\n')
