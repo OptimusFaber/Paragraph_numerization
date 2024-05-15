@@ -15,7 +15,7 @@ from copy import deepcopy
 
 def check_file(json_path=None, config_path=None, report_output=None, json_output=None, global_log_path=None, libre_path='libreoffice', text=False, test=False, visualize=False):    
     log_path = '/'.join(global_log_path.split('/')[:-1]) + '/myapp.log'
-    print('VERSION 1.7')
+    print('VERSION 1.8')
     if log_path=='myapp.log':
         log_path = global_path + '/' + log_path
 

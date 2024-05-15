@@ -37,6 +37,8 @@ def parse(text, txt_path, log_path='myapp.log'):
    for entity in js:
       for string in entity:
          txt = string["Text"]
+         if string['Index'] == 1237:
+            print()
          if string["IsToc"] and not string["Numbering"]:
             if not re.search(re.compile(r"(^|(?<=^\s)\s*)[Тт]аблица [№]?\d+", re.ASCII), txt):
                continue
@@ -50,7 +52,7 @@ def parse(text, txt_path, log_path='myapp.log'):
             begin = True
             while txt and sign:
                txt = re.sub(r'\u00A0', ' ', txt)
-               while not (txt[0].isdigit() or txt[0].isalpha()):
+               while not (txt[0].isdigit() or txt[0].isalpha() or txt[0] == '('):
                   txt = txt[1:]
                   if txt == '':
                      break
@@ -88,7 +90,8 @@ def parse(text, txt_path, log_path='myapp.log'):
                   name = name[1:]
                while re.search('\s', name[-1]):
                   name = name[:-1]
-               if re.search(f'{name}[.]', txt) and name[0].isdigit():
+               promt = name.replace(')', '[)]').replace('(', '[(]').replace('.', '[.]')
+               if re.search(f'{promt}[.]', txt) and name[0].isdigit():
                   name+='.'
 
                paragraph = list_findings[0][0].group()

@@ -204,7 +204,7 @@ def abb_finder(json_text, abbs=True, dicts=True, add_info=None, content_strings 
                     incorrect_formulation_set.add(elem["Value"])
         #*-----------------------------
         if 5 < con_end - con_begin < 150:
-            forbidden_list = list(abb_set.values()) + list(range(con, con_end+1))
+            forbidden_list = list(abb_set.values()) + list(range(con_begin, con_end+1))
         else:
             forbidden_list = list(abb_set.values())
 

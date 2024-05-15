@@ -155,14 +155,15 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
                 incorrect_formulation_set.add(elem["Value"])
     #*-----------------------------
     buffer = []
-    if con[0] == con_end[0]:
-        buffer.extend([(con[0], i) for i in range(con[1], con_end[1])])
-    else:
-        while con[0] != con_end[0]:
-            buffer.extend([(con[0], i) for i in range(con[1], len(text['Paragraphs'][con[0]]["Text"].split('\n')))])
-            con[0]+=1
-            con[1]=0
-        buffer.extend([(con[0], i) for i in range(con[1], con_end[1])])
+    if con and con_end:
+        if con[0] == con_end[0]:
+            buffer.extend([(con[0], i) for i in range(con[1], con_end[1])])
+        else:
+            while con[0] != con_end[0]:
+                buffer.extend([(con[0], i) for i in range(con[1], len(text['Paragraphs'][con[0]]["Text"].split('\n')))])
+                con[0]+=1
+                con[1]=0
+            buffer.extend([(con[0], i) for i in range(con[1], con_end[1])])
 
 
     forbidden_list = list(set(map(lambda lst: lst[:2], abb_set.values()))) + buffer

@@ -84,7 +84,7 @@ class Make_tree:
         elif isinstance(elem1, str): elem1 = elem1         
         if isinstance(elem2, Node): elem2 = elem2.node_name
         elif isinstance(elem2, list) or isinstance(elem2, tuple): elem2 = elem2[0]
-        elif isinstance(elem2, str): elem2= elem2 
+        elif isinstance(elem2, str): elem2= elem2  
         #!---------Приводим всё к числовому типу данных-----------
         elem1, elem2 = list(map(int, elem1.split('.'))), list(map(int, elem2.split('.')))
         #!---Невозможные ситуации, которые мы сразу отбрасываем---
@@ -102,6 +102,9 @@ class Make_tree:
                 for i in elem2[1:]: dif += i
                 if dif > 7: return 0
                 return dif+1
+        #!---------Последнее число совпадает c Вторым с конца 2.4.9 и затем 2.4 --------------
+        if len(elem1) - len(elem2) >= 1:
+            if elem1[-2] == elem2[-1]: return 0
         #!---------Первое число совпадает 5.6 и 5.8--------------
         if elem1[0] == elem2[0]:                                
             dif = 0
@@ -480,7 +483,7 @@ class Make_tree:
                 if not duplic and i > -25:
                     duplic = self.tree[i]
             if self.numeral_check(self.tree[i], elem):
-                if len(point) < len(list(self.tree[i].ancestors)): continue
+                # if len(point) < len(list(self.tree[i].ancestors)): continue
                 if any([ancestor in black_list for ancestor in self.tree[i].ancestors]): continue
                 if self.tree[i].parent in black_list: continue
                 if self.numeral_check(self.tree[i], elem) > 5: continue
@@ -625,6 +628,8 @@ class Make_tree:
                     if not duplic and i > -25:
                         duplic = self.tree[i]
                     black_list.add(self.tree[i].parent)
+                if self.tree[i].status == 'DUPLICATE' or self.tree[i].status == 'INCORRECT':
+                    continue
                 if self.numeral_check(self.tree[i], elem) and all([ancestor not in black_list for ancestor in self.tree[i].ancestors]) and (self.tree[i] not in forbiden_list):
                     posible_relatives.append(self.tree[i])
                     black_list.add(self.tree[i].parent)
@@ -728,6 +733,9 @@ class Make_tree:
                     if duplic:
                         self.tree.append(Node(" " + elem[0], sign=elem[1], pos=elem[2], parent=duplic.parent, data_type='numbers', 
                                               status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=elem[5]))
+                    else:
+                        self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=self.tree[-1].parent, data_type='numbers', 
+                                              status='INCORRECT', delimetr = None, sup=elem[5], elem_name=elem[5]))
                     return
                 st = 0
                 if find(self.root, lambda node: node.path_name == "/txt/{}.{}".format(*sp)):
@@ -804,6 +812,8 @@ class Make_tree:
                                           status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=elem[5]))
                     if self.content:
                         self.content_set.add(elem[2])
+        self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=self.tree[-1].parent, data_type='numbers', 
+                            status='INCORRECT', delimetr = None, sup=elem[5], elem_name=elem[5]))
 
     def cut(self):
         if self.tree:
@@ -815,10 +825,11 @@ class Make_tree:
         logging.basicConfig(filename=log_path, level=logging.DEBUG, 
             format=f'%(asctime)s %(levelname)s module: %(name)s line num: %(lineno)s func:%(funcName)s %(message)s \nText path: {txt_path}\n')
         logger=logging.getLogger(__name__)
-        for lst in lsts:
+        for i, lst in enumerate(lsts):
+            self.part = i
             self.lst = lst
             for elem, self.k in zip(self.lst, range(len(self.lst))):
-                if elem[2] == 90:
+                if elem[2] == 44:
                     print()
                 if elem[1] in ["таблица", "рисунок", "рис", "схема", "приложение"]:
                     if elem[3] == 'numbers':

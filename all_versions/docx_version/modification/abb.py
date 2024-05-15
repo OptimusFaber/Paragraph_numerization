@@ -14,7 +14,7 @@ def letter_extractor(string, ind):
     return line        
         
 
-def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = None, json_path=None, log_path='myapp.log'):
+def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = None, json_path=None, log_path='myapp.log', defis=False):
     logging.basicConfig(filename=log_path, level=logging.DEBUG, 
         format=f'%(asctime)s %(levelname)s module: %(name)s line num: %(lineno)s func: %(funcName)s %(message)s \nText path: {json_path}\n')
     logger=logging.getLogger(__name__)
@@ -22,7 +22,10 @@ def abb_finder(text, abbs=True, dicts=True, add_info=None, content_strings = Non
         return []
     #& Маски для поиска нужных нам сокращений
     abb_mask1 = re.compile(r"(?<![a-zA-Zа-яА-ЯЁё0-9-—–])((«?([А-ЯЁ]+и)»?\s?){2,}|(«?([А-ЯЁ]{2,})»?\s?)+|(«?[A-Z]{2,}»?\s?)+)([^ЁёА-Яа-яA-Za-z0-9-—–]|$)")
-    abb_mask2 = re.compile(r"(?<![a-zA-Zа-яА-ЯЁё0-9-—–])(?<!-)(((([А-ЯЁ]+[а-яё]*){2,})\s?)+|((([A-Z]+[a-z]*){2,})\s?)+)([^ЁёА-Яа-яA-Za-z0-9-—–]|$)")
+    if defis:
+        abb_mask2 = re.compile(r"(?<![a-zA-Zа-яА-ЯЁё0-9-—–])(?<!-)(((([А-ЯЁ]+[а-яё-]*){2,})\s?)+|((([A-Z]+[a-z]*){2,})\s?)+)([^ЁёА-Яа-яA-Za-z0-9-—–]|$)")
+    else:
+        abb_mask2 = re.compile(r"(?<![a-zA-Zа-яА-ЯЁё0-9-—–])(?<!-)(((([А-ЯЁ]+[а-яё]*){2,})\s?)+|((([A-Z]+[a-z]*){2,})\s?)+)([^ЁёА-Яа-яA-Za-z0-9-—–]|$)")
     #&--------------------------------------------------------------------------------------------------------------------
     all_words = ""
     pos, js, tables = [], [], []

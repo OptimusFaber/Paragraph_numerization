@@ -84,7 +84,7 @@ class Make_tree:
         elif isinstance(elem1, str): elem1 = elem1         
         if isinstance(elem2, Node): elem2 = elem2.node_name
         elif isinstance(elem2, list) or isinstance(elem2, tuple): elem2 = elem2[0]
-        elif isinstance(elem2, str): elem2= elem2 
+        elif isinstance(elem2, str): elem2= elem2  
         #!---------Приводим всё к числовому типу данных-----------
         elem1, elem2 = list(map(int, elem1.split('.'))), list(map(int, elem2.split('.')))
         #!---Невозможные ситуации, которые мы сразу отбрасываем---
@@ -102,6 +102,9 @@ class Make_tree:
                 for i in elem2[1:]: dif += i
                 if dif > 7: return 0
                 return dif+1
+        #!---------Последнее число совпадает c Вторым с конца 2.4.9 и затем 2.4 --------------
+        if len(elem1) - len(elem2) >= 1:
+            if elem1[-2] == elem2[-1]: return 0
         #!---------Первое число совпадает 5.6 и 5.8--------------
         if elem1[0] == elem2[0]:                                
             dif = 0
@@ -520,7 +523,7 @@ class Make_tree:
             #! ------------------------------------------------------------------
             parent = rel.parent 
             #! ------------------------------------------------------------------
-            n1, n2 = self.func(elem[0]), self.func(rel.node_name)
+            n1, n2 = self.func(elem[0]), self.func(rel.node_name.split('.')[0])
             for i in range(n2+1, n1):
                 self.tree.append(Node(self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
                                       status='MISSING', string_index = elem[4], sup=elem[0], elem_name=self.revfunc(i)))
@@ -590,7 +593,7 @@ class Make_tree:
 
     def numeral_paragraphs(self, elem):
         #! Алгоритм работы с параграфами где несколько цифр
-        string_index, parent, sp, black_list, forbiden_list, duplic = elem[4], None, list(), set(), list(), False
+        parent, sp, black_list, forbiden_list, duplic = None, list(), set(), list(), False
         posible_relatives = list()
         buf = list(map(int, elem[0].split('.')))
         if buf[-1] == 0:
@@ -637,7 +640,7 @@ class Make_tree:
                     par = False
                     posible_relatives = []
             if par:
-                parent, string_index = node, node.string_index
+                parent = node
                 rel = list(map(int, node.node_name.split('.')))
                 sp = list(map(int, elem[0].split('.')))
                 f = True
@@ -660,13 +663,19 @@ class Make_tree:
                         k1 = k2 = False
                         if e==0:
                             buf_parent = parent
+                            if node.data_type == 'number':
+                                if parent.name != 'txt':
+                                    buf_parent = parent.parent
                             for j in range(rel[e]+1, sp[e]):
                                 try:
-                                    self.tree.append(Node('{}.1'.format(j), sign='.', pos=elem[2], parent=buf_parent, data_type='numbers', 
-                                                        status='MISSING', string_index = string_index, sup=elem[0], elem_name='{}.1'.format(j)))  
+                                    self.tree.append(Node(str(j), sign='.', pos=elem[2], parent=buf_parent, data_type='number', 
+                                                        status='MISSING', string_index = elem[4], sup=elem[0], elem_name=str(j)))  
                                     param = True
                                 except:
-                                    continue     
+                                    continue
+                            if len(sp) > 1 and sp[e] != rel[e]:
+                                   self.tree.append(Node(str(sp[e]), sign='.', pos=elem[2], parent=buf_parent, data_type='number', 
+                                                        status='MISSING', string_index = elem[4], sup=elem[0], elem_name=str(sp[e]))) 
                             if not f: parent = self.tree[-1]
                         else:
                             buf_parent = parent
@@ -678,13 +687,13 @@ class Make_tree:
                                     buf_parent = parent.parent
                             for j in range(rel[e]+1, sp[e]):  
                                 self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign='.', pos=elem[2], parent=buf_parent, data_type='numbers', 
-                                                    status='MISSING', string_index = string_index, sup=elem[0], elem_name='.'.join(list(map(str, adress+[j])))))                                
+                                                    status='MISSING', string_index = elem[4], sup=elem[0], elem_name='.'.join(list(map(str, adress+[j])))))                                
                                 if not f: parent = self.tree[-1]
                                 param = True
                             if len(sp) > e+1:
                                 # buf_parent = parent.parent
                                 self.tree.append(Node('.'.join(list(map(str, adress+[sp[e]]))), sign='.', pos=elem[2], parent=buf_parent, data_type='numbers', 
-                                                    status='MISSING', string_index = string_index, sup=elem[0], elem_name='.'.join(list(map(str, adress+[sp[e]])))))
+                                                    status='MISSING', string_index = elem[4], sup=elem[0], elem_name='.'.join(list(map(str, adress+[sp[e]])))))
                                 if not f: parent = self.tree[-1]
                                 param = True
                         adress.append(sp[e])
@@ -693,7 +702,7 @@ class Make_tree:
                             parent = self.tree[-1]
                         for j in range(1, sp[e]):  
                             self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign='.', pos=elem[2], parent=parent, data_type='numbers', 
-                                                status='MISSING', string_index = string_index, sup=elem[0], elem_name='.'.join(list(map(str, adress+[j])))))
+                                                status='MISSING', string_index = elem[4], sup=elem[0], elem_name='.'.join(list(map(str, adress+[j])))))
                             if not f: parent = self.tree[-1]
                             param = True
                         adress.append(sp[e])
@@ -814,11 +823,15 @@ class Make_tree:
         for lst in lsts:
             self.lst = lst
             for elem, self.k in zip(self.lst, range(len(self.lst))):
-                if elem[2] == 20:
+                if elem[0] == '5' and elem[2] == 4:
                     print()
                 if elem[1] in ["таблица", "рисунок", "рис", "схема", "приложение"]:
-                    self.func, self.revfunc = functions[elem[3]]
-                    self.n = first_elements[elem[3]]
+                    if elem[3] == 'numbers':
+                        self.func, self.revfunc = functions['number']
+                        self.n = first_elements['number']
+                    else:
+                        self.func, self.revfunc = functions[elem[3]]
+                        self.n = first_elements[elem[3]]
                     try: self.non_text(elem)
                     except Exception as err: logger.error(err)
                     continue
