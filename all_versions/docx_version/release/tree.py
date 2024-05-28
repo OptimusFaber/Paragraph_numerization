@@ -385,6 +385,9 @@ class Make_tree:
                                       status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=elem[5]))
                 self.last_alpha = self.tree[-1]
                 return
+        else:
+            self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=self.root, data_type=elem[3], 
+                                      status='EXISTING', delimetr = elem[4]))
         
     def single_numbers(self, elem):                 ## Алгоритм работы с числовами параграфами
         parent = None
@@ -520,7 +523,7 @@ class Make_tree:
                 #     prev = num_list[i]
             buf = posible_relatives.copy()
             posible_relatives = list(filter(lambda x: abs(x.delimetr - elem[4])<=1, posible_relatives))
-            posible_relatives.sort(key = lambda x: self.numeral_check(x, elem))
+            posible_relatives.sort(key = lambda x: (self.numeral_check(x, elem), len(x.name.split('.'))))
             if not posible_relatives:
                 posible_relatives = buf
                 posible_relatives.sort(key = lambda x: self.numeral_check(x, elem))
@@ -621,8 +624,13 @@ class Make_tree:
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
                                       status='EXISTING', delimetr = elem[4]))
                 return
+        table = True
+        if ('рилож' in self.tree[-1].parent.name or 'блиц' in self.tree[-1].parent.name):
+            table = False
         for i in range(-1, -len(self.tree)-1, -1):
             if 'number' in self.tree[i].data_type and (elem[1] == self.tree[i].sign or self.tree[i].sign == 'NaN'):
+
+
                 if self.tree[i].name == elem[0]: 
                     forbiden_list.append(self.tree[i].parent)
                     if not duplic and i > -25:
@@ -630,11 +638,13 @@ class Make_tree:
                     black_list.add(self.tree[i].parent)
                 if self.tree[i].status == 'DUPLICATE' or self.tree[i].status == 'INCORRECT':
                     continue
-                if self.numeral_check(self.tree[i], elem) and all([ancestor not in black_list for ancestor in self.tree[i].ancestors]) and (self.tree[i] not in forbiden_list):
+                if self.numeral_check(self.tree[i], elem) and all([ancestor not in black_list for ancestor in self.tree[i].ancestors]) and (self.tree[i] not in forbiden_list) and not (('рилож' in self.tree[i].parent.name or 'блиц' in self.tree[i].parent.name) and table):
                     posible_relatives.append(self.tree[i])
                     black_list.add(self.tree[i].parent)
+                    table = True
                 else:
                     black_list.add(self.tree[i].parent)
+                    table = True
         if posible_relatives:
             posible_relatives.sort(key = lambda x: self.numeral_check(x, elem))
             # posible_relatives.sort(key = lambda rel: int(elem[0].split('.')[0]) - int(rel.name.split('.')[0]))
@@ -829,7 +839,7 @@ class Make_tree:
             self.part = i
             self.lst = lst
             for elem, self.k in zip(self.lst, range(len(self.lst))):
-                if elem[2] == 44:
+                if elem[2] == 1190:
                     print()
                 if elem[1] in ["таблица", "рисунок", "рис", "схема", "приложение"]:
                     if elem[3] == 'numbers':

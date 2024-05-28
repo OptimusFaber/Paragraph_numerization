@@ -152,7 +152,6 @@ def generate(dict_list=None, output_pdf="./report.pdf", inputFileName = None, or
         time.sleep(0.5)
         if time.time()-tic>90:
             os.remove(f"{status_path}/libre_status.log")
-        print('Waiting')
     with open(f"{status_path}/libre_status.log", 'w') as fp:
         pass
     #! Create docx file
