@@ -403,7 +403,7 @@ class Make_tree:
                     for i in range(len(num_list)):   
                         ## иду по нераспределенным элементам, смотрю что впереди
                         param = False
-                        if elem[1] == num_list[i][1]:
+                        if elem[1] == num_list[i][1] or (elem[1] == 'NaN' and num_list[i][1] == '.') or (elem[1] == '.' and num_list[i][1] == 'NaN'):
                             if self.numeral_check(elem[0], num_list[i][0]) and (prev is None or not self.numeral_check(prev, num_list[i])): 
                                 param = True
                                 st += 1
@@ -429,29 +429,34 @@ class Make_tree:
                                         #! -----------------------------------------------------------------------------------------
                                         st=True
                                         break
+                                
                         prev = num_list[i]
                     else:
-                        ## Проверяем, что дерево у нас не пустое
-                        c = 0
-                        for obj in self.tree:            
-                            if obj.status == "EXISTING":
-                                c += 1
-                        if c > 1:
-                            self.content = False
-                            self.trees.append(tree_to_dict(self.root, all_attrs=True))
-                            self.roots.append(self.root)
-                        self.root, self.tree, self.ancestor = Node("txt"), [], None
-                        parent, st = self.root, True  
+                        if elem[1] == '.':      #! CHECK!!!
+                            ## Проверяем, что дерево у нас не пустое
+                            c = 0
+                            for obj in self.tree:            
+                                if obj.status == "EXISTING":
+                                    c += 1
+                            if c > 1:
+                                self.content = False
+                                self.trees.append(tree_to_dict(self.root, all_attrs=True))
+                                self.roots.append(self.root)
+                            self.root, self.tree, self.ancestor = Node("txt"), [], None
+                            parent, st = self.root, True  
             else:
                 parent, st = self.root, True
             ## Проверяем статус элемента - надо ли добавлять новую ветку или нет
             if st:
                 if self.func(elem[0]) == 2:
-                    self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                          status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=self.n))
-                    if elem[1] in self.p:
-                        if elem[0] == '2':
-                            self.p.remove(elem[1])
+                    try:
+                        self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
+                                            status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=self.n))
+                        if elem[1] in self.p:
+                            if elem[0] == '2':
+                                self.p.remove(elem[1])
+                    except:
+                        pass
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
                                       status='EXISTING', delimetr = elem[4]))
 
@@ -621,6 +626,12 @@ class Make_tree:
                 return
             elif self.tree[-1].sign == 'приложение':
                 parent = self.tree[-1]
+                if buf[0] == 2:
+                    self.tree.append(Node('1', sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
+                                      status='MISSING', delimetr = elem[4], sup=elem[5], elem_name='1'))
+                for i in range(1, buf[1]):
+                    self.tree.append(Node(str(buf[0])+'.'+str(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
+                                      status='MISSING', delimetr = elem[4], sup=elem[5], elem_name=str(buf[0])+'.'+str(i)))
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
                                       status='EXISTING', delimetr = elem[4]))
                 return
@@ -636,7 +647,8 @@ class Make_tree:
                     if not duplic and i > -25:
                         duplic = self.tree[i]
                     black_list.add(self.tree[i].parent)
-                if self.tree[i].status == 'DUPLICATE' or self.tree[i].status == 'INCORRECT':
+                # if self.tree[i].status == 'DUPLICATE' or self.tree[i].status == 'INCORRECT':
+                if self.tree[i].status == 'DUPLICATE':
                     continue
                 if self.numeral_check(self.tree[i], elem) and all([ancestor not in black_list for ancestor in self.tree[i].ancestors]) and (self.tree[i] not in forbiden_list) and not (('рилож' in self.tree[i].parent.name or 'блиц' in self.tree[i].parent.name) and table):
                     posible_relatives.append(self.tree[i])
@@ -839,7 +851,7 @@ class Make_tree:
             self.part = i
             self.lst = lst
             for elem, self.k in zip(self.lst, range(len(self.lst))):
-                if elem[2] == 1190:
+                if elem[2] == 863:
                     print()
                 if elem[1] in ["таблица", "рисунок", "рис", "схема", "приложение"]:
                     if elem[3] == 'numbers':

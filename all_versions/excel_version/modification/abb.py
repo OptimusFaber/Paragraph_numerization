@@ -67,11 +67,11 @@ def pos_compare(pos1, pos2):
     else: return False
 
 
-def abb_finder(json_text, abbs=True, dicts=True, add_info=None, content_strings = None, excel_path=None, log_path='myapp.log'):
+def abb_finder(json_text, abbs=True, dicts=(True, True, True), add_info=None, content_strings = None, excel_path=None, log_path='myapp.log', new_format=0):
     logging.basicConfig(filename=log_path, level=logging.DEBUG, 
         format=f'%(asctime)s %(levelname)s module: %(name)s line num: %(lineno)s func: %(funcName)s %(message)s \nText path: {excel_path}\n')
     logger=logging.getLogger(__name__)
-    if not abbs and not dicts:
+    if not abbs and not all(dicts):
         return []
     #& Маски для поиска нужных нам сокращений
     abb_mask1 = re.compile(r"(?<![a-zA-Zа-яА-Я0-9-—–])((«?([А-Я]+и)»?\s?){2,}|(«?([А-Я]{2,})»?\s?)+|(«?[A-Z]{2,}»?\s?)+)([^А-Яа-яA-Za-z0-9-—–]|$)")
@@ -187,21 +187,38 @@ def abb_finder(json_text, abbs=True, dicts=True, add_info=None, content_strings 
                     
         #* Дополняем словари если нужно
         if add_info:
-            if "Corruption" in add_info.keys():
-                for elem in add_info["Corruption"]:
-                    corruption_factor_set.add(elem["Value"])
-            if "Abbreviation" in add_info.keys():
-                for elem in add_info["Abbreviation"]:
-                    abb_set[elem["Value"]] = f"'{sheet['Name']}'!A0"
-            if "No_NPA" in add_info.keys():
-                for elem in add_info["No_NPA"]:
-                    no_connection_with_npa_set.add(elem["Value"])
-            if "SpecWords" in add_info.keys():                      ## Дополнение к Abbreviation
-                for elem in add_info["SpecWords"]:
-                    special_words.add(elem["Value"])
-            if "IncorrectForm" in add_info.keys():
-                for elem in add_info["IncorrectForm"]:
-                    incorrect_formulation_set.add(elem["Value"])
+            if not new_format:
+                if "Corruption" in add_info.keys():
+                    for elem in add_info["Corruption"]:
+                        corruption_factor_set.add(elem["Value"])
+                if "Abbreviation" in add_info.keys():
+                    for elem in add_info["Abbreviation"]:
+                        abb_set[elem["Value"]] = f"'{sheet['Name']}'!A0"
+                if "No_NPA" in add_info.keys():
+                    for elem in add_info["No_NPA"]:
+                        no_connection_with_npa_set.add(elem["Value"])
+                if "SpecWords" in add_info.keys():                      ## Дополнение к Abbreviation
+                    for elem in add_info["SpecWords"]:
+                        special_words.add(elem["Value"])
+                if "IncorrectForm" in add_info.keys():
+                    for elem in add_info["IncorrectForm"]:
+                        incorrect_formulation_set.add(elem["Value"])
+            else:
+                if "Corruption" in add_info.keys():
+                    for elem in add_info["Corruption"]:
+                        corruption_factor_set.add(elem)
+                if "Abbreviation" in add_info.keys():
+                    for elem in add_info["Abbreviation"]:
+                        abb_set[elem] = 0
+                if "No_NPA" in add_info.keys():
+                    for elem in add_info["No_NPA"]:
+                        no_connection_with_npa_set.add(elem)
+                if "SpecWords" in add_info.keys():                      ## Дополнение к Abbreviation
+                    for elem in add_info["SpecWords"]:
+                        special_words.add(elem)
+                if "IncorrectForm" in add_info.keys():
+                    for elem in add_info["IncorrectForm"]:
+                        incorrect_formulation_set.add(elem)
         #*-----------------------------
         if 5 < con_end - con_begin < 150:
             forbidden_list = list(abb_set.values()) + list(range(con_begin, con_end+1))
@@ -378,19 +395,21 @@ def abb_finder(json_text, abbs=True, dicts=True, add_info=None, content_strings 
 
                 #? Поиск элементов из наших 3 словарей
                 if dicts:
-                    corr_fac = list(filter(lambda x: x[0] , zip([re.search("\W"+word+"\W", devided_text[i][0].lower()) for word in corruption_factor_set], corruption_factor_set)))
-                    no_conn  = list(filter(lambda x: x[0],  zip([re.search("\W"+word+"\W", devided_text[i][0].lower()) for word in no_connection_with_npa_set], no_connection_with_npa_set)))
-                    inc_frm  = list(filter(lambda x: x[0],  zip([re.search("\W"+word+"\W", devided_text[i][0].lower()) for word in incorrect_formulation_set], incorrect_formulation_set)))
-
-                    for cor in corr_fac:
-                        sentence = "Фраза «{}»".format(cor[1])
-                        feedback_list.append(["Corruption", sentence, i, cor[1]])
-                    for no in no_conn:
-                        sentence = "Фраза «{}»".format(no[1])
-                        feedback_list.append(["NoNPA", sentence, i, no[1]])
-                    for inc in inc_frm:
-                        sentence = "Фраза «{}»".format(inc[1])
-                        feedback_list.append(["IncorrectForm", sentence, i, inc[1]]) 
+                    if dicts[0]:
+                        corr_fac = list(filter(lambda x: x[0] , zip([re.search("\W"+word+"\W", devided_text[i][0].lower()) for word in corruption_factor_set], corruption_factor_set)))
+                        for cor in corr_fac:
+                            sentence = "Фраза «{}»".format(cor[1])
+                            feedback_list.append(["Corruption", sentence, i, cor[1]])
+                    if dicts[1]:
+                        no_conn  = list(filter(lambda x: x[0],  zip([re.search("\W"+word+"\W", devided_text[i][0].lower()) for word in no_connection_with_npa_set], no_connection_with_npa_set)))
+                        for no in no_conn:
+                            sentence = "Фраза «{}»".format(no[1])
+                            feedback_list.append(["NoNPA", sentence, i, no[1]])
+                    if dicts[2]:
+                        inc_frm  = list(filter(lambda x: x[0],  zip([re.search("\W"+word+"\W", devided_text[i][0].lower()) for word in incorrect_formulation_set], incorrect_formulation_set)))
+                        for inc in inc_frm:
+                            sentence = "Фраза «{}»".format(inc[1])
+                            feedback_list.append(["IncorrectForm", sentence, i, inc[1]]) 
                 #?------------------------------------------------------------------------------------
                 if abbs and buf:
                     buf = list(filter(lambda x: (x[1][0] not in list_of_added_elems) and (x[1][1] not in list_of_added_elems), buf))

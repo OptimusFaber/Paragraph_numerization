@@ -12,8 +12,9 @@ import codecs
 from modification.sentence_compare import *
 from modification.report import *
 from copy import deepcopy
+from modification.duplicate_report import *
 
-def check_file(excel_path=None, config_path=None, report_output=None, json_output=None, global_log_path=None, libre_path='libreoffice', text=False, test=False, visualize=False): 
+def check_file(excel_path=None, config_path=None, report_output=None, json_output=None, global_log_path=None, libre_path='libreoffice', text=False, test=False, visualize=False, add_file=None, new_format=0): 
     log_path = '/'.join(global_log_path.split('/')[:-1]) + '/myapp.log'
     if log_path=='myapp.log':
         log_path = global_path + '/' + log_path
@@ -36,19 +37,43 @@ def check_file(excel_path=None, config_path=None, report_output=None, json_outpu
         try:
             F = open(config_path, encoding='utf-8')
             j = json.load(F)
-            paragraph_check = j["Settings"]["CheckNumberList"]
-            abb_check = j["Settings"]["CheckAbbreviations"]
-            dict_check = j["Settings"]["DetectReference"]
-            try:
-                add_info = j["Dictionaries"]
-            except:
-                add_info = None
-        except Exception as err:
+        except:
             logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
             format=f'%(asctime)s %(levelname)s module: check.py\n%(message)s\nIncorrect Configuration file directory\nConfiguration path: {config_path}\n')
             logger=logging.getLogger(__name__)
             logger.error(err)
             sys.exit("Wrong config directory!")
+
+        if not new_format:
+            try:
+                paragraph_check = j["Settings"]["CheckNumberList"]
+                abb_check = j["Settings"]["CheckAbbreviations"]
+                dict_check = (j["Settings"]["DetectReference"], j["Settings"]["DetectReference"], j["Settings"]["DetectReference"])
+                try:
+                    add_info = j["Dictionaries"]
+                except:
+                    add_info = None
+            except Exception as err:
+                logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+                format=f'%(asctime)s %(levelname)s module: check.py\n%(message)s\nIncorrect Configuration file directory\nConfiguration path: {config_path}\n')
+                logger=logging.getLogger(__name__)
+                logger.error(err)
+                sys.exit("Wrong config format!")
+        else:
+            try:
+                paragraph_check = j["Settings"]["CheckNumberings"]
+                abb_check = j["Settings"]["CheckAbbreviations"]
+                dict_check = (j["Settings"]["CheckCorruption"], j["Settings"]['CheckNoNpaConnection'], j["Settings"]['CheckIncorrectSentences'])
+                try:
+                    add_info = {"Abbreviation":j["Abbreviations"], "Corruption": j["Corruption"], "No_NPA": j["No_NPA"], "IncorrectForm": j["IncorrectForm"]}
+                except:
+                    add_info = None
+            except Exception as err:
+                logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+                format=f'%(asctime)s %(levelname)s module: check.py\n%(message)s\nIncorrect Configuration file directory\nConfiguration path: {config_path}\n')
+                logger=logging.getLogger(__name__)
+                logger.error(err)
+                sys.exit("Wrong config format!")
     else:
         paragraph_check = abb_check = dict_check = True
     if excel_path:
@@ -148,7 +173,7 @@ def check_file(excel_path=None, config_path=None, report_output=None, json_outpu
             logger.error(err)
             sys.exit("Error while printing result!")
         try:
-            feedback2 = abb_finder(json_text=t, abbs=abb_check, dicts=dict_check,  add_info=add_info, content_strings=content, excel_path=excel_path, log_path=log_path)
+            feedback2 = abb_finder(json_text=t, abbs=abb_check, dicts=dict_check,  add_info=add_info, content_strings=content, excel_path=excel_path, log_path=log_path, new_format=new_format)
         except Exception as err:
             logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
             format=f'%(asctime)s %(levelname)s module: abb.py \nText path: {excel_path}\n')
@@ -215,6 +240,18 @@ def check_file(excel_path=None, config_path=None, report_output=None, json_outpu
                 logger=logging.getLogger(__name__)
                 logger.error(err)
                 sys.exit("Error while generating the report!")
+
+            if add_file is not None:
+                try:
+                    duplicates_info(json_path=add_file, output_pdf=report_output, originalfilename=file_name, libre_path=libre_path, status_path='/'.join(global_log_path.split('/')[:-1]))
+                except Exception as err:
+                    logging.basicConfig(filename=global_log_path, level=logging.DEBUG, 
+                    format=f'%(asctime)s %(levelname)s module: duplicate_report.py\nError while generating the pdf-report\nText path: {excel_path}\n')
+                    logger=logging.getLogger(__name__)
+                    logger.error(err)
+                    sys.exit("Error while generating the duplicate_report!")
+            else:
+                print('No duplicate file was created')
 
             if os.path.getsize(log_path) == 0:
                 os.remove(log_path)

@@ -12,6 +12,8 @@ if __name__ == "__main__":
     parser.add_argument("--error_path", default=None, help="полный путь к файлу с ошибкой, если она случилась. Если ошибок нет, то файл не создается")
     parser.add_argument("--libre_path", default='libreoffice', help="полный путь к версии либер офиса")
     parser.add_argument("--document_type", default=None, help="тип обрабатывемого документа - excel или word")
+    parser.add_argument("--add_file", default=None, help="путь к JSON файлу с информацией о дубликатах")
+    parser.add_argument("--new_format", default=0, help="флаг для нового формата json файла")
     args = parser.parse_args()
         
     if args.document_type == "excel":
@@ -28,4 +30,6 @@ if __name__ == "__main__":
                report_output=args.report_path,
                json_output=args.checked_entity_path,
                global_log_path=args.error_path,
-               libre_path=args.libre_path)
+               libre_path=args.libre_path,
+               add_file=args.add_file,
+               new_format=int(args.new_format))
