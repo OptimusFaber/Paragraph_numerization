@@ -846,103 +846,61 @@ class Parse_numberings:
                 self.ancestor = self.tree[-1]  
                 return
         if not posible_relatives:
-            if len(elem[0].split('.')) == 2:
-                sp = list(map(int, elem[0].split('.')))
-                if sp[0] > 2 or sp[1] > 3: 
-                    if duplic:
-                        for x in range(10):
-                            try:
-                                self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], parent=duplic.parent, data_type='numbers', 
-                                                    status='DUPLICATE', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
-                                return
-                            except:
-                                continue
-                    else:
-                        for x in range(10):
-                            try:
-                                self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[-1].parent, data_type='numbers', 
-                                                    status='INCORRECT', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
-                                return
-                            except:
-                                continue
-                    return
-                st = 0
-                if find(self.root, lambda node: node.path_name == "/txt/{}.{}".format(*sp)):
-                    num_list = list(filter(lambda par: "number" in par[3], self.lst[self.index+1:]))
-                    prev = None
-                    for i in range(len(num_list)):
-                        param = ok = False
-                        if 'number' not in num_list[i][3] or elem[1] != num_list[i][1]: continue
-                        if self.numeral_check(self.main_line_num.name, num_list[i][0]) and (prev is None or not self.numeral_check(prev, num_list[i])):
-                            param = True
-                            st += 1
-                        if self.main_line_num:
-                            flag = False
-                            if self.main_line_num.sign == num_list[i][1]:
-                                if self.numeral_check(self.main_line_num.name, num_list[i][0]):
-                                    if prev is not None:
-                                        if self.numeral_check(prev, num_list[i]) and prev[1] != num_list[i][1]:
-                                            flag = True
-                                    else:
-                                        flag = True
-                                    if flag:
-                                        #! СЛАБОЕ МЕСТО-----------------------------------------------------------------------------
-                                        if int(self.main_line_num.name.split('.')[0]) == 1 and int(elem[0]) == 2: parent=self.main_line_num.parent
-                                        elif (st and not param) or st > 1: parent=self.tree[-1]
-                                        else: parent=self.tree[-1]
-                                        #! -----------------------------------------------------------------------------------------
-                                        st=True
-                                        break
-                            
-                        if elem[1] == num_list[i][1]:
-                            prev = num_list[i]
-
-                    else:   # Делаем новое дерево
-                        c = 0
-                        for obj in self.tree: 
-                            if obj.status == "EXISTING":
-                                c += 1
-                        if c > 1:
-                            self.trees.append(tree_to_dict(self.root, all_attrs=True))
-                        self.roots.append(self.root)
-                        self.root, self.tree = Node("txt"), []
-                        parent= self.root
-                        st = True
-
-                else:
-                    if not self.tree:
-                        parent, st = self.root, True
-  
-                if st:
-                    for i in range(1, sp[0]):
-                        try:
-                            self.tree.append(Node("{}.1".format(i), sign='.', pos=elem[2], parent=parent, data_type='numbers', 
-                                                  status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name="{}.1".format(i)))
-                        except:
-                            self.tree.append(Node(" " + "{}.1".format(i), sign=elem[1], pos=elem[2], parent=parent, data_type='numbers', 
-                                                  status='DUPLICATE', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=" " + "{}.1".format(i)))
-                    for i in range(1, sp[1]):
-                        try:
-                            self.tree.append(Node("{}.{}".format(sp[0], i), sign='.', pos=elem[2], parent=parent, data_type='numbers', 
-                                                  status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name="{}.{}".format(sp[0], i)))
-                        except:
-                            self.tree.append(Node(" " + "{}.{}".format(sp[0], i), sign=elem[1], pos=elem[2], parent=parent, data_type='numbers', 
-                                                  status='DUPLICATE', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=" " + "{}.{}".format(sp[0], i)))
-                    self.tree.append(Node(elem[0], sign='.', pos=elem[2], parent=parent, data_type='numbers', 
-                                          status='EXISTING', delimetr = elem[4]))
-                    if parent.node_name == 'txt': self.main_line_num = self.tree[-1]
-                    self.ancestor = self.tree[-1]
+            # Проверяем, есть ли параграфы той же подпоследовательности
+            current_prefix = '.'.join(elem[0].split('.')[:-1])  # получаем префикс (например, для 2.1.4 получим 2.1)
+            last_number = int(elem[0].split('.')[-1])  # получаем последнее число (для 2.1.4 получим 4)
+            
+            # Ищем предыдущие параграфы той же подпоследовательности
+            similar_paragraphs = [
+                node for node in self.tree 
+                if node.name.startswith(current_prefix + '.') and 
+                node.sign == elem[1] and
+                node.status != 'DUPLICATE'
+            ]
+            
+            if not similar_paragraphs:
+                # Если это первый параграф неправильной последовательности - помечаем как INCORRECT
+                for x in range(10):
+                    try:
+                        self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], 
+                                            parent=self.tree[-1].parent, data_type='numbers',
+                                            status='INCORRECT', delimetr=None, 
+                                            sup=elem[5], elem_name=elem[5]))
+                        return
+                    except:
+                        continue
             else:
-                if forbiden_list:
-                    self.tree.append(Node(" {}".format(elem[0]), sign=elem[1], pos=elem[2], parent=forbiden_list[0], data_type='numbers', 
-                                          status='DUPLICATE', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
-        for x in range(10):
-            try:          
-                self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[-1].parent, data_type='numbers', 
-                                    status='INCORRECT', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
+                # Если уже есть параграфы в этой подпоследовательности
+                similar_paragraphs.sort(key=lambda x: int(x.name.split('.')[-1]))
+                last_similar = similar_paragraphs[-1]
+                last_num = int(last_similar.name.split('.')[-1])
+                
+                # Проверяем на дубликат
+                if any(node.name == elem[0] for node in similar_paragraphs):
+                    for x in range(10):
+                        try:
+                            self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2],
+                                                parent=last_similar.parent, data_type='numbers',
+                                                status='DUPLICATE', delimetr=None,
+                                                sup=elem[5], elem_name=elem[5]))
+                            return
+                        except:
+                            continue
+                
+                # Добавляем пропущенные параграфы и текущий как EXISTING
+                parent = last_similar.parent
+                for missing_num in range(last_num + 1, last_number):
+                    missing_name = f"{current_prefix}.{missing_num}"
+                    self.tree.append(Node(missing_name, sign=elem[1], pos=elem[2],
+                                        parent=parent, data_type='numbers',
+                                        status='MISSING', delimetr=elem[4],
+                                        sup=elem[5], elem_name=missing_name))
+                
+                # Добавляем текущий параграф как EXISTING
+                self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2],
+                                    parent=parent, data_type='numbers',
+                                    status='EXISTING', delimetr=elem[4]))
                 return
-            except:
-                continue
 
     @log_errors
     def cut(self):

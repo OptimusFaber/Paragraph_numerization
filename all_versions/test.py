@@ -3,23 +3,23 @@ document_type = "word"
 
 
 if document_type == "excel":
-        if check_type == "check":
-            from excel_version.main_files.check import Checker
-            file = Checker(json_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/xlsx через FRONT/Processing/19053.json",
-                        config_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/xlsx через FRONT/Original/19053.json",
-                        json_output="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/xlsx через FRONT/Processing/19053_checked_new.json",
-                        error_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/xlsx через FRONT/Processing/19053.error",
-                        visualize=True,
-                        new_format=int("0"))
-            file.start()
-        elif check_type == "gen":
-            from excel_version.report.report import Report_generator
-            report = Report_generator(json_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/341d6e80-5f0a-4154-a4d7-159b8a7f3342/Processing/18364_summary.json",
-                                    output_pdf="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/341d6e80-5f0a-4154-a4d7-159b8a7f3342/Export/18364_summary.pdf",
-                                    config_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/341d6e80-5f0a-4154-a4d7-159b8a7f3342/Original/18364.json",
-                                    save_doc=False, 
-                                    new_format=int("0"))
-            report.start()
+    if check_type == "check":
+        from excel_version.main_files.check import Checker
+        file = Checker(json_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/xlsx через FRONT/Processing/19053.json",
+                    config_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/xlsx через FRONT/Original/19053.json",
+                    json_output="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/xlsx через FRONT/Processing/19053_checked_new.json",
+                    error_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/xlsx через FRONT/Processing/19053.error",
+                    visualize=True,
+                    new_format=int("0"))
+        file.start()
+    elif check_type == "gen":
+        from excel_version.report.report import Report_generator
+        report = Report_generator(json_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/341d6e80-5f0a-4154-a4d7-159b8a7f3342/Processing/18364_summary.json",
+                                output_pdf="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/341d6e80-5f0a-4154-a4d7-159b8a7f3342/Export/18364_summary.pdf",
+                                config_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/341d6e80-5f0a-4154-a4d7-159b8a7f3342/Original/18364.json",
+                                save_doc=False, 
+                                new_format=int("0"))
+        report.start()
         
 elif document_type == "word":
     if check_type == "check":
