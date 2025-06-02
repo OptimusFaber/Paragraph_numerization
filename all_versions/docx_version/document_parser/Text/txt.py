@@ -27,6 +27,7 @@ class Parse_text(Text_processing):
 
                 f_elem = True
                 begin = True
+                list_findings = []
                 while self.txt and self.sign:
                     self.txt = re.sub(r'\u00A0', ' ', self.txt)
                     while not (self.txt[0].isdigit() or self.txt[0].isalpha() or self.txt[0] == '('):
@@ -150,6 +151,21 @@ class Parse_text(Text_processing):
                     self.txt = self.txt[self.pos:]
                     counter+=(self.pos)
                     self.paragraph = self.paragraph[:-1] if self.paragraph[-1] == '.' else self.paragraph
+
+                    if self.paragraph[-1] == '1' and len(self.paragraph) >= 3:
+                        s, l = add_info
+                        s = s['Text']
+                        for i in range(len(l)):
+                            elem = l[i][0]
+                            if l[i][0].group()[0].isdigit():
+                                # if elem.group()[0] == self.paragraph[0]:
+                                    second_word_cords = [len(s.split(' ')[0]), len(s.split(' ')[0]) + len(s.split(' ')[1]) + 3]
+                                    if second_word_cords[0] <= elem.span()[0] <= second_word_cords[1]:  
+                                        prev_paragraph_name = re.sub('[^\d]*', '', elem.group())
+                                        prev_paragraph = self._clean_text(prev_paragraph_name, 'paragraph')
+                                        lst[n].append((prev_paragraph, self.sign, string["Index"]-1, "number", string["NumberingLevel"], prev_paragraph_name))
+                                        break
                     lst[n].append((self.paragraph, self.sign, string["Index"], data_type, string["NumberingLevel"], name))
+                add_info = (string, list_findings)
 
         return lst

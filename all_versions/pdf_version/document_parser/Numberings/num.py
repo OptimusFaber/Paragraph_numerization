@@ -160,7 +160,7 @@ class Parse_numberings:
             for x in range(10):
                 try:
                     self.tree.append(Node(x * " " + elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', 
-                                            status='DUPLICATE', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
+                                            status='DUPLICATE', string_index = None, sup=elem[5], elem_name=elem[5]))
                     return
                 except:
                     continue
@@ -187,24 +187,24 @@ class Parse_numberings:
                                 for j in range(rel[e]+1, cur[e]):
                                     try:
                                         self.tree.append(Node(elem[1] + " " + '{}.1'.format(j), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                                status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))  
+                                                                status='MISSING', string_index = elem[4], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))  
                                     except:
                                         continue     
                             else:
                                 for j in range(rel[e]+1, cur[e]):  
                                     self.tree.append(Node(elem[1] + " " + '.'.join(list(map(str, adress+[j]))), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                            status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
+                                                            status='MISSING', string_index = elem[4], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
                                 if len(cur) > e+1:
                                     self.tree.append(Node(elem[1] + " " + '.'.join(list(map(str, adress+[cur[e]]))), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                            status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
+                                                            status='MISSING', string_index = elem[4], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
                             adress.append(cur[e])
                         else:
                             for j in range(1, cur[e]):  
                                 self.tree.append(Node(elem[1] + " " + '.'.join(list(map(str, adress+[j]))), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                        status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
+                                                        status='MISSING', string_index = elem[4], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
                             adress.append(cur[e])
                     self.tree.append(Node(elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                            status='EXISTING', delimetr = elem[4]))
+                                            status='EXISTING', string_index = elem[4]))
                     self.non_txt_dct[elem[1]].append(elem[0])
                     return
 
@@ -219,13 +219,13 @@ class Parse_numberings:
                             continue
                         try:
                             self.tree.append(Node(elem[1] + " " + self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
+                                                status='MISSING', string_index = elem[4], sup=elem[5], elem_name=elem[5]))
                             self.non_txt_dct[elem[1]].append(self.revfunc(i))
                         except:
                             return
                     try:
                         self.tree.append(Node(elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                            status='EXISTING', delimetr = elem[4]))
+                                            status='EXISTING', string_index = elem[4]))
                         self.non_txt_dct[elem[1]].append(elem[0])
                     except:
                         if filtered_list[-1].name == elem[1] and elem[2] - filtered_list[-1].pos < 10:
@@ -233,7 +233,7 @@ class Parse_numberings:
                         for x in range(10):
                             try:
                                 self.tree.append(Node(x * " " + elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', 
-                                                    status='DUPLICATE', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
+                                                    status='DUPLICATE', string_index = None, sup=elem[5], elem_name=elem[5]))
                                 return
                             except:
                                 continue
@@ -248,13 +248,13 @@ class Parse_numberings:
                             continue
                         try:
                             self.tree.append(Node(elem[1] + " " + self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
+                                                status='MISSING', string_index = elem[4], sup=elem[5], elem_name=elem[5]))
                             self.non_txt_dct[elem[1]].append(self.revfunc(i))
                         except:
                             return                       
                 try:
                     self.tree.append(Node(elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                        status='EXISTING', delimetr = elem[4]))
+                                        status='EXISTING', string_index = elem[4]))
                     self.non_txt_dct[elem[1]].append(elem[0])
                 except:
                     try:
@@ -263,7 +263,7 @@ class Parse_numberings:
                         for x in range(10):
                             try:
                                 self.tree.append(Node(x * " " + elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', 
-                                                    status='DUPLICATE', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
+                                                    status='DUPLICATE', string_index = None, sup=elem[5], elem_name=elem[5]))
                                 return
                             except:
                                 continue
@@ -275,7 +275,7 @@ class Parse_numberings:
                     cur = list(map(int, elem[0].split('.')))
                     if rel[0] != cur[0]:
                         self.tree.append(Node(elem[1] + " 1", sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                            status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=elem[1] + " 1"))
+                                            status='MISSING', string_index = elem[4], sup=elem[5], elem_name=elem[1] + " 1"))
                     adress = []
                     k1 = k2 = True
                     dif = len(cur) - len(rel)
@@ -293,28 +293,28 @@ class Parse_numberings:
                                     try:
                                         if len(rel)==1:
                                             self.tree.append(Node(elem[1] + " {}".format(j), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                                    status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j))) 
+                                                                    status='MISSING', string_index = elem[4], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j))) 
                                         else:
                                             self.tree.append(Node(elem[1] + " {}.1".format(j), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                                    status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))  
+                                                                    status='MISSING', string_index = elem[4], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))  
                                     except:
                                         continue     
                             else:
                                 for j in range(rel[e]+1, cur[e]):  
                                     self.tree.append(Node(elem[1] + " " + '.'.join(list(map(str, adress+[j]))), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                            status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
+                                                            status='MISSING', string_index = elem[4], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
                                 if len(cur) > e+1:
                                     self.tree.append(Node(elem[1] + " " + '.'.join(list(map(str, adress+[cur[e]]))), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                            status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
+                                                            status='MISSING', string_index = elem[4], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
                             adress.append(cur[e])
                         else:
                             for j in range(1, cur[e]):  
                                 self.tree.append(Node(elem[1] + " " + '.'.join(list(map(str, adress+[j]))), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                        status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
+                                                        status='MISSING', string_index = elem[4], sup=elem[5], elem_name=elem[1] + " " + '{}.1'.format(j)))
                             adress.append(cur[e])
 
                     self.tree.append(Node(elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                            status='EXISTING', delimetr = elem[4]))
+                                            status='EXISTING', string_index = elem[4]))
                     self.non_txt_dct[elem[1]].append(elem[0])
                     return
                 
@@ -349,14 +349,14 @@ class Parse_numberings:
                             for x in range(10):
                                 try:
                                     self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', 
-                                                        status='DUPLICATE', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
+                                                        status='DUPLICATE', string_index = None, sup=elem[5], elem_name=elem[5]))
                                     self.last_alpha = self.tree[-1]
                                     return
                                 except:
                                     continue
                         break
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                      status='EXISTING', delimetr = elem[4]))
+                                      status='EXISTING', string_index = elem[4]))
                 self.last_alpha = self.tree[-1]
                 return
             black_list = []
@@ -379,9 +379,9 @@ class Parse_numberings:
                             if chr(i) == 'й' or chr(i) == 'Й':
                                 continue
                             self.tree.append(Node(self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                                  status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=self.revfunc(i)))
+                                                  status='MISSING', string_index = elem[4], sup=elem[5], elem_name=self.revfunc(i)))
                         self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                              status='EXISTING', delimetr = elem[4]))
+                                              status='EXISTING', string_index = elem[4]))
                         self.last_alpha = self.tree[-1]
                         return 
                     else:
@@ -393,7 +393,7 @@ class Parse_numberings:
                             for x in range(10):
                                 try:
                                     self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[i].parent, data_type='None', 
-                                                        status='DUPLICATE', delimetr = None,sup=elem[5], elem_name=elem[5]))
+                                                        status='DUPLICATE', string_index = None,sup=elem[5], elem_name=elem[5]))
                                     self.last_alpha = self.tree[-1]
                                     return
                                 except:
@@ -403,9 +403,9 @@ class Parse_numberings:
                 if self.func(elem[0]) - self.func(self.n) == 1:
                     parent=self.tree[-1]
                     self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                          status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=self.n))
+                                          status='MISSING', string_index = elem[4], sup=elem[5], elem_name=self.n))
                     self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                          status='EXISTING', delimetr = elem[4]))
+                                          status='EXISTING', string_index = elem[4]))
                     self.last_alpha = self.tree[-1]
                     return
                 
@@ -429,7 +429,7 @@ class Parse_numberings:
                                 for x in range(10):
                                     try:
                                         self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], parent=duplic.parent, data_type='None', 
-                                                            status='DUPLICATE', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
+                                                            status='DUPLICATE', string_index = None, sup=elem[5], elem_name=elem[5]))
                                         return
                                     except:
                                         continue
@@ -443,9 +443,9 @@ class Parse_numberings:
             if st:
                 if self.func(elem[0]) == 2:
                     self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                          status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=self.n))
+                                          status='MISSING', string_index = elem[4], sup=elem[5], elem_name=self.n))
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                      status='EXISTING', delimetr = elem[4]))
+                                      status='EXISTING', string_index = elem[4]))
                 self.last_alpha = self.tree[-1]
                 return
             #* ---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -453,14 +453,14 @@ class Parse_numberings:
                 for x in range(10):
                     try:
                         self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], parent=duplic.parent, data_type='None', 
-                                            status='DUPLICATE', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
+                                            status='DUPLICATE', string_index = None, sup=elem[5], elem_name=elem[5]))
                         self.last_alpha = self.tree[-1]
                         return
                     except:
                         continue
-        else:
-            self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=self.root, data_type=elem[3], 
-                                      status='EXISTING', delimetr = elem[4]))
+        # else:
+        #     self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=self.root, data_type=elem[3], 
+        #                               status='EXISTING', string_index = elem[4]))
         
     @logger
     def single_numbers(self, elem):                 ## Алгоритм работы с числовами параграфами
@@ -524,14 +524,14 @@ class Parse_numberings:
                 if self.func(elem[0]) == 2:
                     try:
                         self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                            status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=self.n))
+                                            status='MISSING', string_index = elem[4], sup=elem[5], elem_name=self.n))
                         if elem[1] in self.single_numbebrs_list:
                             if elem[0] == '2':
                                 self.single_numbebrs_list.remove(elem[1])
                     except:
                         pass
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                      status='EXISTING', delimetr = elem[4]))
+                                      status='EXISTING', string_index = elem[4]))
 
                 ## Добавляем инфу о параграфе в список
                 if parent.node_name == 'txt': self.main_line_num = self.tree[-1]
@@ -586,7 +586,6 @@ class Parse_numberings:
 
         if posible_relatives:
             buf = posible_relatives.copy()
-            # posible_relatives = list(filter(lambda x: abs(x.delimetr - elem[4])<=1, posible_relatives))
             posible_relatives.sort(key = lambda x: (self.numeral_check(x, elem), len(x.name.split('.'))))
             if not posible_relatives:
                 posible_relatives = buf
@@ -598,9 +597,9 @@ class Parse_numberings:
             n1, n2 = self.func(elem[0]), self.func(rel.node_name.split('.')[0])
             for i in range(n2+1, n1):
                 self.tree.append(Node(self.revfunc(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                      status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=self.revfunc(i)))
+                                      status='MISSING', string_index = elem[4], sup=elem[5], elem_name=self.revfunc(i)))
             self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                  status='EXISTING', delimetr = elem[4]))
+                                  status='EXISTING', string_index = elem[4]))
             if elem[0] == '2':
                 self.single_numbebrs_list.remove(elem[1])
             if parent.node_name == 'txt': self.main_line_num = self.tree[-1]
@@ -616,9 +615,9 @@ class Parse_numberings:
                     parent = self.tree[-1]
                     if self.func(elem[0]) == 2:
                         self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                              status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=self.n))
+                                              status='MISSING', string_index = elem[4], sup=elem[5], elem_name=self.n))
                     self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                          status='EXISTING', delimetr = elem[4]))
+                                          status='EXISTING', string_index = elem[4]))
                     return
                 prev = num_list[i]
             else:
@@ -633,9 +632,9 @@ class Parse_numberings:
                 parent, st = self.root, True
                 if self.func(elem[0]) == 2:
                     self.tree.append(Node(self.n, sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                          status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=self.n))
+                                          status='MISSING', string_index = elem[4], sup=elem[5], elem_name=self.n))
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                      status='EXISTING', delimetr = elem[4]))
+                                      status='EXISTING', string_index = elem[4]))
                 return
 
         for i in range(-1, -len(self.tree)-1, -1):
@@ -644,7 +643,7 @@ class Parse_numberings:
                     for x in range(10):
                         try:
                             self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[i].parent, data_type='None', 
-                                                status='DUPLICATE', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
+                                                status='DUPLICATE', string_index = None, sup=elem[5], elem_name=elem[5]))
                             if elem[0] == '2':
                                 self.single_numbebrs_list.remove(elem[1])
                             return
@@ -655,7 +654,7 @@ class Parse_numberings:
             for x in range(10):
                 try:
                     self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], parent=duplic.parent, data_type='None', 
-                                        status='DUPLICATE', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
+                                        status='DUPLICATE', string_index = None, sup=elem[5], elem_name=elem[5]))
                     return
                 except:
                     continue
@@ -665,7 +664,7 @@ class Parse_numberings:
             for x in range(10):
                 try:
                     self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[-1].node_name, data_type='None', 
-                                    status='INCORRECT', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
+                                    status='INCORRECT', string_index = None, sup=elem[5], elem_name=elem[5]))
                     return
                 except:
                     continue
@@ -674,34 +673,34 @@ class Parse_numberings:
     @logger
     def numeral_paragraphs(self, elem):
         #! Алгоритм работы с параграфами где несколько цифр
-        delimetr, parent, sp, black_list, forbiden_list, duplic = elem[4], None, list(), set(), list(), False
+        string_index, parent, sp, black_list, forbiden_list, duplic = elem[4], None, list(), set(), list(), False
         posible_relatives = list()
         buf = list(map(int, elem[0].split('.')))
         if buf[-1] == 0:
             self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=self.tree[-1], data_type='numbers', 
-                                  status='INCORRECT', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
+                                  status='INCORRECT', string_index = elem[4], sup=elem[5], elem_name=elem[5]))
             return
         if len(buf) == 2 and buf[0] in [1, 2] and buf[1] in [1, 2, 3]:
             if not self.tree:
                 if buf[0] == 2:
                     self.tree.append(Node('1', sign='.', pos=elem[2], parent=self.root, data_type='number', 
-                                          status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name='1')) 
+                                          status='MISSING', string_index = elem[4], sup=elem[5], elem_name='1')) 
                 for i in range(1, buf[1]):
                     self.tree.append(Node('{}.{}'.format(buf[0], j), sign='.', pos=elem[2], parent=self.root, data_type='numbers', 
-                                          status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name='{}.{}'.format(buf[0], j)))
+                                          status='MISSING', string_index = elem[4], sup=elem[5], elem_name='{}.{}'.format(buf[0], j)))
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=self.root, data_type=elem[3], 
-                                      status='EXISTING', delimetr = elem[4]))
+                                      status='EXISTING', string_index = elem[4]))
                 return
             elif self.tree[-1].sign == 'приложение':
                 parent = self.tree[-1]
                 if buf[0] == 2:
                     self.tree.append(Node('1', sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                      status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name='1'))
+                                      status='MISSING', string_index = elem[4], sup=elem[5], elem_name='1'))
                 for i in range(1, buf[1]):
                     self.tree.append(Node(str(buf[0])+'.'+str(i), sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                      status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name=str(buf[0])+'.'+str(i)))
+                                      status='MISSING', string_index = elem[4], sup=elem[5], elem_name=str(buf[0])+'.'+str(i)))
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                      status='EXISTING', delimetr = elem[4]))
+                                      status='EXISTING', string_index = elem[4]))
                 return
         table = True
         if ('рилож' in self.tree[-1].parent.name or 'блиц' in self.tree[-1].parent.name):
@@ -738,7 +737,7 @@ class Parse_numberings:
                     par = False
                     posible_relatives = []
             if par:
-                parent, delimetr = node, node.delimetr
+                parent, string_index = node, node.string_index
                 rel = list(map(int, node.node_name.split('.')))
                 sp = list(map(int, elem[0].split('.')))
                 f = True
@@ -764,7 +763,7 @@ class Parse_numberings:
                             for j in range(rel[e]+1, sp[e]):
                                 try:
                                     self.tree.append(Node('{}.1'.format(j), sign=elem[1], pos=elem[2], parent=buf_parent, data_type='numbers', 
-                                                        status='MISSING', delimetr = delimetr, addinfo = elem[6], sup=elem[5], elem_name='{}.1'.format(j)))  
+                                                        status='MISSING', string_index = string_index, sup=elem[5], elem_name='{}.1'.format(j)))  
                                     param = True
                                 except:
                                     continue     
@@ -779,13 +778,13 @@ class Parse_numberings:
                                     buf_parent = parent.parent
                             for j in range(rel[e]+1, sp[e]):  
                                 self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign=elem[0], pos=elem[2], parent=buf_parent, data_type='numbers', 
-                                                    status='MISSING', delimetr = delimetr, addinfo = elem[6], sup=elem[5], elem_name='.'.join(list(map(str, adress+[j])))))
+                                                    status='MISSING', string_index = string_index, sup=elem[5], elem_name='.'.join(list(map(str, adress+[j])))))
                                 if not f: parent = self.tree[-1]
                                 param = True
                             if len(sp) > e+1:
                                 # buf_parent = parent.parent
                                 self.tree.append(Node('.'.join(list(map(str, adress+[sp[e]]))), sign=elem[1], pos=elem[2], parent=buf_parent, data_type='numbers', 
-                                                    status='MISSING', delimetr = delimetr, addinfo = elem[6], sup=elem[5], elem_name='.'.join(list(map(str, adress+[sp[e]])))))
+                                                    status='MISSING', string_index = string_index, sup=elem[5], elem_name='.'.join(list(map(str, adress+[sp[e]])))))
                                 if not f: parent = self.tree[-1]
                                 param = True
                         adress.append(sp[e])
@@ -794,7 +793,7 @@ class Parse_numberings:
                             parent = self.tree[-1]
                         for j in range(1, sp[e]):  
                             self.tree.append(Node('.'.join(list(map(str, adress+[j]))), sign=elem[1], pos=elem[2], parent=parent, data_type='numbers', 
-                                                status='MISSING', delimetr = delimetr, addinfo = elem[6], sup=elem[5], elem_name='.'.join(list(map(str, adress+[j])))))
+                                                status='MISSING', string_index = string_index, sup=elem[5], elem_name='.'.join(list(map(str, adress+[j])))))
                             if not f: parent = self.tree[-1]
                             param = True
                         adress.append(sp[e])
@@ -812,7 +811,7 @@ class Parse_numberings:
                     parent = parent.parent
 
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                    status='EXISTING', delimetr = elem[4]))
+                                    status='EXISTING', string_index = elem[4]))
                 if parent.node_name == 'txt': self.main_line_num = self.tree[-1]
                 self.ancestor = self.tree[-1]  
                 return
@@ -824,7 +823,7 @@ class Parse_numberings:
                         for x in range(10):
                             try:
                                 self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], parent=duplic.parent, data_type='numbers', 
-                                                    status='DUPLICATE', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
+                                                    status='DUPLICATE', string_index = None, sup=elem[5], elem_name=elem[5]))
                                 return
                             except:
                                 continue
@@ -832,7 +831,7 @@ class Parse_numberings:
                         for x in range(10):
                             try:
                                 self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[-1].parent, data_type='numbers', 
-                                                    status='INCORRECT', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
+                                                    status='INCORRECT', string_index = None, sup=elem[5], elem_name=elem[5]))
                                 return
                             except:
                                 continue
@@ -888,29 +887,29 @@ class Parse_numberings:
                     for i in range(1, sp[0]):
                         try:
                             self.tree.append(Node("{}.1".format(i), sign='.', pos=elem[2], parent=parent, data_type='numbers', 
-                                                  status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name="{}.1".format(i)))
+                                                  status='MISSING', string_index = elem[4], sup=elem[5], elem_name="{}.1".format(i)))
                         except:
                             self.tree.append(Node(" " + "{}.1".format(i), sign=elem[1], pos=elem[2], parent=parent, data_type='numbers', 
-                                                  status='DUPLICATE', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=" " + "{}.1".format(i)))
+                                                  status='DUPLICATE', string_index = None, sup=elem[5], elem_name=" " + "{}.1".format(i)))
                     for i in range(1, sp[1]):
                         try:
                             self.tree.append(Node("{}.{}".format(sp[0], i), sign='.', pos=elem[2], parent=parent, data_type='numbers', 
-                                                  status='MISSING', delimetr = elem[4], addinfo = elem[6], sup=elem[5], elem_name="{}.{}".format(sp[0], i)))
+                                                  status='MISSING', string_index = elem[4], sup=elem[5], elem_name="{}.{}".format(sp[0], i)))
                         except:
                             self.tree.append(Node(" " + "{}.{}".format(sp[0], i), sign=elem[1], pos=elem[2], parent=parent, data_type='numbers', 
-                                                  status='DUPLICATE', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=" " + "{}.{}".format(sp[0], i)))
+                                                  status='DUPLICATE', string_index = None, sup=elem[5], elem_name=" " + "{}.{}".format(sp[0], i)))
                     self.tree.append(Node(elem[0], sign='.', pos=elem[2], parent=parent, data_type='numbers', 
-                                          status='EXISTING', delimetr = elem[4]))
+                                          status='EXISTING', string_index = elem[4]))
                     if parent.node_name == 'txt': self.main_line_num = self.tree[-1]
                     self.ancestor = self.tree[-1]
             else:
                 if forbiden_list:
                     self.tree.append(Node(" {}".format(elem[0]), sign=elem[1], pos=elem[2], parent=forbiden_list[0], data_type='numbers', 
-                                          status='DUPLICATE', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
+                                          status='DUPLICATE', string_index = None, sup=elem[5], elem_name=elem[5]))
         for x in range(10):
             try:          
                 self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[-1].parent, data_type='numbers', 
-                                    status='INCORRECT', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
+                                    status='INCORRECT', string_index = None, sup=elem[5], elem_name=elem[5]))
                 return
             except:
                 continue
@@ -924,7 +923,8 @@ class Parse_numberings:
 
     @log_errors
     def start(self, lsts):
-        for _, lst in lsts.items():
+        for i, lst in enumerate(lsts):
+            self.part = i
             self.lst = lst
             for self.index, elem in enumerate(self.lst):
                 if elem[1] in ["таблица", "рисунок", "рис", "схема", "приложение"]:

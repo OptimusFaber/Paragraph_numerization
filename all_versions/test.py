@@ -24,10 +24,10 @@ if document_type == "excel":
 elif document_type == "word":
     if check_type == "check":
         from docx_version.main_files.check import Checker
-        file = Checker(json_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/Техническое_задание_16468020_1_ОтчетИПД_1.doc/Processing/19583.json",
-                        config_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/Техническое_задание_16468020_1_ОтчетИПД_1.doc/Original/19583.json",
-                        json_output="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/Техническое_задание_16468020_1_ОтчетИПД_1.doc/Processing/19583_new.json",
-                        error_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/Техническое_задание_16468020_1_ОтчетИПД_1.doc/Processing/19583.error",
+        file = Checker(json_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/8a09e7a6-61e2-4910-b426-d925912bb8ba/Processing/20351.json",
+                        config_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/8a09e7a6-61e2-4910-b426-d925912bb8ba/Original/20351.json",
+                        json_output="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/8a09e7a6-61e2-4910-b426-d925912bb8ba/Processing/20351_new.json",
+                        error_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/8a09e7a6-61e2-4910-b426-d925912bb8ba/Processing/20351.error",
                         visualize=True,
                         new_format=int("0"))
         file.start()

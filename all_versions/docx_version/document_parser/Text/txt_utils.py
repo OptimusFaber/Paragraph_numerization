@@ -105,7 +105,7 @@ class Text_processing:
         if string["IsToc"] and not string["Numbering"]:
             if not re.search(r"(^|(?<=^\s)\s*)[Тт]аблица [№]?\d+", string["Text"]):
                 return True
-        return string.get('Vanish', False)
+        return string.get('Vanish', True)
 
     @logger
     def _prepare_text(self, string: Dict) -> str:
