@@ -152,7 +152,7 @@ class Parse_text(Text_processing):
                     counter+=(self.pos)
                     self.paragraph = self.paragraph[:-1] if self.paragraph[-1] == '.' else self.paragraph
 
-                    if self.paragraph[-1] == '1' and len(self.paragraph) >= 3:
+                    if self.paragraph[-1] in '123' and len(self.paragraph) >= 3:
                         s, l = add_info
                         s = s['Text']
                         for i in range(len(l)):
