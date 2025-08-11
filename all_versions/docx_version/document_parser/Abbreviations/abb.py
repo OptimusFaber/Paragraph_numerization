@@ -104,6 +104,10 @@ class Abb_finder(Abbreviations_processing):
                 if element:
                     elem = element.group()
                     elem = self._clean_abbreviation(elem)
+                    if elem[0] == "«" and elem[-1] == "»":
+                        elem_without_quotes = elem[1:-1]
+                    else:
+                        elem_without_quotes = None
                     #! Проверяем что это не римская цифра
                     if bool(re.search(r"^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$", elem)) and elem != "CD":
                         continue
@@ -120,6 +124,13 @@ class Abb_finder(Abbreviations_processing):
                             d = element.span()
                             self.list_of_added_elems.extend(range(element.span()[0]+d[0], element.span()[0]+d[1]))
                             continue
+                    #! Делаем то же самое для варианта без ковычек
+                    if elem_without_quotes is not None:
+                        if elem_without_quotes in list(self.abb_set.keys()):
+                            if self.abb_set[elem_without_quotes] <= index:
+                                d = elem_without_quotes.span()
+                                self.list_of_added_elems.extend(range(elem_without_quotes.span()[0]+d[0], elem_without_quotes.span()[0]+d[1]))
+                                continue
                     #! -------------------------------------------
                     if all(list(map(lambda x: 1<len(x)<11, elem.split(" ")))):
                         #?Убираем параграф если он весь написан большими буквами

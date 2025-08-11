@@ -145,19 +145,20 @@ class Parse_text(Text_processing):
                     fake_delimetr = 0
 
                     if self.paragraph[-1] == '1' and len(self.paragraph) >= 3:
-                        s, l = add_info
-                        s = s['Text']
-                        for i in range(len(l)):
-                            elem = l[i][0]
-                            if l[i][0].group()[0].isdigit():
-                                if elem.group()[0] == self.paragraph[0]:
-                                    second_word_cords = [len(s.split(' ')[0]), len(s.split(' ')[0]) + len(s.split(' ')[1]) + 3]
-                                    if second_word_cords[0] <= elem.span()[0] <= second_word_cords[1]:  
-                                        prev_paragraph_name = elem.group()[0]
-                                        prev_paragraph = self._clean_text(prev_paragraph_name, 'paragraph')
-                                        cell_num = int(re.search('(?<=![A-Z])\d+', s['Address']).group())
-                                        lst[self.sheet_info['Name']].append((prev_paragraph, self.sign, cell_num, data_type, fake_delimetr, prev_paragraph_name, s['Address']))
-                                        break
+                        string, l = add_info
+                        s = string['Text']
+                        if len(s.split(' '))>1:
+                            for i in range(len(l)):
+                                elem = l[i][0]
+                                if l[i][0].group()[0].isdigit():
+                                    if elem.group()[0] == self.paragraph[0]:
+                                        second_word_cords = [len(s.split(' ')[0]), len(s.split(' ')[0]) + len(s.split(' ')[1]) + 3]
+                                        if second_word_cords[0] <= elem.span()[0] <= second_word_cords[1]:  
+                                            prev_paragraph_name = elem.group()[0]
+                                            prev_paragraph = self._clean_text(prev_paragraph_name, 'paragraph')
+                                            cell_num = int(re.search('(?<=![A-Z])\d+', string['Address']).group())
+                                            lst[self.sheet_info['Name']].append((prev_paragraph, self.sign, cell_num, data_type, fake_delimetr, prev_paragraph_name, string['Address']))
+                                            break
                     lst[self.sheet_info['Name']].append((self.paragraph, self.sign, self.cell_num, data_type, fake_delimetr, name, self.txt_index))
                 add_info = (string, list_findings)
 

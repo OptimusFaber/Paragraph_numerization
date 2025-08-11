@@ -321,7 +321,7 @@ class Parse_numberings:
                 elif elem[0] == "1":
                     try:
                         self.tree.append(Node(elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type=elem[3], 
-                                            status='EXISTING', delimetr = elem[4]))
+                                            status='EXISTING', delimetr = elem[4], string_index = elem[4]))
                         self.non_txt_dct[elem[1]].append(elem[0])
                     except:
                         try:
@@ -330,7 +330,7 @@ class Parse_numberings:
                             for x in range(10):
                                 try:
                                     self.tree.append(Node(x * " " + elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', 
-                                                        status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=elem[5]))
+                                                        status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=elem[5], string_index = None))
                                     return
                                 except:
                                     continue
@@ -458,9 +458,6 @@ class Parse_numberings:
                         return
                     except:
                         continue
-        # else:
-        #     self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2], parent=self.root, data_type=elem[3], 
-        #                               status='EXISTING', string_index = elem[4]))
         
     @logger
     def single_numbers(self, elem):                 ## Алгоритм работы с числовами параграфами
@@ -715,7 +712,6 @@ class Parse_numberings:
                         duplic = self.tree[i]
                     if not (self.tree[i].status == 'INCORRECT' or self.tree[i].status == 'DUPLICATE'):
                         black_list.add(self.tree[i].parent)
-                # if self.tree[i].status == 'DUPLICATE' or self.tree[i].status == 'INCORRECT':
                 if self.tree[i].status == 'DUPLICATE':
                     continue
                 if self.numeral_check(self.tree[i], elem) and all([ancestor not in black_list for ancestor in self.tree[i].ancestors]) and (self.tree[i] not in forbiden_list) and not (('рилож' in self.tree[i].parent.name or 'блиц' in self.tree[i].parent.name) and table):
@@ -835,7 +831,7 @@ class Parse_numberings:
                         self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], 
                                             parent=self.tree[-1].parent, data_type='numbers',
                                             status='INCORRECT', delimetr=None, 
-                                            sup=elem[5], elem_name=elem[5]))
+                                            sup=elem[5], elem_name=elem[5], string_index = elem[4]))
                         return
                     except:
                         continue
@@ -851,7 +847,7 @@ class Parse_numberings:
                         try:
                             self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2],
                                                 parent=last_similar.parent, data_type='numbers',
-                                                status='DUPLICATE', delimetr=None,
+                                                status='DUPLICATE', delimetr=None, string_index = None,
                                                 sup=elem[5], elem_name=elem[5]))
                             return
                         except:
@@ -863,13 +859,13 @@ class Parse_numberings:
                     missing_name = f"{current_prefix}.{missing_num}"
                     self.tree.append(Node(missing_name, sign=elem[1], pos=elem[2],
                                         parent=parent, data_type='numbers',
-                                        status='MISSING', delimetr=elem[4],
+                                        status='MISSING', delimetr=elem[4], string_index = elem[4],
                                         sup=elem[5], elem_name=missing_name))
                 
                 # Добавляем текущий параграф как EXISTING
                 self.tree.append(Node(elem[0], sign=elem[1], pos=elem[2],
                                     parent=parent, data_type='numbers',
-                                    status='EXISTING', delimetr=elem[4]))
+                                    status='EXISTING', delimetr=elem[4], string_index = elem[4]))
                 return
 
     @log_errors

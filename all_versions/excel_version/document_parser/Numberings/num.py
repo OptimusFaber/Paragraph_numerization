@@ -330,7 +330,7 @@ class Parse_numberings:
                             for x in range(10):
                                 try:
                                     self.tree.append(Node(x * " " + elem[1] + " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', 
-                                                        status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=elem[5]))
+                                                        status='DUPLICATE', delimetr = None, sup=elem[5], elem_name=elem[5], addinfo = elem[6]))
                                     return
                                 except:
                                     continue
@@ -348,7 +348,7 @@ class Parse_numberings:
                         if self.tree[i].node_name == elem[0]:
                             for x in range(10):
                                 try:
-                                    self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None', 
+                                    self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], parent=parent, data_type='None',
                                                         status='DUPLICATE', delimetr = None, addinfo = elem[6], sup=elem[5], elem_name=elem[5]))
                                     self.last_alpha = self.tree[-1]
                                     return
@@ -393,7 +393,7 @@ class Parse_numberings:
                             for x in range(10):
                                 try:
                                     self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], parent=self.tree[i].parent, data_type='None', 
-                                                        status='DUPLICATE', delimetr = None,sup=elem[5], elem_name=elem[5]))
+                                                        status='DUPLICATE', delimetr = None,sup=elem[5], elem_name=elem[5], addinfo = elem[6]))
                                     self.last_alpha = self.tree[-1]
                                     return
                                 except:
@@ -745,7 +745,6 @@ class Parse_numberings:
                         duplic = self.tree[i]
                     if not (self.tree[i].status == 'INCORRECT' or self.tree[i].status == 'DUPLICATE'):
                         black_list.add(self.tree[i].parent)
-                # if self.tree[i].status == 'DUPLICATE' or self.tree[i].status == 'INCORRECT':
                 if self.tree[i].status == 'DUPLICATE':
                     continue
                 if self.numeral_check(self.tree[i], elem) and all([ancestor not in black_list for ancestor in self.tree[i].ancestors]) and (self.tree[i] not in forbiden_list) and not (('рилож' in self.tree[i].parent.name or 'блиц' in self.tree[i].parent.name) and table):
@@ -864,7 +863,7 @@ class Parse_numberings:
                     try:
                         self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2], 
                                             parent=self.tree[-1].parent, data_type='numbers',
-                                            status='INCORRECT', delimetr=None, 
+                                            status='INCORRECT', delimetr=None, addinfo = elem[6],
                                             sup=elem[5], elem_name=elem[5]))
                         return
                     except:
@@ -881,7 +880,7 @@ class Parse_numberings:
                         try:
                             self.tree.append(Node(x * " " + elem[0], sign=elem[1], pos=elem[2],
                                                 parent=last_similar.parent, data_type='numbers',
-                                                status='DUPLICATE', delimetr=None,
+                                                status='DUPLICATE', delimetr=None, addinfo = elem[6],
                                                 sup=elem[5], elem_name=elem[5]))
                             return
                         except:

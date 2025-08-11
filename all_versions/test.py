@@ -1,14 +1,14 @@
 check_type = "check"
-document_type = "word"
+document_type = "pdf"
 
 
 if document_type == "excel":
     if check_type == "check":
         from excel_version.main_files.check import Checker
-        file = Checker(json_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/xlsx через FRONT/Processing/19053.json",
-                    config_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/xlsx через FRONT/Original/19053.json",
-                    json_output="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/xlsx через FRONT/Processing/19053_checked_new.json",
-                    error_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/xlsx через FRONT/Processing/19053.error",
+        file = Checker(json_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/e427bb56-f87e-4ce8-90bb-1980b200d9a3/Processing/20492.json",
+                    config_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/e427bb56-f87e-4ce8-90bb-1980b200d9a3/Original/20492.json",
+                    json_output="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/e427bb56-f87e-4ce8-90bb-1980b200d9a3/Processing/20492_checked_new.json",
+                    error_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/e427bb56-f87e-4ce8-90bb-1980b200d9a3/Processing/20492.error",
                     visualize=True,
                     new_format=int("0"))
         file.start()
@@ -24,10 +24,10 @@ if document_type == "excel":
 elif document_type == "word":
     if check_type == "check":
         from docx_version.main_files.check import Checker
-        file = Checker(json_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/364cb734-295e-47d5-ba1c-54d8c3b7073d/Processing/20381.json",
-                        config_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/364cb734-295e-47d5-ba1c-54d8c3b7073d/Original/20381.json",
-                        json_output="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/364cb734-295e-47d5-ba1c-54d8c3b7073d/Processing/20381_new.json",
-                        error_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/364cb734-295e-47d5-ba1c-54d8c3b7073d/Processing/20381.error",
+        file = Checker(json_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/e427bb56-f87e-4ce8-90bb-1980b200d9a3/Processing/20492.json",
+                        config_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/e427bb56-f87e-4ce8-90bb-1980b200d9a3/Original/20492.json",
+                        json_output="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/e427bb56-f87e-4ce8-90bb-1980b200d9a3/Processing/20492_new.json",
+                        error_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/e427bb56-f87e-4ce8-90bb-1980b200d9a3/Processing/20492.error",
                         visualize=True,
                         new_format=int("0"))
         file.start()
@@ -43,10 +43,10 @@ elif document_type == "word":
 elif document_type == "pdf":
     if check_type == "check":
         from pdf_version.main_files.check import Checker
-        file = Checker(json_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/pdf ошибка обработки 2/Processing/19163.json",
-                        config_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/pdf ошибка обработки 2/Original/19163.json",
-                        json_output="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/pdf ошибка обработки 1/Processing/19163_checked.json",
-                        error_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/pdf ошибка обработки 1/Processing/19163.error",
+        file = Checker(json_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/83fd79c1-0737-42d0-9cc0-18230613d2be/Processing/20497.json",
+                        config_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/83fd79c1-0737-42d0-9cc0-18230613d2be/Original/20497.json",
+                        json_output="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/83fd79c1-0737-42d0-9cc0-18230613d2be/Processing/20497_checked.json",
+                        error_path="/home/rodrick/Desktop/Work/EasyData/Paragraph_numerization/83fd79c1-0737-42d0-9cc0-18230613d2be/Processing/20497.error",
                         visualize=True,
                         new_format=int("0"))
         file.start()
